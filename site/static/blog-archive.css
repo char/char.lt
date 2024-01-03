@@ -1,0 +1,45 @@
+header {
+  margin-bottom: 1em;
+}
+
+article {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+
+  margin: 0.5em 0;
+}
+
+article > * {
+  margin: 0;
+  padding: 0;
+}
+
+article h2 {
+  font-size: 1em;
+  min-width: fit-content;
+}
+
+article.featured {
+  flex-direction: column;
+  justify-content: unset;
+
+  border: 1px solid var(--accent-col);
+  border-radius: 6px;
+  padding: 1em;
+  margin: 1em 0;
+
+  gap: 0.5em;
+}
+
+article:not(.featured) h2 {
+  flex: 1;
+}
+
+article:not(.featured) .description {
+  display: block;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+  flex: 1;
+}

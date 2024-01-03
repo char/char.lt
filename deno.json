@@ -1,0 +1,19 @@
+{
+  "tasks": {
+    "lume": "echo \"import 'lume/cli.ts'\" | deno run --unstable -A - --config _lume.ts",
+    "build": "deno task lume",
+    "watch": "deno task lume --watch",
+    "serve": "deno task lume -s",
+    "ngx": "deno run -A char-lt.ngx.ts"
+  },
+  "imports": {
+    "lume/": "https://deno.land/x/lume@v1.19.4/"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "npm:preact"
+  },
+  "lint": {
+    "rules": { "exclude": ["no-explicit-any"] }
+  }
+}
