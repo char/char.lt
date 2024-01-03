@@ -13,7 +13,7 @@ use sqlx::SqlitePool;
 use tokio::net::TcpListener;
 
 #[cfg(unix)]
-mod hyper_unix;
+mod axum_unix;
 
 #[derive(Parser, Debug)]
 struct CLIArgs {
@@ -64,17 +64,7 @@ async fn main() -> Result<()> {
     if let Some(bind_unix) = args.bind_unix {
         #[cfg(unix)]
         {
-            use hyper_util::{
-                rt::{TokioExecutor, TokioIo},
-                server,
-            };
-
-            let bind_unix_display = bind_unix.display();
-            println!("Listening at (unix) {bind_unix_display} ...");
-
-            todo!("implement unix socket listening");
-
-            // let _ = fs::remove_file(&unix_bind).await;
+            axum_unix::serve_unix(router, bind_unix).await?;
         }
 
         #[cfg(not(unix))]

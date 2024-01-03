@@ -21,7 +21,7 @@ const commonConfig = (base: string, backend: string) => [
 
 export const config = ngx("server", [
   ["server_name char.lt", ...ngx.listen(), ...ngx.letsEncrypt("char.lt")],
-  ...commonConfig("/srv/http/char.lt", "http://127.0.0.6:8000"),
+  ...commonConfig("/srv/www/char.lt", "http://unix:/var/run/char_lt.sock"),
 ]);
 export const path = "char-lt.conf";
 
@@ -30,7 +30,7 @@ export const devConfig = ngx("server", [
     "server_name char.lt",
     ...["8000", "[::]:8000"].map((x) => `listen ${x} default_server`),
   ],
-  ...commonConfig("..", "http://127.0.0.1:8001"),
+  ...commonConfig("..", "http://127.0.0.1:3001"),
   [
     "add_header Cache-Control no-store",
     "if_modified_since off",

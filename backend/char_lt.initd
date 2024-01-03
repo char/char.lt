@@ -1,0 +1,9 @@
+#!/sbin/openrc-run
+
+description="char.lt web service"
+command="/srv/www/char.lt/backend/target/release/char_lt_backend"
+command_background="yes"
+pidfile="/var/run/char_lt.pid"
+directory="/srv/www/char.lt/backend"
+
+export BIND_ADDRESS="127.0.0.6:8000"
