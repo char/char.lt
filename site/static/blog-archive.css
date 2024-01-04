@@ -17,7 +17,6 @@ article > * {
 
 article h2 {
   font-size: 1em;
-  min-width: fit-content;
 }
 
 article.featured {
