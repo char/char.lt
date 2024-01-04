@@ -32,7 +32,7 @@ An example of bytecode verification is checking whether jump instructions are at
 
 Here is a simple case where we jump to a label with the `goto` instruction:
 
-<pre><code class="hljs lang-javabytecode"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-name">myWeirdMethod</span>():</span>
+<pre><code class="hljs-manual lang-javabytecode"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-name">myWeirdMethod</span>():</span>
   <span class="hljs-keyword">goto</span> my_label
   <span class="hljs-keyword">sipush</span> <span class="hljs-number">0x06ac</span>
   <span class="hljs-keyword">ireturn</span>
@@ -58,7 +58,7 @@ But if we peruse the [Java bytecode instruction listings](https://en.wikipedia.o
 
 Therefore, we can manipulate our `goto` instruction to jump into the middle of our immediate `short` constant that usually would act as the operand to `sipush`:
 
-<pre><code class="hljs language-javabytecode"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> myWeirdMethod():</span>
+<pre><code class="hljs-manual language-javabytecode"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> myWeirdMethod():</span>
   <span class="hljs-keyword">goto</span> &lt;four bytes forward&gt;
   <span class="hljs-keyword">sipush</span> <span class="hljs-number">0x06ac</span>
   <span class="hljs-keyword">ireturn</span>

@@ -7,13 +7,15 @@
     "ngx": "deno run -A char-lt.ngx.ts"
   },
   "imports": {
-    "lume/": "https://deno.land/x/lume@v1.19.4/"
+    "lume/": "https://deno.land/x/lume@v2.0.2/"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "npm:preact"
   },
   "lint": {
-    "rules": { "exclude": ["no-explicit-any"] }
+    "rules": {
+      "exclude": ["no-explicit-any"]
+    }
   }
 }

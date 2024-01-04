@@ -5,7 +5,7 @@ export const url = "/blog/";
 export default (data) => {
   const blogPosts = data.search
     .pages("type=blog_post", "date=desc")
-    .filter((page) => !page.data.unlisted);
+    .filter((post) => !post.unlisted);
 
   return {
     head: (
@@ -33,18 +33,18 @@ export default (data) => {
           </p>
         </header>
 
-        {blogPosts.map((page) => {
-          const postDate = page.data.date.toISOString().split("T")[0];
+        {blogPosts.map((post) => {
+          const postDate = post.date.toISOString().split("T")[0];
 
-          if (page.data.featured) {
+          if (post.featured) {
             return (
               <article class="featured">
                 <h2>
-                  <a href={page.data.url}>{page.data.title}</a>
+                  <a href={post.url}>{post.title}</a>
                   {` `}
                   (featured &ndash; <time>{postDate}</time>)
                 </h2>
-                <p class="description">{page.data.description}</p>
+                <p class="description">{post.description}</p>
               </article>
             );
           }
@@ -52,7 +52,7 @@ export default (data) => {
           return (
             <article>
               <h2>
-                <a href={page.data.url}>{page.data.title}</a>
+                <a href={post.url}>{post.title}</a>
               </h2>
               <p>
                 (<time>{postDate}</time>)

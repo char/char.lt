@@ -4,6 +4,7 @@ import pug from "lume/plugins/pug.ts";
 import feed from "lume/plugins/feed.ts";
 import codeHighlight from "lume/plugins/code_highlight.ts";
 import katex from "lume/plugins/katex.ts";
+import nunjucks from "lume/plugins/nunjucks.ts";
 
 import mdAnchor from "npm:markdown-it-anchor";
 import mdFootnote from "npm:markdown-it-footnote";
@@ -22,6 +23,7 @@ const site = lume(
 site.copy("static");
 site.copy("assets");
 site.use(jsx());
+site.use(nunjucks());
 site.use(
   feed({
     output: ["/blog.rss", "/blog.json"],
@@ -36,7 +38,15 @@ site.use(
     },
   })
 );
-site.use(codeHighlight());
+site.use(
+  codeHighlight({
+    // @ts-ignore codeHighlight _does_ merge but doesn't let you provide a Partial<Options>
+    options: {
+      ignoreUnescapedHTML: true,
+      cssSelector: "pre code:not(.hljs-manual)",
+    },
+  })
+);
 site.use(katex({ options: { displayMode: false } }));
 
 const customizeMarkdown = (md: any) => {
