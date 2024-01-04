@@ -33,6 +33,7 @@ export default (data) => {
         <title>{pageTitle}</title>
         <meta property="og:title" content={pageTitle} />
         <meta property="twitter:title" content={pageTitle} />
+        <meta itemprop="name" content={pageTitle} />
 
         <link rel="canonical" href={`https://char.lt/${url}`} />
 

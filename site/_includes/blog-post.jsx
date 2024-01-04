@@ -16,6 +16,9 @@ export default ({ title, description, children, date }) => {
           type="application/json"
           href="https://char.lt/blog.json"
         />
+        <meta name="description" content={description} />
+        <meta itemprop="description" content={description} />
+        <meta property="og:description" content={description} />
       </>
     ),
     body: (
