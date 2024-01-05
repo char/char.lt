@@ -8,6 +8,7 @@ const commonConfig = (base: string, backend: string) => [
   ngx("location /", [
     `root ${base}/public`,
     "try_files $uri $uri/index.html @misc",
+    ngx("location ~ /\\.git", ["deny all"]),
   ]),
   ngx("location @backend", [
     `proxy_pass ${backend}`,
@@ -15,7 +16,10 @@ const commonConfig = (base: string, backend: string) => [
     "recursive_error_pages on",
     "error_page 404 = @misc",
   ]),
-  ngx("location @misc", [`root ${base}/misc`, "try_files $uri =404"]),
+  ngx("location @misc", [
+    `root ${base}/misc`,
+    "try_files $uri $uri/index.html =404",
+  ]),
 ];
 
 export const config = ngx("server", [
@@ -39,6 +43,5 @@ export const devConfig = ngx("server", [
 ]);
 
 if (import.meta.main) {
-  console.log(devConfig.build());
-  devConfig.write("./nginx/char-lt.conf");
+  console.log(config.build());
 }
