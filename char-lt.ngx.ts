@@ -1,7 +1,6 @@
 #!/usr/bin/env -S deno run -A
 
-// TODO: we should probably not depend via char.lt in the char.lt repo
-import ngx from "https://char.lt/ngx/ngx.ts?v=1";
+import ngx from "https://char.lt/ngx/v0.1/ngx.ts";
 
 const commonConfig = (base: string, backend: string) => [
   ["error_page 404 /404.html"],
