@@ -579,6 +579,7 @@
   },
   "remote": {
     "https://char.lt/ngx/ngx.ts?v=1": "7a5c261a038fa9ebf71558ba0ae0198063f38380f1a8eceb6d9f703cae743d82",
+    "https://char.lt/ngx/v0.1/ngx.ts": "5ceb623b4089acef229141ffb91c5de2d5c75c8409562d099701db9b2759d33b",
     "https://deno.land/std@0.170.0/_util/asserts.ts": "d0844e9b62510f89ce1f9878b046f6a57bf88f208a10304aab50efcb48365272",
     "https://deno.land/std@0.170.0/_util/os.ts": "8a33345f74990e627b9dfe2de9b040004b08ea5146c7c9e8fe9a29070d193934",
     "https://deno.land/std@0.170.0/encoding/base64.ts": "8605e018e49211efc767686f6f687827d7f5fd5217163e981d8d693105640d7a",

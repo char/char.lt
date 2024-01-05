@@ -11,6 +11,7 @@ import mdFootnote from "npm:markdown-it-footnote";
 
 const site = lume(
   {
+    emptyDest: false,
     src: "./site",
     dest: "./public",
     location: new URL("https://char.lt"),

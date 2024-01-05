@@ -159,7 +159,7 @@ pre > code {
 }
 
 :root {
-  --hl-comment: #555c6d;
+  --hl-comment: #676f82;
   --hl-keyword: #9bedff;
   --hl-builtin: #ff94d1;
   --hl-string: #95ffc3;
@@ -186,7 +186,7 @@ pre > code {
   color: var(--hl-builtin);
 }
 
-.hljs-string {
+.hljs-string, .hljs-regexp {
   color: var(--hl-string);
 }
 
@@ -209,6 +209,10 @@ pre > code {
 
 .hljs-emphasis {
   font-style: italic;
+}
+
+.hljs-subst {
+  color: var(--fg-col);
 }
 
 .no-list {
