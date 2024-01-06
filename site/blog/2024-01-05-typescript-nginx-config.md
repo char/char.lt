@@ -1,9 +1,9 @@
 ---
 title: "ngx: a TypeScript DSL for nginx config generation"
-description: but really, this is about imperfection & saving time
+description: imperfect tools for saving time
 ---
 
-hi! [i made a thing](https://git.lavender.software/char/ngx) - but this post isn't really about the thing.
+hi! [i made a thing](https://git.lavender.software/char/ngx) - it kind of sucks but it saves me lots of time.
 
 ## a taste of ngx
 
@@ -110,12 +110,16 @@ for (let postUrl of blogPosts) {
 
 ## ngx isn't amazing
 
-i still have to think about nginx configuration! i still have to check the docs for the right directive to put in a string, it's still possible to mess up some syntax or semantics of the config file which can cause nginx to fail to reload, and i now have to generate each config individually.
+i still have to think about nginx configuration! it hasn't solved all my problems.
 
-BUT: i don't have to type a site's domain three times or remember the default letsencrypt live directory path ever again!
+because i didn't take the time to write a proper DSL, i still have to check the docs for the right directive to put in a string literal, so it's still possible to mess up some syntax or semantics of the config file which can cause nginx to fail to reload. this is kind of bad usability.
 
-## automating away toil
+i also now have to run a build step for each config instead of just editing things in `/etc/nginx/http.d/`, and then after i've run the script i have to manually send its output to the correct file in the nginx config folder. this means i can potentially lose config sources (like, _literally lose_, like.. where in the filesystem did i leave it?) or clobber the wrong thing. those are bad footguns!
 
-writing this little tool has saved me a good amount of effort & choosing to *not* write a better tool has saved me a lot more :)
+BUT: i don't have to type a site's domain three times or remember the default letsencrypt live directory path ever again! it saves me time and i can improve it more later, but making this small thing is good incremental improvement for my workflow
 
-is there some computer chore you have that's trivially partially-automated? what's a minimal approach that can alleviate some boring work for you? i don't dread nginx configuration anymore :)
+## choosing to *not* write a better tool
+
+if i, at the outset, decided to make a _perfect_ solution for nginx config, i likely would have burned a weekend and come away with nothing usable. so i made something kind of bad and i will make it better when it matters.
+
+is there some computer chore you have that's trivially partially-automated? what's a minimal approach that can alleviate some boring work for you? i didn't have to spend a bunch of time inventing something but i don't dread nginx configuration anymore :)
