@@ -58,9 +58,15 @@ const redirects = {
 };
 
 export const config = ngx("server", [
-  ["server_name a.com", ...ngx.listen(), ...ngx.letsEncrypt("a.com")],
+  [
+    "server_name a.com",
+    ...ngx.listen(),
+    ...ngx.letsEncrypt("a.com")
+  ],
   Object.entries(redirects).map(([path, uri]) =>
-    ngx(`location = ${path}`, [`return 301 ${uri}`])
+    ngx(`location = ${path}`, [
+      `return 301 ${uri}`
+    ])
   ),
 ]);
 
@@ -98,9 +104,7 @@ for (let postUrl of blogPosts) {
   const year = matches[1];
   const month = matches[2];
   const title = matches[4];
-  redirects[
-    `/blog/${postUrl}`
-  ] = `https://char.lt/blog/${year}/${month}/${title}/`;
+  redirects[`/blog/${postUrl}`] = `https://char.lt/blog/${year}/${month}/${title}/`;
 }
 ```
 

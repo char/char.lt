@@ -143,19 +143,22 @@ code, kbd {
   font-family: "SF Mono", "Source Code Pro", "Fira Mono", "Roboto Mono", monospace;
   display: inline-block;
   padding: 0.225em 0.35em;
-  background: var(--bg-col);
+  background: var(--bg-col-2);
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.9em;
 }
 
 pre > code {
-  background-color: var(--bg-col-2);
+  overflow-x: auto;
+  white-space: pre;
+
   display: block;
   border-radius: 0.5em;
   padding: 1em;
   line-height: 1.4em;
   font-weight: normal;
+  font-weight: 0.667rem;
 }
 
 :root {
