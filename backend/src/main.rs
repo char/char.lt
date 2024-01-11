@@ -19,7 +19,7 @@ mod axum_unix;
 struct CLIArgs {
     #[arg(long, env = "BIND_ADDRESS", default_value = "127.0.0.1:3001")]
     bind_address: SocketAddr,
-    #[arg(long)]
+    #[arg(long, env = "BIND_UNIX")]
     bind_unix: Option<PathBuf>,
 }
 
