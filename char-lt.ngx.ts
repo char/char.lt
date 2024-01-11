@@ -7,7 +7,7 @@ const commonConfig = (base: string, backend: string) => [
 
   ngx("location /", [
     `root ${base}/public`,
-    "try_files $uri $uri/index.html @misc",
+    "try_files $uri $uri/index.html @backend",
     ngx("location ~ /\\.git", ["deny all"]),
   ]),
   ngx("location @backend", [
@@ -24,7 +24,7 @@ const commonConfig = (base: string, backend: string) => [
 
 export const config = ngx("server", [
   ["server_name char.lt", ...ngx.listen(), ...ngx.letsEncrypt("char.lt")],
-  ...commonConfig("/srv/www/char.lt", "http://unix:/var/run/char_lt.sock"),
+  ...commonConfig("/srv/www/char.lt", "http://127.0.0.6:8000"),
 ]);
 export const path = "char-lt.conf";
 
