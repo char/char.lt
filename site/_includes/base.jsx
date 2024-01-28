@@ -1,5 +1,3 @@
-export const layout = "html.njk";
-
 const SITE_NAME = "charlotte som";
 
 const Nav = (data) => {
