@@ -7,6 +7,7 @@
        url('/assets/fonts/rouna/rouna-bold-webfont.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -18,6 +19,7 @@
        url('/assets/fonts/rouna/rouna-medium-webfont.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -29,11 +31,14 @@
        url('/assets/fonts/rouna/rouna-regular-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'Noto Color Emoji';
-  src: url('/assets/fonts/noto-color-emoji/NotoColorEmoji-Regular.ttf') format('truetype');
+  src: url('/assets/fonts/noto-color-emoji/NotoColorEmoji-Regular.woff2') format('woff2'),
+       url('/assets/fonts/noto-color-emoji/NotoColorEmoji-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
