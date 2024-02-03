@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Tahoma Fallback';
+  src: local(Tahoma);
+  size-adjust: 113%;
+  ascent-override: 85%;
+  descent-override: normal;
+  line-gap-override: normal;
+}
+
 :root {
   --bg-col: #121212;
   --bg-col-2: #181818;
@@ -17,7 +26,7 @@
 html {
   color-scheme: dark;
 
-  font-family: "Rouna", 'Noto Color Emoji', sans-serif;
+  font-family: "Rouna", 'Noto Color Emoji', 'Tahoma Fallback', sans-serif;
   font-size: 13pt;
   font-size-adjust: from-font;
 
