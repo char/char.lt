@@ -30,4 +30,5 @@ header :first-child {
 header img {
   height: 5em;
   border-radius: 8px;
+  margin: 0.5em;
 }
