@@ -26,7 +26,7 @@ site.use(jsx());
 site.use(
   feed({
     output: ["/blog.rss", "/blog.json"],
-    query: "type=blog_post",
+    query: "type=blog_post unlisted!=true",
     info: {
       title: "charlotte som",
       description: "thoughts & ideas from charlotte som",
