@@ -27,11 +27,11 @@ html {
   color-scheme: dark;
 
   font-family: "Rouna", 'Tahoma Fallback', sans-serif;
-  font-size: 13pt;
+  font-size: 14pt;
   font-size-adjust: from-font;
 
-  line-height: 1.4em;
-  letter-spacing: 0.025ch;
+  line-height: 1.5em;
+  letter-spacing: 0.05ch;
 
   background-color: var(--bg-col);
   color: var(--fg-col);
@@ -140,7 +140,13 @@ h2 {
   margin-top: 1.5rem;
 }
 
-h3, h4, h5, h6 {
+h3 {
+  font-size: 1.44rem;
+  font-weight: 500;
+  margin: 0.75rem 0;
+}
+
+h4, h5, h6 {
   font-size: 1.25rem;
   font-weight: 500;
   margin: 0.75rem 0;
@@ -148,6 +154,12 @@ h3, h4, h5, h6 {
 
 p {
   margin: 1.25rem 0;
+}
+
+blockquote {
+  margin: 0;
+  padding: 0;
+  margin-left: 2em;
 }
 
 code, kbd {
@@ -210,7 +222,7 @@ pre > code {
   color: var(--hl-builtin);
 }
 
-.hljs-title, .hljs-name {
+.hljs-title, .hljs-name, .language-json .hljs-attr {
   color: var(--hl-ident);
 }
 
