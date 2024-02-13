@@ -28,8 +28,8 @@ site.use(
     output: ["/blog.rss", "/blog.json"],
     query: "type=blog_post unlisted!=true",
     info: {
-      title: "charlotte som",
-      description: "thoughts & ideas from charlotte som",
+      title: "charlotte som's blog",
+      description: "thoughts & ideas",
     },
     items: {
       title: "=title",
