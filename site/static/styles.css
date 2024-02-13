@@ -31,7 +31,7 @@ html {
   font-size-adjust: from-font;
 
   line-height: 1.5em;
-  letter-spacing: 0.05ch;
+  word-spacing: 0.05ch;
 
   background-color: var(--bg-col);
   color: var(--fg-col);
