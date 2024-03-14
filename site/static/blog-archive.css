@@ -5,9 +5,9 @@ header {
 article {
   display: flex;
   flex-direction: row;
-  gap: 1em;
-
-  margin: 0.5em 0;
+  margin: 0.25em 0;
+  gap: 1ch;
+  justify-content: space-between;
 }
 
 article > * {
@@ -20,6 +20,7 @@ article h2 {
 }
 
 article.featured {
+  display: flex;
   flex-direction: column;
   justify-content: unset;
 
@@ -29,10 +30,6 @@ article.featured {
   margin: 1em 0;
 
   gap: 0.5em;
-}
-
-article:not(.featured) h2 {
-  flex: 1;
 }
 
 article:not(.featured) .description {

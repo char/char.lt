@@ -54,9 +54,8 @@ export default (data) => {
               <h2>
                 <a href={post.url}>{post.title}</a>
               </h2>
-              <p>
-                (<time>{postDate}</time>)
-              </p>
+              <span>&ndash;</span>
+              <p class="description">{post.description}</p>
             </article>
           );
         })}
