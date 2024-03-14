@@ -6,7 +6,7 @@ featured: true
 
 An adventure with Java bytecode, HotSpot VM internals, `sun.misc.Unsafe`, and the power of Java.
 
-*Please* don't do this in production (or do, but as a prank).
+_Please_ don't do this in production (or do, but as a prank).
 
 <section>
 
@@ -22,7 +22,7 @@ Today, we're going to be disabling the bytecode verifier using only pure Java.
 
 Okay, so, when you create a Java program, you compile it with `javac`, it gets converted into a `.class` file that consists of Java bytecode, and (maybe) packed into a JAR file. (You can think of a JAR file as like a ZIP file, except it's exactly the same file format.)
 
-When you *run* this Java program, the bytecode is parsed from the input file (be it a standalone `.class` file or a JAR file) and goes through several stages, including **class verification**: The class is checked to see if its contents conform to the JVM specification, and is rejected if it's too weird.
+When you _run_ this Java program, the bytecode is parsed from the input file (be it a standalone `.class` file or a JAR file) and goes through several stages, including **class verification**: The class is checked to see if its contents conform to the JVM specification, and is rejected if it's too weird.
 
 ### So, what could we do?
 
@@ -100,8 +100,8 @@ First, we will lay out some ground rules:
 
 1. The program should work without a hitch on most[^2] JVMs.
 2. To achieve this: The developer writes in JVM languages, and nothing but.
-  - For the sake of this exercise, we'll consider dropping into user-written native code cheating. We don't want to rely on [JNI](https://en.wikipedia.org/wiki/Java_Native_Interface), [JVM TI](https://en.wikipedia.org/wiki/Java_Virtual_Machine_Tools_Interface), or anything but what the JVM provides us.
-  - For these examples, I'll be writing Java and Kotlin.
+    - For the sake of this exercise, we'll consider dropping into user-written native code cheating. We don't want to rely on [JNI](https://en.wikipedia.org/wiki/Java_Native_Interface), [JVM TI](https://en.wikipedia.org/wiki/Java_Virtual_Machine_Tools_Interface), or anything but what the JVM provides us.
+    - For these examples, I'll be writing Java and Kotlin.
 
 [^2]: We're actually only targeting HotSpot-based Java Virtual Machines right now, but it's a fair compromise: I've yet to discover anyone who actually uses an OpenJ9 VM without also having a HotSpot-based one installed. Both the Oracle VMs and OpenJDK are compiled with HotSpot by default.
 
@@ -110,11 +110,11 @@ First, we will lay out some ground rules:
 
 ## Getting Dangerous: `sun.misc.Unsafe`
 
-We've seen the *why*, we've seen the *what*; it's time for: the *how*.
+We've seen the _why_, we've seen the _what_; it's time for: the _how_.
 
-`sun.misc.Unsafe` is an internal, deprecated API that you shouldn't ever use, *but*... It's super useful.
+`sun.misc.Unsafe` is an internal, deprecated API that you shouldn't ever use, _but_... It's super useful.
 
-The `Unsafe` API is mainly used by libraries like [kryo](https://github.com/EsotericSoftware/kryo) for high-performance serialization. This takes advantage of one facet of `Unsafe`: Creating objects *without* calling any of their constructors.
+The `Unsafe` API is mainly used by libraries like [kryo](https://github.com/EsotericSoftware/kryo) for high-performance serialization. This takes advantage of one facet of `Unsafe`: Creating objects _without_ calling any of their constructors.
 
 However, `Unsafe` has many more usages. Today, we're going to use **Direct Memory Access**.
 
@@ -132,7 +132,7 @@ public native void putByte(long address, byte x);
 
 If you notice, these methods in `Unsafe` are virtual, not `static`, so we need to get ourselves an `Unsafe` object.
 
-`sun.misc.Unsafe` *does* actually follow the singleton design pattern, but its getter is gated by a security check:
+`sun.misc.Unsafe` _does_ actually follow the singleton design pattern, but its getter is gated by a security check:
 
 ```java
 @CallerSensitive
@@ -206,7 +206,7 @@ Perfect. We've found what we wanted. Our targets are the `BytecodeVerificationLo
 
 Okay. We know where we want to write, but it's not like we can call `unsafe.putByte(BytecodeVerificationLocal, 0)` and have it Just Work™. We have to somehow find the memory addresses of these flags.
 
-Luckily, somebody, somewhere, at some time in the past, ***has*** wanted to profile the JVM, meaning that, theoretically, enough information must be exposed to let a profiler access performance statistics for them to be displayed. I'd like to thank the high-frequency trading industry for making this adventure possible.
+Luckily, somebody, somewhere, at some time in the past, **_has_** wanted to profile the JVM, meaning that, theoretically, enough information must be exposed to let a profiler access performance statistics for them to be displayed. I'd like to thank the high-frequency trading industry for making this adventure possible.
 
 ### The Serviceability Agent
 
@@ -246,7 +246,7 @@ Now all that's left to do is to find their locations within our own Java process
 
 ### Finding Natives: `ClassLoader.findNative(...)`
 
-In the Java standard library, a package-private method `ClassLoader.findNative` is used to locate the native handles of Java `native` methods. However, since the implementation is so simple, we can use it to look up *any* native symbol in the Java process, including these `gHotSpotXYZ` values.
+In the Java standard library, a package-private method `ClassLoader.findNative` is used to locate the native handles of Java `native` methods. However, since the implementation is so simple, we can use it to look up _any_ native symbol in the Java process, including these `gHotSpotXYZ` values.
 
 ```kotlin
 private val findNativeMethod by lazy {
@@ -290,7 +290,6 @@ Notice of how the last three nibbles of both values are always the same (the var
 Since we want to eventually write to [a `Flag` struct](https://github.com/AdoptOpenJDK/openjdk-jdk8u/blob/master/hotspot/src/share/vm/runtime/globals.hpp#L211)'s value[^3], as well as read its name, we'll want to walk the `gHotSpotVMStructs` array.
 
 [^3]: `Flag` was actually refactored and [renamed to `JVMFlag`](https://github.com/AdoptOpenJDK/openjdk-jdk13u/commit/170f0455bb3bba06f4f42007aae098b445f2e8c8) in Java 11, but we can just swap out the name for later versions.
-
 
 This is actually pretty simple, as we already have all the gadgets in place to do so.
 
@@ -418,7 +417,7 @@ fun getTypes(structs: Map<String, JVMStruct>): Map<String, JVMType> {
 }
 ```
 
-And we can inspect our flag *type* now:
+And we can inspect our flag _type_ now:
 
 ![A screenshot of IntelliJ IDEA's debugger, showing information about the Flag type](/assets/blog/jvm-hackery-noverify/flag-type.png)
 
@@ -440,7 +439,7 @@ fun getFlags(types: Map<String, JVMType>): List<JVMFlag> {
   val flagType =
     types["Flag"] ?: types["JVMFlag"] ?:
       error("Could not resolve type 'Flag'")
-  
+
   val flagsField =
     flagType.fields["flags"] ?:
       error("Could not resolve field 'Flag.flags'")
@@ -454,7 +453,7 @@ fun getFlags(types: Map<String, JVMType>): List<JVMFlag> {
   val nameField =
     flagType.fields["_name"] ?:
       error("Could not resolve field 'Flag._name'")
-  
+
   val addrField =
     flagType.fields["_addr"] ?:
       error("Could not resolve field 'Flag._addr'")
@@ -494,7 +493,7 @@ This disables the two flags, and makes `should_verify_class` return false. Any f
 
 ## Conclusion: Having Fun
 
-Now that we've forced the JVM to never verify classes, we can do some *wacky* things with weird class bytecode.
+Now that we've forced the JVM to never verify classes, we can do some _wacky_ things with weird class bytecode.
 
 Using my Kotlin bytecode assembly DSL, [Koffee](https://github.com/videogame-hacker/Koffee), we can easily use ObjectWeb's ASM to craft a class file and load it into memory once the bytecode verifier has been disabled.
 
@@ -511,7 +510,7 @@ class InMemoryClassLoader(val node: ClassNode, private val cwFlags: Int) : Class
   override fun findClass(name: String): Class<*>? {
     if (name == node.name.replace('/', '.'))
       return defineClass(name, classData, 0, classData.size)
-    
+
     return null
   }
 
@@ -519,7 +518,7 @@ class InMemoryClassLoader(val node: ClassNode, private val cwFlags: Int) : Class
 }
 ```
 
-Then, we can use *Koffee* to assemble a `ClassNode`, load it into memory, and execute its `main(args)` method:
+Then, we can use _Koffee_ to assemble a `ClassNode`, load it into memory, and execute its `main(args)` method:
 
 ```kotlin
 fun main(args: Array<String>) {
@@ -622,7 +621,7 @@ As you can see, with the verifier disabled, it becomes incredibly easy to trip u
 ## Epilogue
 
 - Employing this technique seems to work on Windows and Linux, but it seems that macOS's `libjvm.dylib` has its `gHotSpotVM...` symbols set to local-only, meaning that `ClassLoader.findNative(...)` can't resolve the symbols.
-- If you are going to do this, it's *much* wiser to use JNI, as accessing the values can be done with a simple `extern void* gHotSpotVMStructs;` instead of using `findNative` and `Unsafe` to read the values.
+- If you are going to do this, it's _much_ wiser to use JNI, as accessing the values can be done with a simple `extern void* gHotSpotVMStructs;` instead of using `findNative` and `Unsafe` to read the values.
 - Check out the [GitHub repo](https://github.com/char/noverify-hackery) that contains all the work we've done in this post.
 
 </section>
