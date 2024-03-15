@@ -47,10 +47,24 @@ img {
   transform: translateX(-50%);
 }
 
+img.medium-sized {
+  height: 32em;
+}
+
 @media (max-width: 90ch) {
   img {
     max-width: 90vw;
   }
+}
+
+figure {
+  background: var(--bg-col-2);
+  padding: 1em;
+  border-radius: 0.5em;
+}
+
+figure figcaption {
+  text-align: center;
 }
 
 .footnote-ref a, a.footnote-backref {
