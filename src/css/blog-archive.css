@@ -1,0 +1,22 @@
+#blog-archive-list > ul {
+  display: grid;
+  column-gap: 2em;
+  row-gap: 0.25em;
+  grid-template-columns: 6em 1fr;
+  grid-template-areas: "date headline";
+  padding: 0;
+  margin: 0;
+
+  & > li {
+    display: contents;
+    padding: 0;
+    margin: 0;
+
+    & > time {
+      grid-area: "date";
+    }
+    & > :not(time) {
+      grid-area: "headline";
+    }
+  }
+}

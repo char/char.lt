@@ -1,0 +1,15 @@
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+  gap: 1em;
+
+  & > div {
+    flex: 1;
+  }
+  & .profile-picture {
+    all: unset; /* avoid wide-elements stuff */
+    border-radius: 4px;
+    height: 7.5em;
+  }
+}

@@ -1,21 +1,19 @@
 {
-  "tasks": {
-    "lume": "echo \"import 'lume/cli.ts'\" | deno run --unstable -A - --config _lume.ts",
-    "build": "deno task lume",
-    "watch": "deno task lume --watch",
-    "serve": "deno task lume -s",
-    "ngx": "deno run -A char-lt.ngx.ts"
-  },
   "imports": {
-    "lume/": "https://deno.land/x/lume@v2.0.2/"
+    "@lume": "https://deno.land/x/lume@v2.3.0/mod.ts",
+    "@lume/cli": "https://deno.land/x/lume@v2.3.0/cli.ts",
+    "@lume/types": "https://deno.land/x/lume@v2.3.0/types.ts",
+    "@lume/plugins/": "https://deno.land/x/lume@v2.3.0/plugins/",
+    "@lume/deps/": "https://deno.land/x/lume@v2.3.0/deps/"
+  },
+  "tasks": {
+    "lume": "echo \"import '@lume/cli'\" | deno run -A - --config ./_lume.ts",
+    "build": "deno task lume",
+    "serve": "deno task lume -s"
   },
   "compilerOptions": {
+    "types": ["@lume/types"],
     "jsx": "react-jsx",
     "jsxImportSource": "npm:preact"
-  },
-  "lint": {
-    "rules": {
-      "exclude": ["no-explicit-any"]
-    }
   }
 }

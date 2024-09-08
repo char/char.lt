@@ -1,0 +1,12 @@
+<nav>
+  <div><a href="/">char.lt</a></div>
+
+  <ul>
+    {{ function navItem(label, href, active) }}
+      <li><a class="{{ active ? "active" : "" }}" href="{{ href }}">{{ label }}</a></li>
+    {{ /function }}
+    {{ navItem("Home", "/", url === "/") }}
+    {{ navItem("Blog", "/blog/", url.startsWith("/blog/")) }}
+    {{ navItem("Miscellanea", "/misc/", url.startsWith("/misc/")) }}
+  </ul>
+</nav>

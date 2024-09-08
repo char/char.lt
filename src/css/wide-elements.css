@@ -1,0 +1,67 @@
+:root {
+  --extra-width: 8em;
+}
+
+@media (min-width: 1050px) {
+  :is(article, section) {
+    & pre {
+      margin-left: calc(var(--extra-width) * -1);
+      width: calc(var(--content-width) + var(--extra-width) * 2 - 4em);
+      border-radius: 0;
+
+      position: relative;
+      z-index: 2;
+
+      &::before {
+        content: "";
+        position: absolute;
+        border-radius: 8px;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: var(--bg-col);
+        border: 1px solid var(--accent-col-mute-1);
+        z-index: -1;
+
+        /* i have to give it a little tolerance otherwise it flickers when you zoom */
+        clip-path: polygon(
+          -1px -1px,
+          calc(var(--extra-width) - 2em) -1px,
+          calc(var(--extra-width) - 2em) 3px,
+          calc(100% - 4px - var(--extra-width) + 2em) 3px,
+          calc(100% - 4px - var(--extra-width) + 2em) -1px,
+          calc(100% + 1px) -1px,
+          calc(100% + 1px) calc(100% + 1px),
+          calc(100% - 4px - var(--extra-width) + 2em) calc(100% + 1px),
+          calc(100% - 4px - var(--extra-width) + 2em) calc(100% - 3px),
+          calc(var(--extra-width) - 2em) calc(100% - 2px - 1px),
+          calc(var(--extra-width) - 2em) calc(100% + 1px),
+          -1px calc(100% + 1px)
+        );
+      }
+
+      & > code {
+        padding: 1em;
+        background-color: transparent;
+      }
+    }
+
+    & :is(picture, video) {
+      margin-left: calc(var(--extra-width) * -1);
+      width: calc(var(--content-width) + var(--extra-width) * 2 - 4em);
+      border-radius: 0;
+    }
+
+    & img {
+      margin: 0.75em auto;
+      width: auto;
+      max-width: min(
+        100vw,
+        calc(var(--content-width) + var(--extra-width) * 2)
+      );
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}

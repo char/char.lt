@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="{{ lang || "en" }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{{ title }}</title>
+    {{ if description }}
+      <meta property="og:description" content="{{ description }}" />
+    {{ /if }}
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="/css/styles.css" />
+    {{ content.head }}
+  </head>
+  <body>
+    <main>
+      {{ include "./navbar.vto" }}
+      {{ content.body }}
+      {{ include "./footer.vto" }}
+    </main>
+  </body>
+</html>
