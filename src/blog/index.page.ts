@@ -1,5 +1,6 @@
 export const layout = "base-layout.vto";
 export const type = undefined;
+export const title = "Blog - Charlotte Som";
 export const url = "/blog/";
 
 const renderBlogPosts = (blogPosts: Lume.Page["data"][]): string => {
