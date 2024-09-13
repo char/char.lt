@@ -4,7 +4,8 @@
 
 :root {
   --bg-col: #141415;
-  --bg-col-2: #232326;
+  --bg-col-2: #171719;
+  --bg-col-3: #232326;
   --bg-col-grid: #232323;
 
   --fg-col: #fefefe;
@@ -166,7 +167,7 @@ nav {
 
     list-style: none;
 
-    background-color: var(--bg-col-2);
+    background-color: var(--bg-col-3);
     border-radius: 2em;
 
     & > li {
@@ -174,7 +175,7 @@ nav {
         display: inline-block;
         padding: 0.5em 1em;
 
-        background-color: var(--bg-col-2);
+        background-color: var(--bg-col-3);
         color: var(--fg-col);
 
         border-radius: 1.25em;
@@ -217,11 +218,11 @@ pre > code {
 
   display: block;
   border-radius: 0.5em;
-  padding: 0;
+  padding: 1em;
   line-height: 1.4;
   font-weight: lighter;
 
-  background-color: transparent;
+  background-color: var(--bg-col-2);
 }
 
 video,
