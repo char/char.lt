@@ -47,6 +47,7 @@ html {
       0 0;
   background-size: 320px 46px;
   background-color: var(--bg-col);
+  background-position: center;
 }
 @supports (font-variation-settings: normal) {
   html {
@@ -228,3 +229,4 @@ img,
 picture {
   width: 100%;
 }
+
