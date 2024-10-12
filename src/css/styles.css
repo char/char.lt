@@ -30,7 +30,8 @@ html {
   background-color: var(--bg-col);
   color: var(--fg-col);
 
-  background: repeating-linear-gradient(
+  background:
+    repeating-linear-gradient(
         -30deg,
         var(--bg-col),
         var(--bg-col-grid) 1px,
@@ -223,6 +224,9 @@ pre > code {
   font-weight: lighter;
 
   background-color: var(--bg-col-2);
+
+  border: 1px solid;
+  border-color: var(--accent-col-mute-2);
 }
 
 video,
@@ -230,4 +234,3 @@ img,
 picture {
   width: 100%;
 }
-

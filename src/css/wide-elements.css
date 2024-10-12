@@ -1,8 +1,8 @@
 :root {
-  --extra-width: 8em;
+  --extra-width: 4em;
 }
 
-@media (min-width: 1050px) {
+@media (min-width: 880px) {
   :is(article, section) {
     & pre {
       margin-left: calc(var(--extra-width) * -1);
@@ -15,7 +15,7 @@
       &::before {
         content: "";
         position: absolute;
-        border-radius: 8px;
+        border-radius: 6px;
         top: 0;
         left: 0;
         height: 100%;
@@ -44,6 +44,7 @@
       & > code {
         padding: 1em 2em;
         background-color: transparent;
+        border: none;
       }
     }
 
@@ -62,6 +63,8 @@
       );
       margin-left: 50%;
       transform: translateX(-50%);
+
+      border-radius: 6px;
     }
   }
 }

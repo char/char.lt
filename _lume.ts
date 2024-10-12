@@ -27,7 +27,7 @@ const site = lume(
       options: {},
       plugins: [ventoAutoTrim()],
     },
-  }
+  },
 );
 
 site.use(toml());
@@ -43,7 +43,7 @@ site.use(
       title: "=title",
       description: "=excerpt",
     },
-  })
+  }),
 );
 site.use(
   codeHighlight({
@@ -52,7 +52,7 @@ site.use(
       ignoreUnescapedHTML: true,
       cssSelector: "pre code:not(.hljs-manual)",
     },
-  })
+  }),
 );
 site.use(katex({ options: { displayMode: false } }));
 
@@ -83,7 +83,7 @@ site.use(
         markdown: (text, options) => md.render(text, options),
       },
     },
-  })
+  }),
 );
 
 site.copy("assets");
