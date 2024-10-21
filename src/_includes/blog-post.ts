@@ -12,7 +12,7 @@ export default (data: Lume.Data) => {
   try {
     const fragment = new DOMParser().parseFromString(
       `<article>${children}</article>`,
-      "text/html"
+      "text/html",
     );
     const article = fragment.querySelector(":root > body > article")!;
     const footnotesElem = article.querySelector(".footnotes");
@@ -28,6 +28,7 @@ export default (data: Lume.Data) => {
 
   return {
     head: `
+      <link rel="stylesheet" href="/css/blog-post.css">
       <link rel="stylesheet" href="/css/syntax-highlighting.css">
       <link rel="stylesheet" href="/css/wide-elements.css" />
       <link rel="stylesheet" href="/css/vendor/katex.min.css">
