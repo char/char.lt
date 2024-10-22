@@ -1,3 +1,5 @@
-section + section {
-  margin-top: 2.5rem;
+article {
+  & section + section {
+    margin-top: 2.5rem;
+  }
 }
