@@ -2,7 +2,6 @@
 title: using oxide's "crucible" storage system on arch linux (haphazardly)
 description: because oxide stuff is just... cool??? they make cool stuff. idk
 unlisted: true
-draft: true
 ---
 
 hello. i'm back with another bad idea ^-^  

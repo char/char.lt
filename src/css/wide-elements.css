@@ -65,6 +65,8 @@
       transform: translateX(-50%);
 
       border-radius: 6px;
+
+      max-height: 36em;
     }
   }
 }
