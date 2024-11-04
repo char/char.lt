@@ -149,12 +149,15 @@ const server = ngx("server", [
   `server_name ${DOMAIN}`,
   ...ngx.listen(),
   ...ngx.letsEncrypt(DOMAIN),
+  // allow large blobs to be uploaded:
+  "client_max_body_size 1G",
   ngx("location /", [
     "proxy_pass http://127.0.0.1:2583",
     // a little extra work to get WebSocket proxying working:
     "proxy_http_version 1.1",
     "proxy_set_header Upgrade $http_upgrade",
     "proxy_set_header Connection $connection_upgrade",
+    // set the correct Host header for OAuth:
     "proxy_set_header Host $host",
   ]),
 ]);
