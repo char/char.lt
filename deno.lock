@@ -785,5 +785,10 @@
     "https://deno.land/x/xml@5.4.14/parse.ts": "af704c72d42607d5b3f364972c413e05b6d2921d164806ec47aee348cf6ce49c",
     "https://deno.land/x/xml@5.4.14/stringify.ts": "a00881a1e563902538cfea8ce31464c81e98e61dddcf718039d7118b46464687",
     "https://deno.land/x/xml@5.4.14/wasm_xml_parser/wasm_xml_parser.js": "7ec301b1db7d11671f4f8785505c6f617ea05fcb3d558686c67efad263ea0c8e"
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:preact@*"
+    ]
   }
 }

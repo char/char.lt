@@ -219,8 +219,10 @@ pre > code {
   overflow-x: auto;
 
   display: block;
-  border-radius: 0.5em;
-  padding: 1em;
+
+  border-radius: 0;
+  padding: 1em 0.5em;
+
   line-height: 1.4;
   font-weight: lighter;
 
@@ -228,6 +230,21 @@ pre > code {
 
   border: 1px solid;
   border-color: var(--accent-col-mute-2);
+}
+
+@media (max-width: 880px) {
+  pre > code {
+    margin: 0 -2em;
+    padding: 1.5em 2em;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+@media (max-width: 800px) {
+  pre > code {
+    margin: 0 -1em;
+  }
 }
 
 video,
