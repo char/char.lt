@@ -37,7 +37,7 @@ site.use(
     query: "type=blog_post unlisted!=true",
     info: {
       title: "charlotte som's blog",
-      description: "thoughts & ideas",
+      description: "thoughts and ideas",
     },
     items: {
       title: "=title",
