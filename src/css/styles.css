@@ -25,7 +25,7 @@ html {
   font-family: "Inter", sans-serif;
   font-size: 1.125rem;
   text-rendering: optimizeLegibility;
-  line-height: 1.25;
+  line-height: 1.33;
 
   background-color: var(--bg-col);
   color: var(--fg-col);
