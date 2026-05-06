@@ -1,10 +1,12 @@
 {
   "imports": {
+    "@arborium/arborium": "npm:@arborium/arborium@^2.16.0",
     "@lume": "https://deno.land/x/lume@v2.3.0/mod.ts",
     "@lume/cli": "https://deno.land/x/lume@v2.3.0/cli.ts",
     "@lume/types": "https://deno.land/x/lume@v2.3.0/types.ts",
     "@lume/plugins/": "https://deno.land/x/lume@v2.3.0/plugins/",
-    "@lume/deps/": "https://deno.land/x/lume@v2.3.0/deps/"
+    "@lume/deps/": "https://deno.land/x/lume@v2.3.0/deps/",
+    "@lume/utils/": "https://deno.land/x/lume@v2.3.0/core/utils/"
   },
   "tasks": {
     "lume": "echo \"import '@lume/cli'\" | deno run -A - --config ./_lume.ts",

@@ -83,11 +83,11 @@ PDS_DATA_DIRECTORY=/srv/www/pds/data
 PDS_BLOBSTORE_DISK_LOCATION=/srv/www/pds/data/blocks
 PDS_BLOB_UPLOAD_LIMIT=52428800
 
-PDS_JWT_SECRET=<secret 1> # generate me!
-PDS_ADMIN_PASSWORD=<secret 2> # generate me!
+PDS_JWT_SECRET="<secret 1>" # generate me!
+PDS_ADMIN_PASSWORD="<secret 2>" # generate me!
 # this is a key that should be generated with an openssl command:
 # openssl ecparam --name secp256k1 --genkey --noout --outform DER | tail -c +8 | head -c 32 | xxd -p -c 32
-PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX=<secret 3>
+PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX="<secret 3>"
 
 # this config block connects your PDS to the Bluesky main net:
 PDS_DID_PLC_URL="https://plc.directory"

@@ -32,14 +32,14 @@ An example of bytecode verification is checking whether jump instructions are at
 
 Here is a simple case where we jump to a label with the `goto` instruction:
 
-<pre><code class="hljs-manual lang-javabytecode"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-name">myWeirdMethod</span>():</span>
-  <span class="hljs-keyword">goto</span> my_label
-  <span class="hljs-keyword">sipush</span> <span class="hljs-number">0x06ac</span>
-  <span class="hljs-keyword">ireturn</span>
+<pre><code class="arborium lang-javabytecode"><a-km>public</a-km> <a-tb>int</a-tb> <a-fd>myWeirdMethod</a-fd>():
+  <a-k>goto</a-k> my_label
+  <a-k>sipush</a-k> <a-n>0x06ac</a-n>
+  <a-k>ireturn</a-k>
 
   my_label:
-  <span class="hljs-keyword">sipush</span> <span class="hljs-number">0x1234</span>
-  <span class="hljs-keyword">ireturn</span>
+  <a-k>sipush</a-k> <a-n>0x1234</a-n>
+  <a-k>ireturn</a-k>
 </code></pre>
 
 It decompiles to something like this:
@@ -58,13 +58,13 @@ But if we peruse the [Java bytecode instruction listings](https://en.wikipedia.o
 
 Therefore, we can manipulate our `goto` instruction to jump into the middle of our immediate `short` constant that usually would act as the operand to `sipush`:
 
-<pre><code class="hljs-manual language-javabytecode"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-name">myWeirdMethod</span>():</span>
-  <span class="hljs-keyword">goto</span> &lt;four bytes forward&gt;
-  <span class="hljs-keyword">sipush</span> <span class="hljs-number">0x06ac</span>
-  <span class="hljs-keyword">ireturn</span>
+<pre><code class="arborium lang-javabytecode"><a-km>public</a-km> <a-tb>int</a-tb> <a-fd>myWeirdMethod</a-fd>():
+  <a-k>goto</a-k> &lt;four bytes forward&gt;
+  <a-k>sipush</a-k> <a-n>0x06ac</a-n>
+  <a-k>ireturn</a-k>
 
-  <span class="hljs-keyword">sipush</span> <span class="hljs-number">0x1234</span>
-  <span class="hljs-keyword">ireturn</span>
+  <a-k>sipush</a-k> <a-n>0x1234</a-n>
+  <a-k>ireturn</a-k>
 </code></pre>
 
 Which wouldn't really decompile:
@@ -214,32 +214,32 @@ A few months ago, while looking into different Java profilers, I discovered the 
 
 Anyway, in order for the agent to function, the JVM exposes a few global fields to allow applications to inspect its current state. On an x86_64 Linux install of OpenJDK 8, they look like this:
 
-<pre><code class="hljs lang-bash">$ <span class="hljs-keyword">cd</span> /usr/lib/jvm/default/jre/lib/amd64/server/
-server/ $ <span class="hljs-keyword">nm</span> -D libjvm.so | <span class="hljs-keyword">grep</span> gHotSpot
-<span class="hljs-number">0000000000d222e0</span> B <span class="hljs-string">gHotSpotVMIntConstantEntryArrayStride</span>
-<span class="hljs-number">0000000000d222f0</span> B <span class="hljs-string">gHotSpotVMIntConstantEntryNameOffset</span>
-<span class="hljs-number">0000000000d222e8</span> B <span class="hljs-string">gHotSpotVMIntConstantEntryValueOffset</span>
-<span class="hljs-number">0000000000ce4568</span> D <span class="hljs-string">gHotSpotVMIntConstants</span>
-<span class="hljs-number">0000000000d222c8</span> B <span class="hljs-string">gHotSpotVMLongConstantEntryArrayStride</span>
-<span class="hljs-number">0000000000d222d8</span> B <span class="hljs-string">gHotSpotVMLongConstantEntryNameOffset</span>
-<span class="hljs-number">0000000000d222d0</span> B <span class="hljs-string">gHotSpotVMLongConstantEntryValueOffset</span>
-<span class="hljs-number">0000000000ce4560</span> D <span class="hljs-string">gHotSpotVMLongConstants</span>
-<span class="hljs-number">0000000000d22338</span> B <span class="hljs-string">gHotSpotVMStructEntryAddressOffset</span>
-<span class="hljs-number">0000000000d22330</span> B <span class="hljs-string">gHotSpotVMStructEntryArrayStride</span>
-<span class="hljs-number">0000000000d22358</span> B <span class="hljs-string">gHotSpotVMStructEntryFieldNameOffset</span>
-<span class="hljs-number">0000000000d22348</span> B <span class="hljs-string">gHotSpotVMStructEntryIsStaticOffset</span>
-<span class="hljs-number">0000000000d22340</span> B <span class="hljs-string">gHotSpotVMStructEntryOffsetOffset</span>
-<span class="hljs-number">0000000000d22360</span> B <span class="hljs-string">gHotSpotVMStructEntryTypeNameOffset</span>
-<span class="hljs-number">0000000000d22350</span> B <span class="hljs-string">gHotSpotVMStructEntryTypeStringOffset</span>
-<span class="hljs-number">0000000000ce4578</span> D <span class="hljs-string">gHotSpotVMStructs</span>
-<span class="hljs-number">0000000000d222f8</span> B <span class="hljs-string">gHotSpotVMTypeEntryArrayStride</span>
-<span class="hljs-number">0000000000d22310</span> B <span class="hljs-string">gHotSpotVMTypeEntryIsIntegerTypeOffset</span>
-<span class="hljs-number">0000000000d22318</span> B <span class="hljs-string">gHotSpotVMTypeEntryIsOopTypeOffset</span>
-<span class="hljs-number">0000000000d22308</span> B <span class="hljs-string">gHotSpotVMTypeEntryIsUnsignedOffset</span>
-<span class="hljs-number">0000000000d22300</span> B <span class="hljs-string">gHotSpotVMTypeEntrySizeOffset</span>
-<span class="hljs-number">0000000000d22320</span> B <span class="hljs-string">gHotSpotVMTypeEntrySuperclassNameOffset</span>
-<span class="hljs-number">0000000000d22328</span> B <span class="hljs-string">gHotSpotVMTypeEntryTypeNameOffset</span>
-<span class="hljs-number">0000000000ce4570</span> D <span class="hljs-string">gHotSpotVMTypes</span>
+<pre><code class="arborium lang-bash">$ <a-k>cd</a-k> /usr/lib/jvm/default/jre/lib/amd64/server/
+server/ $ <a-k>nm</a-k> -D libjvm.so | <a-k>grep</a-k> gHotSpot
+<a-n>0000000000d222e0</a-n> B <a-s>gHotSpotVMIntConstantEntryArrayStride</a-s>
+<a-n>0000000000d222f0</a-n> B <a-s>gHotSpotVMIntConstantEntryNameOffset</a-s>
+<a-n>0000000000d222e8</a-n> B <a-s>gHotSpotVMIntConstantEntryValueOffset</a-s>
+<a-n>0000000000ce4568</a-n> D <a-s>gHotSpotVMIntConstants</a-s>
+<a-n>0000000000d222c8</a-n> B <a-s>gHotSpotVMLongConstantEntryArrayStride</a-s>
+<a-n>0000000000d222d8</a-n> B <a-s>gHotSpotVMLongConstantEntryNameOffset</a-s>
+<a-n>0000000000d222d0</a-n> B <a-s>gHotSpotVMLongConstantEntryValueOffset</a-s>
+<a-n>0000000000ce4560</a-n> D <a-s>gHotSpotVMLongConstants</a-s>
+<a-n>0000000000d22338</a-n> B <a-s>gHotSpotVMStructEntryAddressOffset</a-s>
+<a-n>0000000000d22330</a-n> B <a-s>gHotSpotVMStructEntryArrayStride</a-s>
+<a-n>0000000000d22358</a-n> B <a-s>gHotSpotVMStructEntryFieldNameOffset</a-s>
+<a-n>0000000000d22348</a-n> B <a-s>gHotSpotVMStructEntryIsStaticOffset</a-s>
+<a-n>0000000000d22340</a-n> B <a-s>gHotSpotVMStructEntryOffsetOffset</a-s>
+<a-n>0000000000d22360</a-n> B <a-s>gHotSpotVMStructEntryTypeNameOffset</a-s>
+<a-n>0000000000d22350</a-n> B <a-s>gHotSpotVMStructEntryTypeStringOffset</a-s>
+<a-n>0000000000ce4578</a-n> D <a-s>gHotSpotVMStructs</a-s>
+<a-n>0000000000d222f8</a-n> B <a-s>gHotSpotVMTypeEntryArrayStride</a-s>
+<a-n>0000000000d22310</a-n> B <a-s>gHotSpotVMTypeEntryIsIntegerTypeOffset</a-s>
+<a-n>0000000000d22318</a-n> B <a-s>gHotSpotVMTypeEntryIsOopTypeOffset</a-s>
+<a-n>0000000000d22308</a-n> B <a-s>gHotSpotVMTypeEntryIsUnsignedOffset</a-s>
+<a-n>0000000000d22300</a-n> B <a-s>gHotSpotVMTypeEntrySizeOffset</a-s>
+<a-n>0000000000d22320</a-n> B <a-s>gHotSpotVMTypeEntrySuperclassNameOffset</a-s>
+<a-n>0000000000d22328</a-n> B <a-s>gHotSpotVMTypeEntryTypeNameOffset</a-s>
+<a-n>0000000000ce4570</a-n> D <a-s>gHotSpotVMTypes</a-s>
 </code></pre>
 
 Now all that's left to do is to find their locations within our own Java process.

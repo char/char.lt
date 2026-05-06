@@ -1,8 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
 
 import lume from "@lume";
-import codeHighlight from "@lume/plugins/code_highlight.ts";
 import feed from "@lume/plugins/feed.ts";
+import arborium from "./_lume/arborium.ts";
 import katex from "@lume/plugins/katex.ts";
 import pug from "@lume/plugins/pug.ts";
 import toml from "@lume/plugins/toml.ts";
@@ -46,12 +46,19 @@ site.use(
   }),
 );
 site.use(
-  codeHighlight({
-    // @ts-expect-error codeHighlight _does_ merge but doesn't let you provide a Partial<Options>
-    options: {
-      ignoreUnescapedHTML: true,
-      cssSelector: "pre code:not(.hljs-manual)",
-    },
+  arborium({
+    languages: [
+      "bash",
+      "c",
+      "cpp",
+      "diff",
+      "java",
+      "javascript",
+      "kotlin",
+      "nginx",
+      "toml",
+      "typescript",
+    ],
   }),
 );
 site.use(katex({ options: { displayMode: false } }));

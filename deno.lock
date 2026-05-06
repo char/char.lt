@@ -1,5 +1,5 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
     "jsr:@davidbonnet/astring@1.8.6": "1.8.6",
     "jsr:@libs/typing@2": "2.9.0",
@@ -30,6 +30,7 @@
     "jsr:@std/toml@^1.0.1": "1.0.1",
     "jsr:@std/yaml@1.0.4": "1.0.4",
     "jsr:@std/yaml@^1.0.4": "1.0.4",
+    "npm:@arborium/arborium@^2.16.0": "2.16.0",
     "npm:@js-temporal/polyfill@0.4.4": "0.4.4",
     "npm:@types/estree@1.0.5": "1.0.5",
     "npm:@types/pug@2.0.10": "2.0.10",
@@ -142,6 +143,9 @@
     }
   },
   "npm": {
+    "@arborium/arborium@2.16.0": {
+      "integrity": "sha512-9rz2J9Hx+nMq1qon65SbmE+XZvwr/oDqYPinj+BnYOzef7lGwzn1GtYhuB1Cz8jTZ84wIaBt+B8nTQEGYniqNg=="
+    },
     "@babel/helper-string-parser@7.24.8": {
       "integrity": "sha512-pO9KhhRcuUyGnJWwyEgnRJTSIZHiT+vMD0kPeD+so0l7mxkMT19g3pjY9GTnHySck/hDzq+dtW/4VgnMkippsQ=="
     },
@@ -152,7 +156,8 @@
       "integrity": "sha512-trGdfBdbD0l1ZPmcJ83eNxB9rbEax4ALFTF7fN386TMYbeCQbyme5cOEXQhbGXKebwGaB/J52w1mrklMcbgy6Q==",
       "dependencies": [
         "@babel/types"
-      ]
+      ],
+      "bin": true
     },
     "@babel/types@7.25.6": {
       "integrity": "sha512-/l42B1qxpG6RdfYf343Uw1vmDjeNhneUXtzhojE7pDgfpEypmRhI6j1kr17XCVv4Cgl9HdAiQY2x0GwKm7rWCw==",
@@ -189,7 +194,8 @@
       "integrity": "sha512-Sk/uYFOBAB7mb74XcpizmH0KOR2Pv3D2Hmrh1Dmy5BmK3MpdSa5kqZcg6EKBdklU0bFXX9gCfzvpnyUehrPIuA=="
     },
     "acorn@7.4.1": {
-      "integrity": "sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A=="
+      "integrity": "sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==",
+      "bin": true
     },
     "argparse@2.0.1": {
       "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q=="
@@ -347,7 +353,8 @@
       "integrity": "sha512-RQrI8rlHY92OLf3rho/Ts8i/XvjgguEjOkO1BEXcU3N8BqPpSzBNwV/G0Ukr+P/l3ivvJUE/Fa/CwbS6HesGNQ==",
       "dependencies": [
         "commander"
-      ]
+      ],
+      "bin": true
     },
     "linkify-it@5.0.0": {
       "integrity": "sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==",
@@ -383,7 +390,8 @@
         "mdurl",
         "punycode.js",
         "uc.micro"
-      ]
+      ],
+      "bin": true
     },
     "mdurl@2.0.0": {
       "integrity": "sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w=="
@@ -401,7 +409,8 @@
       "integrity": "sha512-RRurnSjJPj4rp5K6XoP45Ui33ncb7e4H7WiOHVpjbkvqvA3U+N8Z6Qbo0AE6leGYBV66n8EhEaFixvIu3SkxFw=="
     },
     "prettier@3.3.3": {
-      "integrity": "sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew=="
+      "integrity": "sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==",
+      "bin": true
     },
     "promise@7.3.1": {
       "integrity": "sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==",
@@ -506,7 +515,8 @@
         "is-core-module",
         "path-parse",
         "supports-preserve-symlinks-flag"
-      ]
+      ],
+      "bin": true
     },
     "set-function-length@1.2.2": {
       "integrity": "sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==",
@@ -548,6 +558,17 @@
     }
   },
   "remote": {
+    "https://cdn.jsdelivr.net/npm/@arborium/arborium@2.16.0/dist/arborium_host.js": "0b3901142211cb327b70b3e0d35b69671ee8f10a346f2ccc8488f6f9e2b45e8c",
+    "https://cdn.jsdelivr.net/npm/@arborium/bash@2.16.0/grammar.js": "e3fe1c21596b0756e88478a0d4cbb801c03826bff93816f075717b9390211d69",
+    "https://cdn.jsdelivr.net/npm/@arborium/c@2.16.0/grammar.js": "9f6c24f7af514b054121199f84ec8cf8835ed6a8d9d8477a848148c05ece29f6",
+    "https://cdn.jsdelivr.net/npm/@arborium/cpp@2.16.0/grammar.js": "07a296437d09cf459589a2b73d0a830fa466a6d4629cb47c77ab8134a3353265",
+    "https://cdn.jsdelivr.net/npm/@arborium/diff@2.16.0/grammar.js": "5d5bf7ce21209144c72fca47555f7c741d31b84366ed61bd4b3aa264611bd115",
+    "https://cdn.jsdelivr.net/npm/@arborium/java@2.16.0/grammar.js": "6a9db1924d41173817a7a51bfcc63da4b6b93f702e43c480f6cd12efcdb10fd9",
+    "https://cdn.jsdelivr.net/npm/@arborium/javascript@2.16.0/grammar.js": "06f5b93b7f45d8457780a302dfa15bee12cda3d167b7d2256d89b90b89ca9fea",
+    "https://cdn.jsdelivr.net/npm/@arborium/kotlin@2.16.0/grammar.js": "a9f2b995b443a13a0a512e7b0eb368b75e295e8e7005c7ea4ab1b0c4873f01d8",
+    "https://cdn.jsdelivr.net/npm/@arborium/nginx@2.16.0/grammar.js": "8fe88aa882f2fb68a1d4da53ecf7fa3c663d796ae81e4c3f3b02f5a83cb42e51",
+    "https://cdn.jsdelivr.net/npm/@arborium/toml@2.16.0/grammar.js": "b903f24d22331ac64f85bcf162f004ed47b20358b47d8511a0daeb7218dcf288",
+    "https://cdn.jsdelivr.net/npm/@arborium/typescript@2.16.0/grammar.js": "be5ee4cb454f68129b5396fcbce8acef70153364e7fed21ef606e24e3a5257c5",
     "https://deno.land/std@0.170.0/_util/asserts.ts": "d0844e9b62510f89ce1f9878b046f6a57bf88f208a10304aab50efcb48365272",
     "https://deno.land/std@0.170.0/_util/os.ts": "8a33345f74990e627b9dfe2de9b040004b08ea5146c7c9e8fe9a29070d193934",
     "https://deno.land/std@0.170.0/encoding/base64.ts": "8605e018e49211efc767686f6f687827d7f5fd5217163e981d8d693105640d7a",
@@ -788,6 +809,7 @@
   },
   "workspace": {
     "dependencies": [
+      "npm:@arborium/arborium@^2.16.0",
       "npm:preact@*"
     ]
   }

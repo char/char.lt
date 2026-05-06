@@ -1,5 +1,5 @@
 :root {
-  --hl-comment: #768196;
+  --hl-comment: #9da8bb;
   --hl-keyword: #9bedff;
   --hl-builtin: #ff94d1;
   --hl-string: #95ffc3;
@@ -7,59 +7,45 @@
   --hl-number: var(--hl-string);
 }
 
-.hljs-comment,
-.hljs-quote,
-.hljs-deletion,
-.hljs-meta {
+
+a-c, a-cd, a-er {
   color: var(--hl-comment);
 }
 
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-literal,
-.hljs-section,
-.hljs-link {
+a-k, a-kc, a-ko, a-kd, a-ke, a-kf, a-ki, a-kp, a-kr, a-kt, a-ky, a-km, a-dr,
+a-in, a-sc, a-rp, a-cn, a-ex, a-pp,
+a-co, a-cb, a-m,
+a-tu, a-tr {
   color: var(--hl-keyword);
-}
-
-.hljs-function .hljs-keyword,
-.hljs-built_in {
-  color: var(--hl-builtin);
-}
-
-.hljs-string,
-.hljs-regexp {
-  color: var(--hl-string);
-}
-
-.hljs-type {
-  color: var(--hl-builtin);
-}
-
-.hljs-title,
-.hljs-name,
-.language-json .hljs-attr {
-  color: var(--hl-ident);
-}
-
-.hljs-number,
-.hljs-addition {
-  color: var(--hl-number);
-}
-
-.hljs-keyword,
-.hljs-strong {
   font-weight: bold;
 }
 
-.hljs-emphasis {
-  font-style: italic;
+/* builtins & types */
+a-t, a-tb, a-tq, a-tf, a-fb {
+  color: var(--hl-builtin);
 }
 
-.hljs-subst {
-  color: var(--fg-col);
+a-s, a-ss, a-se, a-rx, a-ch, a-cs {
+  color: var(--hl-string);
 }
 
-.language-bash .hljs-variable {
+a-n {
+  color: var(--hl-number);
+}
+
+a-f, a-fm, a-fd, a-fc, a-cr, a-ns,
+a-tg, a-td, a-at, a-pr, a-vm, a-l {
+  color: var(--hl-ident);
+}
+
+a-da { color: var(--hl-string); }
+a-dd { color: var(--hl-comment); }
+
+a-em { font-style: italic; }
+a-st, a-tt { font-weight: bold; }
+a-tx { text-decoration: line-through; }
+
+/* match the old behaviour of only colouring shell-script variables */
+.language-bash a-v, .language-shell a-v, .language-zsh a-v {
   color: var(--hl-ident);
 }
