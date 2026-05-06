@@ -119,7 +119,12 @@ h1 {
   font-weight: 2rem;
 }
 h2 {
-  font-size: 1.25rem;
+  font-size: 1.33rem;
+  margin-top: 2rem;
+}
+
+p {
+  margin: 0.75rem 0;
 }
 
 code,

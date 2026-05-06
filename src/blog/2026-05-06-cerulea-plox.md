@@ -5,6 +5,8 @@ description: "atproto ethos as applied to open data? an experiment"
 
 tl;dr: plox is a canonical encoding of the did:plc directory stored in an atproto PDS. as of may 2026 we're using 35 gigabytes of disk (transparently `zstd`-compressed; raw ≈80 gigabytes) to store `at://cerulea.blue/blue.cerulea.plox.bundle`. you can use it to quickly bootstrap a PLC directory mirror without slowly scraping the log from the plc directory (respecting low rate limits) and you have assured lazy-trust (anyone can recompute and verify the plox CIDs against the canonical plc.directory via slow scraping).
 
+anyway, i'll get to the long version:
+
 ## stable identity on atproto
 
 please humor me while i define my terms:
@@ -20,7 +22,7 @@ to resolve a `did:plc`, you ask the authoritative "DID PLC Directory" (at [plc.d
 
 [^3]: this is actually not completely true in the case of a PLC hardfork and a DID with a rotated-out, compromised key: an attacker can use the leaked key to create an alternative history for the DID, and the replica has no way of knowing which fork is authoritative without trusting the original PLC directory's say on sequencing, but I digress.
 
-but there is a problem: the directory of PLC DIDs only allows you to submit (in testing) 500 requests every 5 minutes. this is fine for most atproto services, but not for running a full-scale relay (where every DID must be dereferenced to check if a PDS/signing key is authoritative for an event) or for extremely scaled-up atproto apps (where 500 DID cache misses in 5 minutes is plausible). this is reason A to run a read replica.
+but there's a problem: the directory of PLC DIDs only allows you to submit (in testing) 500 requests every 5 minutes. this is fine for most atproto services, but not for running a full-scale relay (where every DID must be dereferenced to check if a PDS/signing key is authoritative for an event) or for extremely scaled-up atproto apps (where 500 DID cache misses in 5 minutes is plausible). this is reason A to run a read replica.
 
 reason B to run a replica is that we need it in the case of did:plc exit: for now we've all agreed (passively) to use the central service controlled by Bluesky PBC (for now; a Verein soon) to look up PLC DIDs. therefore, they essentially form a Proof-by-Decree ledger (_fiat DIDs_, if you will) in a structure that sorta parallels a contemporary monarchy: the central directory is _supposed_ to accept all valid operations (subject to rate limits), but can technically exercise its arbitrary power to deny the submission of an operation at any point - at the risk of mass user revolt; _we can all agree on a new authority_, but said authority needs to have all historical PLC data up to the point of switchover.
 
@@ -33,6 +35,8 @@ a PLC directory has to perform the following tasks:
 - subtly: provide a reliable timestamp for any accepted PLC operation (as inside audit logs & exports)
 
 since we have an agreed canonical directory, we have the convenience of a total ordering of operations: each entry the `/export` endpoint returns contains a `seq` that we can rely on for pagination (for now) or for perfect-hashing did:plc for size (you can turn a PLC DID into the first `seq` it appears in, or just an incrementing id of all DIDs ever seen on the directory - see [zplc-server](https://github.com/char/zplc-server).)
+
+## backfilling a replica
 
 but to be able to mirror all the operations, we must first fetch all the operations. as mentioned before, we can only submit a request every ≈600ms (5min / 500 requests) but there are almost a hundred million plc ops (a hundred thousand `/export` requests in sequence - about 17 hours of non-stop backfill!)
 
