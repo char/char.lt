@@ -1,6 +1,7 @@
 ---
 title: i told myself i would write more this year
 description: but first, I had to invent the universe
+unlisted: true
 ---
 
 haha, hey! welcome to my new site!! I've moved all of my blog posts over and I will be setting up redirects from the old places, since "cool URLs don't change" and all[^1].

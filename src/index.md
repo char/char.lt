@@ -9,8 +9,7 @@ layout: main-page.ts
 
 <h1>Charlotte Som,<br>multispecialist technician & computer multimedia artist.</h1>
 
-Hi! I'm **Charlotte** (she/her), welcome to my home on the web.
-I'm in my mid-20s and I'm based in England.
+I like playing in the intersection between a lot of disciplines! I'm a programmer, a music producer, I'm interested in visual effects, and I like solving problems.
 
 </div>
 <img class="profile-picture" src="/assets/pfp.jpg" alt="Charlotte" />
@@ -48,15 +47,6 @@ During my time computer-touching, I've specialized in a few software niches:
 - **STM32 embedded development** (keyboards!)
   - I've gone lower-level before, but nowadays I mostly just run [QMK](https://github.com/qmk/qmk_firmware).
   - Some day I would love to build keyboard firmware on [Hubris](https://github.com/oxidecomputer/hubris) as an ≈RTOS.
-
-</section>
-<section id="music">
-
-## Music
-
-I'm an electronic music producer; I love maximalist synthetic sounds. My usual go-to genres to listen to are hyperpop, drum & bass, garage, and dubstep; but I love a bunch of different types of music.
-
-I haven't gotten to release any fully-produced music, but you can find some of my live sets on [SoundCloud](https://soundcloud.com/char-lt) - they're heavily-produced mashup compilations.
 
 </section>
 <section id="languages">
