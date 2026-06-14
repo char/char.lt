@@ -19,30 +19,6 @@
   --page-gutter: 1rem;
 }
 
-@font-face {
-  font-family: "Ioskeley Mono";
-  src: url("https://ahatem.github.io/IoskeleyMono/fonts/IoskeleyMono-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Ioskeley Mono";
-  src: url("https://ahatem.github.io/IoskeleyMono/fonts/IoskeleyMono-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Ioskeley Mono";
-  src: url("https://ahatem.github.io/IoskeleyMono/fonts/IoskeleyMono-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
 html {
   color-scheme: dark;
 
@@ -137,7 +113,7 @@ li + li {
 
 code,
 kbd {
-  font-family: "Ioskeley Mono", ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", monospace;
+  font-family: "Ioskeley", ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", monospace;
   font-size: 0.875em;
   font-weight: 500;
 
@@ -261,7 +237,7 @@ pre {
     margin: 0;
 
     line-height: 1.45;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 500;
 
     background: transparent;
@@ -329,10 +305,6 @@ picture {
 
       & li {
         display: block;
-
-        & + li {
-          margin-top: 0.5rem;
-        }
 
         & + li::before {
           content: none;

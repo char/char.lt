@@ -9,6 +9,7 @@
     {{ /if }}
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    {{ await stylesheet("/css/ioskeley.css") }}
     {{ await stylesheet("/css/styles.css") }}
     {{ for href of content.stylesheets || [] }}
       {{ await stylesheet(href) }}
