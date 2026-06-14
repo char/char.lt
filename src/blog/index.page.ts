@@ -29,8 +29,8 @@ export default (data: Lume.Data) => {
     .filter((post) => !post.unlisted);
 
   return {
-    head: `<link rel="stylesheet" href="/css/blog-archive.css" />
-      <link
+    stylesheets: ["/css/blog-archive.css"],
+    head: `<link
         rel="alternate"
         type="application/rss+xml"
         href="https://char.lt/blog.rss"

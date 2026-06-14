@@ -27,11 +27,13 @@ export default (data: Lume.Data) => {
   }
 
   return {
+    stylesheets: [
+      "/css/blog-post.css",
+      "/css/syntax-highlighting.css",
+      "/css/wide-elements.css",
+      "/css/vendor/katex.min.css",
+    ],
     head: `
-      <link rel="stylesheet" href="/css/blog-post.css">
-      <link rel="stylesheet" href="/css/syntax-highlighting.css">
-      <link rel="stylesheet" href="/css/wide-elements.css" />
-      <link rel="stylesheet" href="/css/vendor/katex.min.css">
       <link
         rel="alternate"
         type="application/rss+xml"

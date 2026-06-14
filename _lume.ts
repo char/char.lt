@@ -96,6 +96,18 @@ site.use(
 site.copy("assets");
 site.copy("css");
 
+const cssVersions = new Map<string, string>();
+site.data("stylesheet", async (href: string) => {
+  let version = cssVersions.get(href);
+  if (!version) {
+    const digest = await crypto.subtle.digest("SHA-256", await Deno.readFile(`src${href}`));
+    version = Array.from(new Uint8Array(digest.slice(0, 6)), (byte) => byte.toString(16).padStart(2, "0")).join("");
+    cssVersions.set(href, version);
+  }
+
+  return `<link rel="stylesheet" href="${href}?v=${version}" />`;
+});
+
 import prettier from "npm:prettier@3";
 site.process([".html"], async (assets) => {
   for (const asset of assets) {
