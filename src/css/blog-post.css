@@ -25,3 +25,7 @@ article {
     margin-top: 2rem;
   }
 }
+
+aside {
+  border-top: 1px solid var(--fg-col);
+}
