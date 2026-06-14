@@ -17,8 +17,6 @@ I'm in my mid-20s and I'm based in England.
 
 </header>
 
-<script type="module" src="/assets/js/char-skrunkle.mjs"></script>
-
 Currently, I'm working at a startup where we make browser-based game technology. I really think casual games really fit the browser as an application platform, since they can be asset-light & install-free.
 
 In my free time, I reverse-engineer & make mods for games, make little websites and applications, write real-time audio plugins, and do music production. Currently, the project that takes up the majority of my time is a work-in-progress software additive synthesizer.
