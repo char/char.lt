@@ -20,7 +20,6 @@
   }
 
   & .profile-picture {
-    all: unset;
     display: block;
     grid-column: 2;
     grid-row: 1;
@@ -41,5 +40,38 @@
     & .profile-picture {
       width: 7rem;
     }
+  }
+}
+
+.profile-picture {
+  transform-origin: center;
+  touch-action: manipulation;
+
+  &:focus-visible {
+    outline: 0.125rem solid currentColor;
+    outline-offset: 0.25rem;
+  }
+
+  &.is-squishing {
+    animation: profile-picture-squish var(--squish-duration, 0.45s) cubic-bezier(0.2, 0.8, 0.25, 1.2);
+  }
+}
+
+@keyframes profile-picture-squish {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  28% {
+    transform: rotate(var(--squish-rotate-a, 5deg)) scale(var(--squish-wide-x, 1.08), var(--squish-wide-y, 0.92));
+  }
+
+  55% {
+    transform: rotate(var(--squish-rotate-b, -4deg)) scale(var(--squish-tall-x, 0.94), var(--squish-tall-y, 1.08));
+  }
+
+  78% {
+    transform: rotate(var(--squish-rotate-c, 2deg)) scale(1.02, 0.98);
   }
 }

@@ -13,9 +13,11 @@ Hi! I'm **Charlotte** (she/her), welcome to my home on the web.
 I'm in my mid-20s and I'm based in England.
 
 </div>
-<img class="profile-picture" src="/assets/pfp.jpg" />
+<img class="profile-picture" src="/assets/pfp.jpg" alt="Charlotte" />
 
 </header>
+
+<script type="module" src="/assets/js/char-skrunkle.mjs"></script>
 
 Currently, I'm working at a startup where we make browser-based game technology. I really think casual games really fit the browser as an application platform, since they can be asset-light & install-free.
 
