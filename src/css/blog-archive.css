@@ -1,7 +1,6 @@
 #blog-archive-list > ul {
   display: grid;
-  column-gap: 1em;
-  row-gap: 0.25em;
+  column-gap: 1ch;
   grid-template-columns: auto 1fr;
   grid-template-areas: "date headline";
   padding: 0;

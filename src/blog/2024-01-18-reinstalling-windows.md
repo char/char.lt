@@ -1,6 +1,7 @@
 ---
 title: what i do when i reinstall windows
 description: a little checklist just for me
+unlisted: true
 ---
 
 this is one of those blog posts where it's mostly a note-to-self.

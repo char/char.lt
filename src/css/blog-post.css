@@ -1,5 +1,27 @@
+header {
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+header h1 {
+  margin-bottom: 1rem;
+  line-height: 1.12;
+}
+
+header p {
+  margin: 0;
+}
+
+header p + p {
+  margin-top: 0.5rem;
+}
+
+header time {
+  display: block;
+}
+
 article {
   & section + section {
-    margin-top: 2.5rem;
+    margin-top: 2rem;
   }
 }

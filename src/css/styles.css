@@ -3,54 +3,58 @@
 }
 
 :root {
-  --bg-col: #141415;
-  --bg-col-2: #171719;
-  --bg-col-3: #232326;
-  --bg-col-grid: #232323;
+  --bg-col: #100e11;
+  --bg-col-2: #181419;
+  --bg-col-3: #211a22;
 
-  --fg-col: #fefefe;
-  --fg-col-mute-1: #bbbbbb;
+  --fg-col: #f3eef2;
+  --fg-col-mute: #958792;
 
-  --accent-col: #ffa7f8;
-  --accent-col-mute-1: #ae76a9;
-  --accent-col-mute-2: #664363;
+  --accent-col: #ff9df5;
+  --accent-col-mute-1: #b86caf;
+  --accent-col-mute-2: #493045;
   --accent-col-fade-1: #ffd0fb;
 
-  --content-width: 800px;
+  --content-width: 720px;
+  --page-gutter: 1rem;
+}
+
+@font-face {
+  font-family: "Ioskeley Mono";
+  src: url("https://ahatem.github.io/IoskeleyMono/fonts/IoskeleyMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ioskeley Mono";
+  src: url("https://ahatem.github.io/IoskeleyMono/fonts/IoskeleyMono-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ioskeley Mono";
+  src: url("https://ahatem.github.io/IoskeleyMono/fonts/IoskeleyMono-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
 
 html {
   color-scheme: dark;
 
   font-family: "Inter", sans-serif;
-  font-size: 1.125rem;
+  font-size: 1rem;
+  line-height: 1.58;
   text-rendering: optimizeLegibility;
-  line-height: 1.33;
 
-  background-color: var(--bg-col);
+  background: var(--bg-col);
   color: var(--fg-col);
-
-  background:
-    repeating-linear-gradient(
-        -30deg,
-        var(--bg-col),
-        var(--bg-col-grid) 1px,
-        transparent 2px,
-        transparent 20px
-      )
-      0 0,
-    repeating-linear-gradient(
-        30deg,
-        var(--bg-col),
-        var(--bg-col-grid) 1px,
-        transparent 2px,
-        transparent 20px
-      )
-      0 0;
-  background-size: 320px 46px;
-  background-color: var(--bg-col);
-  background-position: center;
 }
+
 @supports (font-variation-settings: normal) {
   html {
     font-family: "InterVariable", sans-serif;
@@ -65,153 +69,177 @@ body {
 }
 
 ::selection {
-  background-color: #5e315aaa;
+  background-color: #6d3567;
 }
 
 main {
-  background-color: var(--bg-col);
-  border: 1px solid var(--accent-col-mute-1);
-  border-radius: 8px;
-
-  margin: 1em auto;
-
-  max-width: var(--content-width);
+  width: min(100% - var(--page-gutter) * 2, 1040px);
+  margin: 1rem auto 2.5rem;
 
   & > * {
-    padding: 2em;
-
-    & > :first-child {
-      margin-top: 0;
-    }
-    & > :last-child {
-      margin-bottom: 0;
-    }
+    margin: 0;
   }
 
-  & > *:not(:first-child) + * {
-    border-top: 1px solid var(--accent-col-mute-1);
+  & > * + * {
+    margin-top: 2rem;
+  }
+
+  & > :not(nav) > :first-child {
+    margin-top: 0;
   }
 }
 
-@media (max-width: 800px) {
-  main {
-    margin: 0;
-    border: none;
+header {
+  padding: 2rem 0 0;
+  border-bottom: 1px solid var(--accent-col-mute-1);
 
-    & > * {
-      padding: 1em;
-    }
-
-    & > *:not(:first-child) + * {
-      border-top: none;
-    }
+  & time {
+    color: var(--fg-col-mute);
   }
 }
 
 :is(h1, h2, h3, h4, h5, h6) {
-  margin: 0;
-  padding: 0;
-  margin-bottom: 0.5em;
-  font-size: 1rem;
+  margin: 0 0 0.75em;
+  line-height: 1.08;
 }
+
 h1 {
-  font-size: 1.5rem;
-  font-weight: 2rem;
+  font-size: 1.75rem;
+  font-weight: 520;
+  text-wrap: pretty;
 }
+
 h2 {
-  font-size: 1.33rem;
   margin-top: 2rem;
+  color: var(--fg-col);
+  font-size: 1.5rem;
+  font-weight: 650;
+}
+
+h3 {
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
 }
 
 p {
   margin: 0.75rem 0;
 }
 
+ul,
+ol {
+  padding-left: 1.25rem;
+}
+
+li + li {
+  margin-top: 0.25rem;
+}
+
 code,
 kbd {
-  font-family: "SF Mono", "Fira Mono", "Roboto Mono", monospace;
-  font-size: 0.9em;
-  font-size-adjust: from-font;
-  font-weight: 600;
+  font-family: "Ioskeley Mono", ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 0.875em;
+  font-weight: 500;
 
-  display: inline-block;
-  padding: 0.05em 0.35em;
-  margin: 0 0.1em;
+  padding: 0.125em 0.25em;
+  margin: 0 0.125em;
   background: var(--bg-col-2);
   color: var(--fg-col);
-  border-radius: 8px;
 }
 
 a {
   color: var(--accent-col);
-  text-underline-offset: 2.5px;
   text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+
+  &:hover {
+    color: var(--accent-col-fade-1);
+  }
 }
 
 nav {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  align-items: baseline;
 
-  padding-bottom: 0;
-
-  flex-direction: row;
-  justify-content: space-between;
+  color: var(--fg-col-mute);
 
   & a {
+    color: var(--accent-col);
     text-decoration: none;
   }
 
-  & > ul {
-    display: inline-flex;
-    flex-direction: row;
+  & > div {
+    display: flex;
+    gap: 0.5em;
+    color: var(--accent-col);
+    font-weight: 650;
 
-    font-size: smaller;
-    gap: 0.25em;
+    &::after {
+      content: "|";
+      color: var(--fg-col-mute);
+      font-weight: 400;
+    }
+  }
+
+  & > ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
 
     margin: 0;
-    padding: 0.25em;
-
+    padding: 0;
     list-style: none;
 
-    background-color: var(--bg-col-3);
-    border-radius: 2em;
+    & li {
+      display: flex;
+      gap: 0.5em;
+      margin-top: 0;
 
-    & > li {
-      & > a {
-        display: inline-block;
-        padding: 0.5em 1em;
+      & + li::before {
+        content: "|";
+        color: var(--fg-col-mute);
+      }
+    }
 
-        background-color: var(--bg-col-3);
+    & a {
+      &.active {
         color: var(--fg-col);
+      }
 
-        border-radius: 1.25em;
-
-        &.active {
-          background-color: var(--accent-col-fade-1);
-          color: var(--bg-col);
-        }
+      &:hover {
+        color: var(--fg-col);
       }
     }
   }
 }
 
+article,
+aside {
+  max-width: var(--content-width);
+}
+
 footer {
   display: flex;
-  flex-direction: row;
+  gap: 1rem;
 
-  color: var(--fg-col-mute-1);
+  padding-top: 1rem;
+  border-top: 1px solid var(--accent-col-mute-1);
+  color: var(--fg-col-mute);
+  font-size: 0.8rem;
 
   & > * {
     flex: 1;
     text-align: center;
+  }
 
-    &:first-child {
-      text-align: start;
-    }
+  & > :first-child {
+    text-align: start;
+  }
 
-    &:last-child {
-      text-align: end;
-    }
+  & > :last-child {
+    text-align: end;
   }
 
   & a {
@@ -219,36 +247,24 @@ footer {
   }
 }
 
-pre > code {
-  white-space: pre-wrap;
-  overflow-x: auto;
+pre {
+  margin: 1.5rem 0;
+  background: var(--bg-col-2);
+  border-left: 2px solid var(--accent-col-mute-1);
 
-  display: block;
+  & > code {
+    display: block;
+    overflow-x: auto;
+    white-space: pre;
 
-  border-radius: 0;
-  padding: 1em 0.5em;
+    padding: 1rem;
+    margin: 0;
 
-  line-height: 1.4;
-  font-weight: lighter;
+    line-height: 1.45;
+    font-size: 0.75rem;
+    font-weight: 500;
 
-  background-color: var(--bg-col-2);
-
-  border: 1px solid;
-  border-color: var(--accent-col-mute-2);
-}
-
-@media (max-width: 880px) {
-  pre > code {
-    margin: 0 -2em;
-    padding: 1.5em 2em;
-    border-left: none;
-    border-right: none;
-  }
-}
-
-@media (max-width: 800px) {
-  pre > code {
-    margin: 0 -1em;
+    background: transparent;
   }
 }
 
@@ -256,4 +272,87 @@ video,
 img,
 picture {
   width: 100%;
+}
+
+@media (min-width: 1050px) {
+  html {
+    font-size: 1.125rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  main {
+    --page-gutter: 2rem;
+
+    display: grid;
+    grid-template-columns: 12rem minmax(0, var(--content-width));
+    column-gap: 4rem;
+    row-gap: 1rem;
+    align-items: start;
+    margin-top: 4rem;
+
+    & > * + * {
+      margin-top: 0;
+    }
+
+    & > :not(nav) {
+      grid-column: 2;
+    }
+  }
+
+  nav {
+    position: sticky;
+    top: 3rem;
+    display: block;
+    padding: 0;
+    border: 0;
+
+    & a {
+      color: inherit;
+    }
+
+    & > div {
+      display: block;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--accent-col-mute-1);
+
+      &::after {
+        content: none;
+      }
+    }
+
+    & > ul {
+      display: block;
+      margin-top: 0.5em;
+
+      & li {
+        display: block;
+
+        & + li {
+          margin-top: 0.5rem;
+        }
+
+        & + li::before {
+          content: none;
+        }
+      }
+
+      & a {
+        &.active {
+          color: var(--fg-col);
+
+          &::after {
+            content: " ←";
+            color: var(--accent-col);
+          }
+        }
+      }
+    }
+  }
+
+  header {
+    padding-top: 0;
+  }
 }

@@ -7,9 +7,9 @@ layout: main-page.ts
 <header>
 <div>
 
-# Charlotte Som, multispecialist technician & computer multimedia artist.
+<h1>Charlotte Som,<br>multispecialist technician & computer multimedia artist.</h1>
 
-Hi! I'm **Charlotte** (she/her), welcome to my home on the web.  
+Hi! I'm **Charlotte** (she/her), welcome to my home on the web.
 I'm in my mid-20s and I'm based in England.
 
 </div>
