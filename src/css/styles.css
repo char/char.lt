@@ -226,11 +226,11 @@ footer {
 pre {
   margin: 1.5rem 0;
   background: var(--bg-col-2);
-  border-left: 2px solid var(--accent-col-mute-1);
+  overflow-x: auto;
 
   & > code {
     display: block;
-    overflow-x: auto;
+    border-left: 2px solid var(--accent-col-mute-1);
     white-space: pre;
 
     padding: 1rem;
