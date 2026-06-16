@@ -12,7 +12,6 @@
 
   & header h1 {
     grid-column: 1;
-    margin-top: 0.375rem;
   }
 
   & header p {
@@ -35,6 +34,10 @@
     & header {
       grid-template-columns: minmax(0, 1fr) auto;
       column-gap: 2rem;
+    }
+
+    & header h1 {
+      margin-top: 0.375rem;
     }
 
     & .profile-picture {
