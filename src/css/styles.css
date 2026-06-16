@@ -235,6 +235,7 @@ pre {
 
     padding: 1rem;
     margin: 0;
+    width: fit-content;
 
     line-height: 1.45;
     font-size: 0.8rem;

@@ -22,7 +22,7 @@ In my free time, I reverse-engineer & make mods for games, make little websites 
 
 You can find some of my software projects on [GitHub](https://github.com/char) and at [git.lavender.software](https://git.lavender.software/).
 
-If you'd like to get in contact, you can email me at `charlotte AT som DOT codes` — Show me stuff you think I'd find interesting! Or drop a question :)
+If you'd like to get in contact, you can email me at `charlotte AT som DOT codes`.
 
 </section>
 <section id="software">
