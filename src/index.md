@@ -49,6 +49,21 @@ During my time computer-touching, I've specialized in a few software niches:
   - Some day I would love to build keyboard firmware on [Hubris](https://github.com/oxidecomputer/hubris) as an ≈RTOS.
 
 </section>
+<section id="game-hacking">
+
+## Gamehacking
+
+Professionally, I used to sell a custom client for Minecraft, and a subscription trainer menu for GTA Online.
+In addition, I love modding Unity3D games. There's something about MSIL that activates the Java bytecode part of my brain.
+
+Games are a really fun playground for me because there is a bunch of emergent behavior:
+Here's a video demonstration of a fast infinite obsidian glitch in Minecraft, it's a limited instant block breaking exploit chained with a special world interaction.
+
+<video alt="A screen recording of Minecraft" controls poster="/assets/misc/infinite-obsidian.webp">
+  <source type="video/mp4" src="/assets/misc/infinite-obsidian.mp4">
+</video>
+
+</section>
 <section id="languages">
 
 ## Languages
