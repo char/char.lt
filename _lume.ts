@@ -67,6 +67,7 @@ import mdAnchor from "npm:markdown-it-anchor";
 import mdFootnote from "npm:markdown-it-footnote";
 
 const customizeMarkdown = (md: any) => {
+  md.linkify.set({ fuzzyLink: false, fuzzyEmail: false });
   md.use(mdAnchor, { level: 2 });
   md.use(mdFootnote);
 

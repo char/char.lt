@@ -120,7 +120,6 @@ kbd {
   padding: 0.125em 0.25em;
   margin: 0 0.125em;
   background: var(--bg-col-2);
-  color: var(--fg-col);
 }
 
 a {

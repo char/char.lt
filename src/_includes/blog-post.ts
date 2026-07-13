@@ -30,6 +30,7 @@ export default (data: Lume.Data) => {
     stylesheets: [
       "/css/blog-post.css",
       "/css/syntax-highlighting.css",
+      "/css/terminal.css",
       "/css/wide-elements.css",
       "/css/vendor/katex.min.css",
     ],

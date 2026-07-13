@@ -1,0 +1,54 @@
+:root {
+  --ansi-foreground: #fcf2f8;
+  --ansi-background: #19171a;
+  --ansi-0: #151515;
+  --ansi-1: #fa5565;
+  --ansi-2: #21f07f;
+  --ansi-3: #fde965;
+  --ansi-4: #3bb7fb;
+  --ansi-5: #f25ec4;
+  --ansi-6: #39ddd0;
+  --ansi-7: #9d989f;
+  --ansi-8: #505050;
+  --ansi-9: #f75c6b;
+  --ansi-10: #40f893;
+  --ansi-11: #fafa64;
+  --ansi-12: #72c6f1;
+  --ansi-13: #f07fbe;
+  --ansi-14: #71f2e8;
+  --ansi-15: #f5f5f5;
+}
+
+pre.terminal {
+  background: var(--ansi-background);
+
+  & > code {
+    color: var(--ansi-foreground);
+    font-feature-settings: "NWID"; /* secret iosevka hack */
+  }
+
+  & a-0 { color: var(--ansi-0); }
+  & a-1 { color: var(--ansi-1); }
+  & a-2 { color: var(--ansi-2); }
+  & a-3 { color: var(--ansi-3); }
+  & a-4 { color: var(--ansi-4); }
+  & a-5 { color: var(--ansi-5); }
+  & a-6 { color: var(--ansi-6); }
+  & a-7 { color: var(--ansi-7); }
+  & a-8 { color: var(--ansi-8); }
+  & a-9 { color: var(--ansi-9); }
+  & a-10 { color: var(--ansi-10); }
+  & a-11 { color: var(--ansi-11); }
+  & a-12 { color: var(--ansi-12); }
+  & a-13 { color: var(--ansi-13); }
+  & a-14 { color: var(--ansi-14); }
+  & a-15 { color: var(--ansi-15); }
+
+  & :is(a-b, [b]) {
+    font-weight: bold;
+  }
+
+  & a-dim {
+    opacity: 0.5;
+  }
+}
