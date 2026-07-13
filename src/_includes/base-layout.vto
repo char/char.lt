@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{{ title }}</title>
+    <meta property="og:title" content="{{ title |> escape }}" />
     {{ if description }}
-      <meta property="og:description" content="{{ description }}" />
+      <meta property="og:description" content="{{ description |> escape }}" />
     {{ /if }}
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
