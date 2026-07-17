@@ -14,6 +14,7 @@
     & > time {
       grid-area: "date";
       font-variant-numeric: tabular-nums;
+      letter-spacing: -0.075ch;
     }
     & > :not(time) {
       grid-area: "headline";
