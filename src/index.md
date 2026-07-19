@@ -12,7 +12,11 @@ layout: main-page.ts
 I like playing in the intersection between a lot of disciplines! I'm a programmer, a music producer, I'm interested in visual effects, and I like solving problems.
 
 </div>
-<img class="profile-picture" src="/assets/pfp.jpg" alt="Charlotte" />
+<picture>
+  <source type="image/avif" srcset="/assets/pfp-256.avif 1x, /assets/pfp.avif 2x" />
+  <source type="image/webp" srcset="/assets/pfp-256.webp 1x, /assets/pfp.webp 2x" />
+  <img class="profile-picture" src="/assets/pfp-256.jpg" srcset="/assets/pfp.jpg 2x" alt="Charlotte" />
+</picture>
 
 </header>
 

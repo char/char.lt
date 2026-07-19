@@ -6,7 +6,8 @@
     align-items: start;
   }
 
-  & header > div {
+  & header > div,
+  & header > picture {
     display: contents;
   }
 
