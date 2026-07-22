@@ -30,7 +30,7 @@
     "jsr:@std/toml@^1.0.1": "1.0.1",
     "jsr:@std/yaml@1.0.4": "1.0.4",
     "jsr:@std/yaml@^1.0.4": "1.0.4",
-    "npm:@arborium/arborium@^2.16.0": "2.16.0",
+    "npm:@arborium/arborium@^2.18.1": "2.18.1",
     "npm:@js-temporal/polyfill@0.4.4": "0.4.4",
     "npm:@types/estree@1.0.5": "1.0.5",
     "npm:@types/pug@2.0.10": "2.0.10",
@@ -144,8 +144,8 @@
     }
   },
   "npm": {
-    "@arborium/arborium@2.16.0": {
-      "integrity": "sha512-9rz2J9Hx+nMq1qon65SbmE+XZvwr/oDqYPinj+BnYOzef7lGwzn1GtYhuB1Cz8jTZ84wIaBt+B8nTQEGYniqNg=="
+    "@arborium/arborium@2.18.1": {
+      "integrity": "sha512-v6WuWy2yd/+R5OFT7g+asDXKImOrUdnTmEvGZwaBgOE2DSFKcksa2Us4QxxIr3C2ohVguRJf/rtbnZska6/UKg=="
     },
     "@babel/helper-string-parser@7.24.8": {
       "integrity": "sha512-pO9KhhRcuUyGnJWwyEgnRJTSIZHiT+vMD0kPeD+so0l7mxkMT19g3pjY9GTnHySck/hDzq+dtW/4VgnMkippsQ=="
@@ -560,6 +560,7 @@
   },
   "remote": {
     "https://cdn.jsdelivr.net/npm/@arborium/arborium@2.16.0/dist/arborium_host.js": "0b3901142211cb327b70b3e0d35b69671ee8f10a346f2ccc8488f6f9e2b45e8c",
+    "https://cdn.jsdelivr.net/npm/@arborium/arborium@2.18.1/dist/arborium_host.js": "85754bcdbdfe27caeb1ef537405f492b9546b068e11041a94ce16069ecd3d65d",
     "https://cdn.jsdelivr.net/npm/@arborium/bash@2.16.0/grammar.js": "e3fe1c21596b0756e88478a0d4cbb801c03826bff93816f075717b9390211d69",
     "https://cdn.jsdelivr.net/npm/@arborium/c@2.16.0/grammar.js": "9f6c24f7af514b054121199f84ec8cf8835ed6a8d9d8477a848148c05ece29f6",
     "https://cdn.jsdelivr.net/npm/@arborium/cpp@2.16.0/grammar.js": "07a296437d09cf459589a2b73d0a830fa466a6d4629cb47c77ab8134a3353265",
@@ -810,7 +811,7 @@
   },
   "workspace": {
     "dependencies": [
-      "npm:@arborium/arborium@^2.16.0",
+      "npm:@arborium/arborium@^2.18.1",
       "npm:preact@*"
     ]
   }

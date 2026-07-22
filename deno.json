@@ -1,6 +1,6 @@
 {
   "imports": {
-    "@arborium/arborium": "npm:@arborium/arborium@^2.16.0",
+    "@arborium/arborium": "npm:@arborium/arborium@^2.18.1",
     "@lume": "https://deno.land/x/lume@v2.3.0/mod.ts",
     "@lume/cli": "https://deno.land/x/lume@v2.3.0/cli.ts",
     "@lume/types": "https://deno.land/x/lume@v2.3.0/types.ts",
