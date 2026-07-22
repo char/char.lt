@@ -1,13 +1,12 @@
 // deno-lint-ignore-file no-explicit-any
 
 import lume from "@lume";
+import extractDate from "@lume/plugins/extract_date.ts";
 import feed from "@lume/plugins/feed.ts";
 import arborium from "./_lume/arborium.ts";
 import katex from "@lume/plugins/katex.ts";
 import pug from "@lume/plugins/pug.ts";
 import toml from "@lume/plugins/toml.ts";
-
-import ventoAutoTrim from "https://deno.land/x/vento@v1.12.10/plugins/auto_trim.ts";
 
 const site = lume(
   {
@@ -23,14 +22,11 @@ const site = lume(
         typographer: true,
       },
     },
-    vento: {
-      options: {},
-      plugins: [ventoAutoTrim()],
-    },
   },
 );
 
 site.use(toml());
+site.use(extractDate());
 site.use(
   feed({
     output: ["/blog.rss", "/blog.json"],
@@ -46,7 +42,9 @@ site.use(
   }),
 );
 site.use(arborium());
-site.use(katex({ options: { displayMode: false } }));
+// katex styles/fonts are vendored (css/vendor/katex.min.css), so the plugin
+// must not emit its own /style.css
+site.use(katex({ cssFile: false, options: { displayMode: false } }));
 
 import mdAnchor from "npm:markdown-it-anchor";
 import mdFootnote from "npm:markdown-it-footnote";
