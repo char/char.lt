@@ -45,22 +45,7 @@ site.use(
     },
   }),
 );
-site.use(
-  arborium({
-    languages: [
-      "bash",
-      "c",
-      "cpp",
-      "diff",
-      "java",
-      "javascript",
-      "kotlin",
-      "nginx",
-      "toml",
-      "typescript",
-    ],
-  }),
-);
+site.use(arborium());
 site.use(katex({ options: { displayMode: false } }));
 
 import mdAnchor from "npm:markdown-it-anchor";
