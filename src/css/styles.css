@@ -102,6 +102,21 @@ p {
   margin: 0.75rem 0;
 }
 
+blockquote {
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: var(--fg-col-mute);
+  border-left: 2px solid var(--accent-col-mute-1);
+
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & > :last-child {
+    margin-bottom: 0;
+  }
+}
+
 ul,
 ol {
   padding-left: 1.25rem;

@@ -1,0 +1,184 @@
+/* Adapted from bluesky-embed 1.0.6 (MIT): https://github.com/mary-ext/bluesky-embed */
+
+h2 {
+  font-size: 1.125rem;
+}
+
+.youtube-embed {
+  max-width: 36em;
+  margin: 1.5rem auto;
+
+  & iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+  }
+
+  & figcaption {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    text-align: right;
+  }
+}
+
+.bluesky-embed {
+  --font-size: 1em;
+  --font-family:
+    system-ui, "Segoe UI", "Roboto", "Helvetica", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --text-primary: #f1f3f5;
+  --text-secondary: #8c9eb2;
+  --text-link: #1083fe;
+  --background-primary: #000;
+  --background-secondary: #212d3b;
+  --divider: rgb(37, 51, 66);
+
+  position: relative;
+  box-sizing: border-box;
+  min-width: 250px;
+  max-width: 36em;
+  padding: 16px;
+  margin: 0 auto;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: 400;
+  line-height: calc(var(--font-size) * 1.25);
+  background: var(--background-primary);
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+
+  & :where(*),
+  & :where(*::before),
+  & :where(*::after) {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+  & :where(a) {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  & .author {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+    font-size: calc(var(--font-size) * 0.875);
+  }
+
+  & .avatar-link {
+    display: block;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    background: var(--background-secondary);
+    border-radius: 9999px;
+
+    &:hover {
+      filter: brightness(0.85);
+    }
+  }
+
+  & .avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  & .profile {
+    display: block;
+    flex-grow: 1;
+    max-width: 100%;
+    overflow: hidden;
+    color: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover .display-name {
+      text-decoration: underline;
+    }
+  }
+
+  & .display-name {
+    overflow: hidden;
+    color: var(--text-primary);
+    font-weight: 700;
+    text-overflow: ellipsis;
+  }
+
+  & .handle {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & .logo {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+  }
+
+  & .text {
+    overflow: hidden;
+    font-size: var(--font-size);
+    line-height: calc(var(--font-size) * 1.5);
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  & .date {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding-bottom: 12px;
+    margin-top: 12px;
+    color: var(--text-secondary);
+    font-size: calc(var(--font-size) * 0.875);
+    border-bottom: 1px solid var(--divider);
+  }
+
+  & .footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+    padding: 12px 0;
+    margin-bottom: -16px;
+    color: var(--text-secondary);
+    font-size: calc(var(--font-size) * 0.875);
+  }
+
+  & .stat {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-weight: 500;
+  }
+
+  & .icon {
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+  }
+
+  & .permalink {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-left: auto;
+    color: var(--text-link);
+    font-weight: 700;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
