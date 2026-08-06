@@ -49,7 +49,7 @@ aparrish kills it. i think this reframing of abstraction as quantization (delibe
 
 > for like, people who are supposed to be very rationally- & scientific-minded literally everyone has _so_ many feelings right now.
 
-steve oomf basically frenetically calms you. he confronts the anxiety of labor displacement in software engineering apropos of AI, and parallels it with Pittsburgh, PA's transformation and adaptation-to-the-times wrt the waxing and waning of the steel industry. also he (duly!) says "weird" a bunch of times. shit is weird right now i get it
+steve oomf basically frenetically calms you. he confronts the anxiety of labor displacement and alienation in software engineering apropos of AI, and parallels it with Pittsburgh's reinvention wrt the waxing and waning of the steel industry. the talk is also about how we can ever know machine-authored software is correct. and like, what even is correctness?? also he (duly!) says "weird" a bunch of times. shit is weird right now i get it
 
 ## Don't take the black pill! - Andrew Kelley, at Software Should Work 2026
 
