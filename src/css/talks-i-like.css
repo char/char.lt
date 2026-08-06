@@ -133,40 +133,14 @@ h2 {
     overflow-wrap: break-word;
   }
 
-  & .date {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    padding-bottom: 12px;
-    margin-top: 12px;
-    color: var(--text-secondary);
-    font-size: calc(var(--font-size) * 0.875);
-    border-bottom: 1px solid var(--divider);
-  }
-
   & .footer {
     display: flex;
     flex-wrap: wrap;
     gap: 8px 16px;
     align-items: center;
-    padding: 12px 0;
-    margin-bottom: -16px;
+    margin-top: 12px;
     color: var(--text-secondary);
     font-size: calc(var(--font-size) * 0.875);
-  }
-
-  & .stat {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    font-weight: 500;
-  }
-
-  & .icon {
-    flex-shrink: 0;
-    width: 1em;
-    height: 1em;
   }
 
   & .permalink {
