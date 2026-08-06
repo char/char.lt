@@ -69,7 +69,7 @@ andrewrk ziglang closes this talk out by saying "we will defeat those who use co
 
 Mike Insomniacgames starts by crucifying a bunch of common advice, and then focuses on outlining general, practical problem-solving skills for game engine programmers. it's really good to hold this one in tension with every other talk you may watch
 
-## Swarm Testing - Will Wilson, at a Papers We Love San Francisco
+## Swarm Testing - Will Wilson, at a Papers We Love in San Francisco
 
 <figure class="youtube-embed"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/wzfC7Q-xNik" title="Swarm Testing — Will Wilson" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><figcaption><a href="https://youtu.be/wzfC7Q-xNik" aria-label="link to Swarm Testing">(link)</a></figcaption></figure>
 
