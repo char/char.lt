@@ -1,5 +1,5 @@
 ---
-title: Anti-copyright - Charlotte Som
+title: Anti-copyright - charlotte!
 ---
 
 <section>

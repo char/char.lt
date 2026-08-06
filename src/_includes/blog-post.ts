@@ -4,7 +4,7 @@ export const layout = "base-layout.vto";
 
 export default (data: Lume.Data) => {
   const { title, description, children, date } = data;
-  data.title = title + " - Charlotte Som";
+  data.title = title + " - charlotte!";
 
   let postContent = children;
   let footnotes: string | undefined;

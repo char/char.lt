@@ -32,7 +32,7 @@ site.use(
     output: ["/blog.rss", "/blog.json"],
     query: "type=blog_post unlisted!=true",
     info: {
-      title: "charlotte som's blog",
+      title: "charlotte's blog",
       description: "thoughts and ideas",
     },
     items: {
