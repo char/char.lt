@@ -76,3 +76,11 @@ Mike Insomniacgames starts by crucifying a bunch of common advice, and then focu
 > And again, these diagrams just look the same to me. I, like-- I've seen these before. And now I'm wondering, is this a coincidence?
 
 William FoundationDB is here to talk about software testing a little and then (metaphorically) get a bunch of pushpins and red yarn and tie together a bunch of things on a corkboard. i really can't spoil the details. go watch
+
+## Throwing it all away - Tyler Neely, at HYTRADBOI 2025
+
+<figure class="youtube-embed"><div style="position:relative;padding-top:56.25%;"><iframe allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true" loading="lazy" src="https://iframe.mediadelivery.net/embed/338510/03580e19-4646-4fba-91c3-17eaba6935b0?autoplay=false" style="border:none;height:100%;position:absolute;top:0;width:100%;"></iframe></div><figcaption><a href="https://www.hytradboi.com/2025/03580e19-4646-4fba-91c3-17eaba6935b0-throwing-it-all-away---how-extreme-rewriting-changed-the-way-i-build-databases" aria-label="link to Throwing it all away">(link)</a></figcaption></figure>
+
+> To the extent that coding is an act of exploration, as you code and continue to learn more about the thing that you are coding, the chances are high that the module boundaries that you started the day with will start to decay in usefulness.
+
+we're a little more concrete with this one: spacejam from sled tells us about "throwing away anything you can't finish in a day", a brute-force approach to creating effective systems whose implementations fit entirely in your brain. by starting over each day, you have a hard-stop against unbounded complexity growth and you get to spin out reusable components that you _know_ you keep revisiting. it's absolutely worth trying this one
