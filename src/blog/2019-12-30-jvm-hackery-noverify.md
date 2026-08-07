@@ -2,6 +2,8 @@
 title: Circumventing the JVM's bytecode verifier
 description: using sun.misc.Unsafe to force -Xverify:none at runtime
 featured: true
+stylesheets:
+  - /css/vendor/katex.min.css
 ---
 
 An adventure with Java bytecode, HotSpot VM internals, `sun.misc.Unsafe`, and the power of Java.

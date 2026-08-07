@@ -31,7 +31,6 @@ export default (data: Lume.Data) => {
       "/css/blog-post.css",
       "/css/syntax-highlighting.css",
       "/css/wide-elements.css",
-      "/css/vendor/katex.min.css",
       ...(data.stylesheets ?? []),
     ],
     head: `
