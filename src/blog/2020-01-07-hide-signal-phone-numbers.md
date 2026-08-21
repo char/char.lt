@@ -1,6 +1,7 @@
 ---
 title: Hiding phone number display on Signal Desktop
 description: They rejected my PR, so I'll just do it myself
+unlisted: true
 ---
 
 Today, we're going to patch the Signal desktop app to hide phone numbers. I need this functionality because of shoulder surfing / screen sharing / whatever.
