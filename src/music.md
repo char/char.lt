@@ -1,5 +1,5 @@
 ---
-title: Music - charlotte!
+title: music - charlotte!
 ---
 
 <style>
@@ -15,11 +15,11 @@ title: Music - charlotte!
 
 <section>
 
-# Music
+# music
 
-Music production for me is a lot of fun and not super serious; I mostly make remixes of songs I enjoy and high-effort sets for URL fests. I like making a bunch of different genres, but my go-to sound seems to be somewhere in the intersection of jazz and heavy bass.
+music production for me is a lot of fun and not super serious; I mostly make remixes of songs I enjoy and high-effort sets for URL fests. i like making a bunch of different genres, but my go-to sound seems to be somewhere in the intersection of jazz and heavy bass.
 
-You can find my sets on YouTube:
+you can find my sets on YouTube:
 - [ninetenfest](https://youtu.be/kg3UG9HWDz8), 2025-11-30
 - [birthday bash 2024](https://youtu.be/Xk5ul8-1ICc), 2024-12-28
 - [birthday bash 2023](https://youtu.be/RGfr4KJ-wqI), 2023-12-29

@@ -7,9 +7,9 @@ layout: main-page.ts
 <header>
 <div>
 
-<h1>Charlotte Som,<br>multispecialist technician & computer multimedia artist.</h1>
+<h1>charlotte!<br>computer programmer &amp; toys-player</h1>
 
-I like playing in the intersection between a lot of disciplines! I'm a programmer, a music producer, I'm interested in visual effects, and I like solving problems.
+i love playing in niches and intersections between disciplines are basically like a niche farm. i write code and i'm a music producer and i like doing VFX.
 
 </div>
 <picture>
@@ -20,48 +20,50 @@ I like playing in the intersection between a lot of disciplines! I'm a programme
 
 </header>
 
-Currently, I'm working at a startup where we make browser-based game technology. I really think casual games really fit the browser as an application platform, since they can be asset-light & install-free.
+right now i'm working on:
+- micro-sized web libraries
+- cheap full-network indexing for the AT Protocol
+- a local-first, realtime-synced password manager
+- audio effects & synthesizers
+- music visualization tooling
 
-In my free time, I reverse-engineer & make mods for games, make little websites and applications, write real-time audio plugins, and do music production. Currently, the project that takes up the majority of my time is a work-in-progress software additive synthesizer.
+you can find my code at [char on github](https://github.com/char) or [on lavender.software](https://git.lavender.software/char) or at [char.lt on tangled](https://tangled.org/char.lt).
 
-You can find some of my software projects on [GitHub](https://github.com/char) and at [git.lavender.software](https://git.lavender.software/).
-
-If you'd like to get in contact, you can email me at `charlotte@som.codes`.
+if you'd like to get in contact (e.g. to respond to a blogpost!), you can email me at `charlotte@som.codes`.
 
 </section>
 <section id="software">
 
-## Software
+## software
 
-I've been programming for a long time & written a lot of software so far. Here's a selection:
+i've been programming for most of my life. here's a selection:
 
 - [Paramorphism](https://paramorphism.dev/) (discontinued) - a JVM bytecode obfuscator targeting Java/Kotlin.
 - [Koffee](https://github.com/char/Koffee) – a programmable JVM bytecode assembler DSL in Kotlin.
 - [phoebe](https://git.lavender.software/char/phoebe) - a best-effort double-puppeting bridge for Discord and Matrix.
 - [ssh-lockbox](https://github.com/char/ssh-lockbox) - an auto-deployment solution & store for SSH public keys.
 
-During my time computer-touching, I've specialized in a few software niches:
+and along the way i've fallen into a bunch of different niche specializations:
 
 - **Java bytecode & JVM internals**
-  - Check out my article on [circumventing the JVM's bytecode verifier](https://char.lt/blog/2019/12/jvm-hackery-noverify/).
+  - i once wrote about [convincing the JVM to skip its bytecode verifier](https://char.lt/blog/2019/12/jvm-hackery-noverify/)
 - **JavaScript semantics & V8 engine internals**
-  - At work, we are using `deno_core` (and `rusty_v8`) to do server-side hosting of user game code.
-- **Systems development around Linux and systemd**
-  - Check out systemd's [fdstore](https://systemd.io/FILE_DESCRIPTOR_STORE/). If you architect right, you can upgrade applications without dropping any important state!
+  - at work, i've used `deno_core` & `rusty_v8` to do sandboxed resource-limited server-side hosting of user game code
+  - for personal stuff, i'm a heavy deno user and an occasional deno contributor ^-^
+- **systems programming against systemd**
+  - systemd's [fdstore](https://systemd.io/FILE_DESCRIPTOR_STORE/) is very cool! careful architecture lets you upgrade running software without dropping its important state
 - **STM32 embedded development** (keyboards!)
-  - I've gone lower-level before, but nowadays I mostly just run [QMK](https://github.com/qmk/qmk_firmware).
-  - Some day I would love to build keyboard firmware on [Hubris](https://github.com/oxidecomputer/hubris) as an ≈RTOS.
+  - i've gone lower-level before, but nowadays i mostly just use [QMK](https://github.com/qmk/qmk_firmware)
+  - one day i'd love to build keyboard firmware on [Hubris](https://github.com/oxidecomputer/hubris) as an ≈RTOS
 
 </section>
 <section id="game-hacking">
 
-## Gamehacking
+## gamehacking
 
-Professionally, I used to sell a custom client for Minecraft, and a subscription trainer menu for GTA Online.
-In addition, I love modding Unity3D games. There's something about MSIL that activates the Java bytecode part of my brain.
+i used to make money selling a custom Minecraft client and a subscription trainer menu for GTA Online. i also love decompiling and modifying Unity3D games because there's something about MSIL that activates the Java bytecode part of my brain, but a lot of them are il2cpp now :(
 
-Games are a really fun playground for me because there is a bunch of emergent behavior:
-Here's a video demonstration of a fast infinite obsidian glitch in Minecraft, it's a limited instant block breaking exploit chained with a special world interaction.
+games are a really fun playground because there's a bunch of emergent behavior to be found in the interaction between systems. like, here's a demonstration of a fast infinite obsidian glitch in Minecraft, it chains a limit instant block-brekaing exploit into some specific world interaction that repopulates obsidian blocks:
 
 <video alt="A screen recording of Minecraft" controls poster="/assets/misc/infinite-obsidian.webp">
   <source type="video/mp4" src="/assets/misc/infinite-obsidian.mp4">
@@ -70,12 +72,8 @@ Here's a video demonstration of a fast infinite obsidian glitch in Minecraft, it
 </section>
 <section id="languages">
 
-## Languages
+## natural languages
 
-I like learning languages as a hobby. I got two for free by birth (English and French) and I also speak conversational Spanish (learned at school) and Korean (self-study).
-
-In addition, I'm interested in Japanese, Italian, German, Dutch, which I've learned on-and-off casually (I would not call myself conversational in any of these yet!).
-
-I'd also really like to learn Russian (I can read Cyrillic already, at least!) and Mandarin (I know some super basic grammar) but haven't found the time.
+i love learning languages as a hobby. i got two for free by birth (English and French) and i also speak conversational Spanish (learned at school) and Korean (self-study). i'd also really like to learn Russian (i can read cyrillic already ^-^) and standard Chinese (i know some characters & some super basic grammar) but i haven't had the time yet!!
 
 </section>

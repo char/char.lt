@@ -5,8 +5,8 @@
     {{ function navItem(label, href, active) }}
       <li><a class="{{ active ? "active" : "" }}" href="{{ href }}">{{ label }}</a></li>
     {{ /function }}
-    {{ navItem("Home", "/", url === "/") }}
-    {{ navItem("Blog", "/blog/", url.startsWith("/blog/")) }}
-    {{ navItem("Music", "/music/", url === "/music/") }}
+    {{ navItem("home", "/", url === "/") }}
+    {{ navItem("blog", "/blog/", url.startsWith("/blog/")) }}
+    {{ navItem("music", "/music/", url === "/music/") }}
   </ul>
 </nav>

@@ -1,6 +1,6 @@
 export const layout = "base-layout.vto";
 export const type = undefined;
-export const title = "Blog - charlotte!";
+export const title = "blog - charlotte!";
 export const url = "/blog/";
 
 const renderBlogPosts = (blogPosts: Lume.Page["data"][]): string => {
@@ -42,10 +42,10 @@ export default (data: Lume.Data) => {
       >`,
     body: `
       <header>
-        <h1>Blog</h1>
-        <p>The following is a list of every post on my blog.</p>
+        <h1>blog</h1>
+        <p>here's every post on my blog!</p>
         <p>
-          There is also an <a href="/blog.rss">RSS feed</a> available.
+          there's also an <a href="/blog.rss">RSS feed</a> available ^-^
         </p>
       </header>
 
