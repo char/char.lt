@@ -11,13 +11,12 @@
   "tasks": {
     "lume": "echo \"import '@lume/cli'\" | deno run -A - --config ./_lume.ts",
     "build": "deno task lume",
-    "serve": "deno task lume -s"
+    "serve": "deno task lume -s",
+    "fmt": "deno run -A npm:prettier@3 --write ."
   },
   "unstable": ["temporal"],
   "lint": {
-    "plugins": [
-      "https://cdn.jsdelivr.net/gh/lumeland/lume@3.3.1/lint.ts"
-    ]
+    "plugins": ["https://cdn.jsdelivr.net/gh/lumeland/lume@3.3.1/lint.ts"]
   },
   "compilerOptions": {
     "types": ["@lume/types"]
