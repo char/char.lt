@@ -4,6 +4,7 @@ description: using sun.misc.Unsafe to force -Xverify:none at runtime
 featured: true
 stylesheets:
   - /css/vendor/katex.min.css
+  - /css/fakeshot-idea.css
 ---
 
 An adventure with Java bytecode, HotSpot VM internals, `sun.misc.Unsafe`, and the power of Java.
@@ -363,7 +364,34 @@ fun getStructs(): Map<String, JVMStruct> {
 }
 ```
 
-And with a small `main` method to test, we successfully read some data about the `Flag` struct: ![A screenshot of IntelliJ IDEA's debugger, showing information about the Flag struct](/assets/blog/jvm-hackery-noverify/flag-struct.png)
+And with a small `main` method to test, we successfully read some data about the `Flag` struct:
+
+<figure class="idea-debugger" role="img" aria-label="IntelliJ IDEA's debugger showing information about the Flag struct">
+  <div class="idea-editor" aria-hidden="true">
+    <div class="idea-editor-line"><span class="line-number">81</span><span class="gutter"><span class="run">▶</span></span><span class="source"><span class="keyword">fun</span> <span class="function">main</span>() {</span></div>
+    <div class="idea-editor-line"><span class="line-number">82</span><span class="gutter">⌄</span><span class="source">&nbsp;&nbsp;<span class="keyword">val</span> structs <span class="muted">: Map&lt;String, JVMStruct&gt;</span> = <span class="function">getStructs</span>() <span class="editor-hint">structs: size = 190</span></span></div>
+    <div class="idea-editor-line active"><span class="line-number">83</span><span class="gutter"><span class="breakpoint">●</span></span><span class="source">&nbsp;&nbsp;<span class="function">println</span>(structs) <span class="editor-hint">structs: size = 190</span></span></div>
+    <div class="idea-editor-line"><span class="line-number">84</span><span class="gutter">⌄</span><span class="source">}</span></div>
+  </div>
+  <div class="idea-expression">
+    <div class="idea-expression-head"><span>Expression:</span><span class="language">Kotlin<span class="language-toggle" aria-hidden="true"></span></span></div>
+    <div class="idea-input"><code>structs[<span class="string">"Flag"</span>]</code><span class="input-tool">↗</span><span class="input-tool">▾</span></div>
+    <div class="idea-expression-hint">Use Ctrl+Shift+Enter to add to Watches</div>
+    <div class="idea-result-label">Result:</div>
+    <div class="idea-tree">
+      <div class="idea-tree-row selected"><span class="disclosure open" aria-hidden="true"></span><span class="object-icon" aria-hidden="true"></span><span><strong>result</strong> = {JVMStruct@1027} "JVMStruct(name=Flag)"</span></div>
+      <div class="idea-tree-row depth-1"><span class="disclosure open" aria-hidden="true"></span><span class="field-icon">f</span><span class="name">fields</span><span>= {LinkedHashMap@1030} <span class="muted">size = 6</span></span></div>
+      <div class="idea-tree-row depth-2"><span class="disclosure" aria-hidden="true"></span><span class="collection-icon" aria-hidden="true"></span><span class="name">"_type"</span><span>→ {JVMStruct$Field@1142} "Field(name=_type, type=const char*, offset=0, static=false)"</span></div>
+      <div class="idea-tree-row depth-2"><span class="disclosure" aria-hidden="true"></span><span class="collection-icon" aria-hidden="true"></span><span class="name">"_name"</span><span>→ {JVMStruct$Field@1144} "Field(name=_name, type=const char*, offset=8, static=false)"</span></div>
+      <div class="idea-tree-row depth-2"><span class="disclosure" aria-hidden="true"></span><span class="collection-icon" aria-hidden="true"></span><span class="name">"_addr"</span><span>→ {JVMStruct$Field@1146} "Field(name=_addr, type=null, offset=16, static=false)"</span></div>
+      <div class="idea-tree-row depth-2"><span class="disclosure" aria-hidden="true"></span><span class="collection-icon" aria-hidden="true"></span><span class="name">"_flags"</span><span>→ {JVMStruct$Field@1148} "Field(name=_flags, type=Flag::Flags, offset=24, static=false)"</span></div>
+      <div class="idea-tree-row depth-2"><span class="disclosure" aria-hidden="true"></span><span class="collection-icon" aria-hidden="true"></span><span class="name">"flags"</span><span>→ {JVMStruct$Field@1150} "Field(name=flags, type=Flag*, offset=140022227845808, static=true)"</span></div>
+      <div class="idea-tree-row depth-2"><span class="disclosure" aria-hidden="true"></span><span class="collection-icon" aria-hidden="true"></span><span class="name">"numFlags"</span><span>→ {JVMStruct$Field@1152} "Field(name=numFlags, type=size_t, offset=140022227842560, static=true)"</span></div>
+      <div class="idea-tree-row depth-1"><span class="disclosure" aria-hidden="true"></span><span class="field-icon">f</span><span class="name">name</span><span>= <span class="string">"Flag"</span></span></div>
+    </div>
+    <div class="idea-actions"><span class="help">?</span><button class="primary" type="button" tabindex="-1">Evaluate</button><button type="button" tabindex="-1">Close</button></div>
+  </div>
+</figure>
 
 ## Reading The Types
 
@@ -421,7 +449,31 @@ fun getTypes(structs: Map<String, JVMStruct>): Map<String, JVMType> {
 
 And we can inspect our flag _type_ now:
 
-![A screenshot of IntelliJ IDEA's debugger, showing information about the Flag type](/assets/blog/jvm-hackery-noverify/flag-type.png)
+<figure class="idea-debugger" role="img" aria-label="IntelliJ IDEA's debugger showing information about the Flag type">
+  <div class="idea-editor" aria-hidden="true">
+    <div class="idea-editor-line"><span class="line-number">117</span><span class="gutter"></span><span class="source"></span></div>
+    <div class="idea-editor-line"><span class="line-number">118</span><span class="gutter"><span class="run">▶</span></span><span class="source"><span class="keyword">fun</span> <span class="function">main</span>() {</span></div>
+    <div class="idea-editor-line"><span class="line-number">119</span><span class="gutter">💡</span><span class="source">&nbsp;&nbsp;<span class="keyword">val</span> types <span class="muted">: Map&lt;String, JVMType&gt;</span> = <span class="function">getTypes</span>(<span class="function">getStructs</span>()) <span class="editor-hint">types: size = 677</span></span></div>
+    <div class="idea-editor-line active"><span class="line-number">120</span><span class="gutter"><span class="breakpoint">●</span></span><span class="source">&nbsp;&nbsp;<span class="function">println</span>(types)</span></div>
+  </div>
+  <div class="idea-expression">
+    <div class="idea-expression-head"><span>Expression:</span><span class="language">Kotlin<span class="language-toggle" aria-hidden="true"></span></span></div>
+    <div class="idea-input"><code>types[<span class="string">"Flag"</span>]</code><span class="input-tool">↗</span><span class="input-tool">▾</span></div>
+    <div class="idea-expression-hint">Use Ctrl+Shift+Enter to add to Watches</div>
+    <div class="idea-result-label">Result:</div>
+    <div class="idea-tree">
+      <div class="idea-tree-row selected"><span class="disclosure open" aria-hidden="true"></span><span class="object-icon" aria-hidden="true"></span><span><strong>result</strong> = {JVMType@1048} "JVMType(type=Flag, superClass=null, size=32, oop=false, int=false, unsigned=false)"</span></div>
+      <div class="idea-tree-row depth-1"><span class="disclosure" aria-hidden="true"></span><span class="field-icon">f</span><span class="name">fields</span><span>= {LinkedHashMap@1051} <span class="muted">size = 6</span></span></div>
+      <div class="idea-tree-row depth-1"><span class="disclosure" aria-hidden="true"></span><span class="field-icon">f</span><span class="name">type</span><span>= <span class="string">"Flag"</span></span></div>
+      <div class="idea-tree-row depth-1"><span class="disclosure" aria-hidden="true"></span><span class="field-icon">f</span><span class="name">superClass</span><span>= <span class="keyword">null</span></span></div>
+      <div class="idea-tree-row depth-1"><span class="disclosure" aria-hidden="true"></span><span class="field-icon">f</span><span class="name">size</span><span>= <span class="number">32</span></span></div>
+      <div class="idea-tree-row depth-1"><span class="disclosure" aria-hidden="true"></span><span class="field-icon">f</span><span class="name">oop</span><span>= <span class="keyword">false</span></span></div>
+      <div class="idea-tree-row depth-1"><span class="disclosure" aria-hidden="true"></span><span class="field-icon">f</span><span class="name">int</span><span>= <span class="keyword">false</span></span></div>
+      <div class="idea-tree-row depth-1"><span class="disclosure" aria-hidden="true"></span><span class="field-icon">f</span><span class="name">unsigned</span><span>= <span class="keyword">false</span></span></div>
+    </div>
+    <div class="idea-actions"><span class="help">?</span><button class="primary" type="button" tabindex="-1">Evaluate</button><button type="button" tabindex="-1">Close</button></div>
+  </div>
+</figure>
 
 </section>
 <section>
