@@ -19,6 +19,9 @@ import { log } from "@lume/utils/log.ts";
 const wasmCacheDir = new URL("./.arborium-cache/", import.meta.url);
 
 const wasmHeaders = { "Content-Type": "application/wasm" };
+// Haskell has trapped in create_session since Arborium 2.14 (#183), but its
+// 2.13 grammar remains compatible with the current host.
+const haskellBaseUrl = "https://cdn.jsdelivr.net/npm/@arborium/haskell@2.13.0";
 
 async function cachedFetch(url: string): Promise<Response> {
   const key = new URL(url).pathname.split("/").slice(-2).join("_");
@@ -36,8 +39,8 @@ async function cachedFetch(url: string): Promise<Response> {
 }
 
 setConfig({
-  resolveJs: ({ baseUrl, path }) => import(`${baseUrl}/${path}`),
-  resolveWasm: ({ baseUrl, path }) => cachedFetch(`${baseUrl}/${path}`),
+  resolveJs: ({ language, baseUrl, path }) => import(`${language === "haskell" ? haskellBaseUrl : baseUrl}/${path}`),
+  resolveWasm: ({ language, baseUrl, path }) => cachedFetch(`${language === "haskell" ? haskellBaseUrl : baseUrl}/${path}`),
   resolveHostJs: ({ baseUrl, path }) => import(`${baseUrl}/${path}`),
   resolveHostWasm: ({ baseUrl, path }) => cachedFetch(`${baseUrl}/${path}`),
 });
@@ -65,7 +68,7 @@ let snippetsDirty = false;
 async function loadSnippets(): Promise<Record<string, string>> {
   if (readCache) return readCache;
   const { version, theme } = getConfig();
-  cacheVersion = `${version}:${theme}`;
+  cacheVersion = `${version}:${theme}:${haskellBaseUrl}`;
   try {
     const parsed: SnippetCache = JSON.parse(await Deno.readTextFile(snippetsPath));
     readCache = parsed.version === cacheVersion ? parsed.entries : {};
