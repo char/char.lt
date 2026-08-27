@@ -201,6 +201,8 @@ nav {
   }
 }
 
+main > header,
+main > footer,
 article,
 aside {
   max-width: var(--content-width);
@@ -337,6 +339,14 @@ picture {
 
   header {
     padding-top: 0;
+  }
+}
+
+@media (max-width: 1050px) {
+  main {
+    max-width: var(--content-width);
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 

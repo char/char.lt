@@ -24,6 +24,75 @@ article {
   & section + section {
     margin-top: 2rem;
   }
+
+  & table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+    border-left: 2px solid var(--accent-col-mute-1);
+    background: var(--bg-col-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  & :is(th, td) {
+    padding: 0.55rem 0.9rem;
+    text-align: left;
+  }
+
+  & th {
+    border-bottom: 1px solid var(--accent-col-mute-1);
+    background: var(--bg-col-3);
+    color: var(--fg-col);
+    font-weight: 650;
+  }
+
+  & tbody tr + tr {
+    border-top: 1px solid var(--accent-col-mute-2);
+  }
+}
+
+figure.storage-diagram {
+  margin: 1.5rem 0;
+
+  & svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  & :is(rect, path, ellipse) {
+    fill: var(--bg-col-2);
+    stroke: var(--accent-col-mute-1);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & .storage-top {
+    fill: var(--bg-col-3);
+  }
+
+  & .storage-link {
+    stroke: var(--fg-col-mute);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & marker path {
+    fill: var(--fg-col-mute);
+    stroke: none;
+  }
+
+  & text {
+    fill: var(--fg-col);
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    text-anchor: middle;
+  }
+
+  & text.capacity {
+    fill: var(--fg-col-mute);
+    font-size: 15px;
+  }
 }
 
 aside {
