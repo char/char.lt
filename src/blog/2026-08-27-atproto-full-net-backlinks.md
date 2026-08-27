@@ -126,27 +126,23 @@ for-you       -> 9223372036854775810
 
 collections and locations are left over, but they're the most boring: we just have outline counter `u64`s for both. they're low-cardinality in the network (since they scale with the number of _lexicons_ and not the number of _records_), so this is fine.
 
-we have an extra 8 bytes left before we fit perfectly in a cache line, so we'll also store a `source_rev` for the backlink which tells us some clock value from when this backlink was recorded.
+we have an extra 8 bytes left before we fit perfectly in a cache line, so we'll also store a `sourceRev` for the backlink which tells us some clock value from when this backlink was recorded.
 
 this leaves us with:
 
-```rust
-#[repr(C)]
-#[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
-struct RecordId {
-  did: u64,
-  collection: u64,
-  rkey: u64,
-}
+```haskell
+data RecordId = RecordId {
+  did :: U64,
+  collection :: U64,
+  rkey :: U64
+} deriving (Eq, Ord)
 
-#[repr(C, align(64))]
-#[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
-struct Backlink {
-  target: RecordId, // 24
-  source: RecordId, // 48
-  location: u64,    // 56
-  source_rev: u64,  // 64
-}
+data Backlink = Backlink {
+  target :: RecordId, -- 24
+  source :: RecordId, -- 48
+  location :: U64,    -- 56
+  sourceRev :: U64    -- 64
+} deriving (Eq, Ord)
 ```
 
 (the on-disk format will be big-endian, but it looks basically just like this!)
@@ -236,79 +232,80 @@ it's very fortunate that we only have one type of query to answer (`list_backlin
 
 things get a little more complex, however, when we don't want to have all the data resident on disk at once: our target case for operations is a cheap, small VPS (with little storage) backed by a large pool of object storage, without blowing up query latency. so we need to somehow keep latency-critical state local, but still offload the bulk of the data to object storage.
 
-let's store our LSM tree's runs' sstables (≈512MiB) remotely as an object each and logically split them into independently-readable blocks (≈1MiB, compressed). for each table, we'll keep an index locally which contains its target keyrange, a bloom-esque[^2] filter over targets (so that we can skip irrelevant tables!), and range fences for each of its blocks:
+let's store our LSM tree's runs' sstables (≈512MiB) remotely as an object each and logically split them into independently-readable blocks (≈1MiB, compressed). for each table, we'll keep an index locally which contains its target keyrange, a bloom-esque[^2] filter over targets (so that we can skip irrelevant tables!), and range fences for each of its blocks:[^3]
 
-```rust
-struct TableMetadata {
-  min_target: RecordId,
-  max_target: RecordId,
-  filter: KeyFilter<RecordId>,
-  blocks: Vec<BlockMetadata>,
+```haskell
+data TableMetadata = TableMetadata {
+  minTarget :: RecordId,
+  maxTarget :: RecordId,
+  filter :: KeyFilter RecordId,
+  blocks :: [BlockMetadata]
 }
 
-struct BlockMetadata {
-  min_target: RecordId,
-  max_target: RecordId,
-  offset: u64, // byte offset in table for this block
-  len: u64, // compressed length
+data BlockMetadata = BlockMetadata {
+  minTarget :: RecordId,
+  maxTarget :: RecordId,
+  offset :: U64, -- byte offset in table for this block
+  len :: U64     -- compressed length
 }
 ```
 
 [^2]: we don't actually use a bloom filter exactly. sstables are definitionally immutable, so we can get better storage efficiency for the same probabilities by using a [xor](https://lemire.me/blog/2019/12/19/xor-filters-faster-and-smaller-than-bloom-filters/) or [binary fuse filter](https://lemire.github.io/talks/2023/fastfilters/fastfilter.html).
+[^3]: let's assume we're using `{-# LANGUAGE DuplicateRecordFields #-}` so that we don't have to write ugly type defs
 
 this means that to serve a query, we look at all table metadata, throw away any table whose target range / filter does not match our query target, and then binary search for matching blocks. a subtlety here is that since we have a block size limit we can't assume that there's only one matching block for a target: we need to allow exceptionally popular targets to span multiple blocks (or even tables!), but since blocks are sorted we can fetch many constituent blocks at once by folding their ranges and using one contiguous object GET.
 
 we have to take into account our write path, as well: recent writes will stay local in the upper levels of our LSM tree and only after a few rounds of compaction into larger levels will we upload runs to object storage, so that we minimize object store write amplification & keep sparse data on a quickly-seekable medium. conversely, larger, deeper levels of the LSM tree should have fewer overlapping runs & more disjoint key ranges, so we will need to do scan fewer (remote) sstables.
 
-additionally, when we're compacting backlinks into deeper level runs, we can discard anything with a non-latest `source_rev` value (since it's superceded by fresher values).
+additionally, when we're compacting backlinks into deeper level runs, we can discard anything with a non-latest `sourceRev` value (since it's superceded by fresher values).
 
 ## updates & deletes: 🐘 address me
 
-ok. cleanup of deleted links is (or at least used to be) the [most resource-intensive part of microcosm](https://bsky.app/profile/bad-example.com/post/3llz5ypn3jc2t) so i want to solve this in an efficient way really badly: did you notice our `source_rev` field on our `Backlink` struct? here's where we make use of it!! the high-level idea is that we store a revocation set of `(source, source_rev)` pairs, and can tell if a backlink is irrelevant (and should be omitted from a query response) if its source and rev appear in the revocation set. we don't want to store the entire revoked set locally, however, so we'll need to employ the same strategies for offloading this data to object storage without blowing up query latency.
+ok. cleanup of deleted links is (or at least used to be) the [most resource-intensive part of microcosm](https://bsky.app/profile/bad-example.com/post/3llz5ypn3jc2t) so i want to solve this in an efficient way really badly: did you notice our `sourceRev` field on our `Backlink` struct? here's where we make use of it!! the high-level idea is that we store a revocation set of `(source, sourceRev)` pairs, and can tell if a backlink is irrelevant (and should be omitted from a query response) if its source and rev appear in the revocation set. we don't want to store the entire revoked set locally, however, so we'll need to employ the same strategies for offloading this data to object storage without blowing up query latency.
 
 let's put all revocations in a similar LSMT and again store local metadata for each sstable of each run & each block within these tables:
 
-```rust
-struct Revocation {
-  source: RecordId,
-  rev: u64,
+```haskell
+data Revocation = Revocation {
+  source :: RecordId,
+  rev :: U64
+} deriving (Eq, Ord)
+
+data RevocationTableMetadata = RevocationTableMetadata {
+  min :: Revocation,
+  max :: Revocation,
+  filter :: KeyFilter Revocation,
+  blocks :: [RevocationBlockMetadata]
 }
 
-struct RevocationTableMetadata {
-  min: Revocation,
-  max: Revocation,
-  filter: KeyFilter<Revocation>,
-  blocks: Vec<RevocationBlockMetadata>,
-}
-
-struct RevocationBlockMetadata {
-  min: Revocation,
-  max: Revocation,
-  offset: u64,
-  len: u64,
+data RevocationBlockMetadata = RevocationBlockMetadata {
+  min :: Revocation,
+  max :: Revocation,
+  offset :: U64,
+  len :: U64
 }
 ```
 
 when we receive a delete or update, though, we don't know the source record's current rev in order to revoke it! so we also need to store a forward index of _live_ `(source, rev)` values:
 
-```rust
-struct SourceHead {
-  source: RecordId,
-  rev: u64,
+```haskell
+data SourceHead = SourceHead {
+  source :: RecordId,
+  rev :: U64
+} deriving (Eq, Ord)
+
+data SourceHeadTableMetadata = SourceHeadTableMetadata {
+  min :: RecordId,
+  max :: RecordId,
+  filter :: KeyFilter RecordId,
+  blocks :: [SourceHeadBlockMetadata]
 }
 
-struct SourceHeadTableMetadata {
-  min: RecordId,
-  max: RecordId,
-  filter: KeyFilter<RecordId>,
-  blocks: Vec<SourceHeadBlockMetadata>,
-}
-
-struct SourceHeadBlockMetadata {
-  min: RecordId,
-  max: RecordId,
-  offset: u64,
-  len: u64,
+data SourceHeadBlockMetadata = SourceHeadBlockMetadata {
+  min :: RecordId,
+  max :: RecordId,
+  offset :: U64,
+  len :: U64
 }
 ```
 
