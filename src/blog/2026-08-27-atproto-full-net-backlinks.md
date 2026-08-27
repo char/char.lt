@@ -42,22 +42,19 @@ the drawbacks of remote storage are that query latencies go way up (especially f
 
 <figure class="storage-diagram">
 <svg viewBox="0 0 720 240" role="img" aria-labelledby="storage-title">
-  <title id="storage-title">storage split between the VPS and object storage</title>
+  <title id="storage-title">storage portions between the VPS and object storage</title>
   <defs>
     <marker id="storage-arrowhead" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse" markerUnits="strokeWidth">
       <path d="M 0 0 L 8 4 L 0 8 z" />
     </marker>
   </defs>
-
   <g class="storage-node">
     <rect x="35" y="85" width="160" height="80" rx="4" />
     <text x="115" y="122">my-server</text>
     <text class="capacity" x="115" y="145">≈20 GiB</text>
   </g>
-
   <line class="storage-link" x1="230" y1="125" x2="385" y2="125" marker-start="url(#storage-arrowhead)" marker-end="url(#storage-arrowhead)" />
   <text x="305" y="105">WAN (slow!)</text>
-
   <g class="storage-node">
     <path d="M 420 65 V 155 C 420 167 471 175 535 175 C 599 175 650 167 650 155 V 65" />
     <ellipse class="storage-top" cx="535" cy="65" rx="115" ry="20" />
@@ -117,6 +114,14 @@ most rkeys on the AT Protocol mainnet are [TIDs](https://atproto.com/specs/tid).
 
 this is almost suspiciously convenient: we can store TIDs as `u64`s ("inline rkeys") and non-TID rkeys outlined as a 63-bit counter with the most significant bit set to 1. i may reclaim some extra upper bits when the top bit is set for other quantizable rkey schemes, but right now people seem to be either using TIDs, fixed literals per collection, or some kind of low-cardinality slugs.
 
+for example, if `self` and `for-you` are the first two entries in our rkey outline:
+
+```
+3jzfcijpj2z2a -> 1728652679052295174
+self          -> 9223372036854775809
+for-you       -> 9223372036854775810
+```
+
 ### fixed-width backlinks
 
 collections and locations are left over, but they're the most boring: we just have outline counter `u64`s for both. they're low-cardinality in the network (since they scale with the number of _lexicons_ and not the number of _records_), so this is fine.
@@ -153,6 +158,79 @@ in the ideal case, we would have a single sorted local run of every record-to-re
 this is a well-explored space, however, and the [LSM tree](https://github.com/tigerbeetle/tigerbeetle/blob/878411f/docs/internals/lsm.md) is a perfectly-shaped solution for us: we are essentially doing a prefix scan of a key-value store (with fixed-size keys and zero-sized values!). TigerBeetle's LSM implementation (linked above) is also excellent thanks to its incrementally-stepped compaction routines, instead of one-shot unamortized spikes. all we need to do is store sstables that contain our lexicographically sorted backlink data, with maybe some additional bloom filters or something per-block so that we can easily skip anything that we know for sure doesn't contain any data that we care about at query-time.
 
 it's very fortunate that we only have one type of query to answer (`list_backlinks :: AtUri -> [Backlink]`) so we don't have to store any other type of index - but we could support e.g. some `listLinksByCollection` XRPC query with an index that uses a simple reordering of our `Backlink` struct (so that `target.collection` and `source.collection` are prefix-scannable !)
+
+<figure class="lsm-diagram">
+<svg viewBox="0 0 720 390" role="img" aria-labelledby="lsm-title">
+  <title id="lsm-title">a backlink query touching many sorted LSM runs</title>
+  <defs>
+    <marker id="lsm-arrowhead" markerWidth="10" markerHeight="12" refX="9" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 1 1 L 9 6 L 1 11" />
+    </marker>
+  </defs>
+  <g class="query">
+    <rect x="180" y="12" width="170" height="44" />
+    <text x="265" y="40">query: target = 0x42</text>
+  </g>
+<text class="level-label" x="24" y="119">L0</text>
+<g class="run">
+<rect x="80" y="90" width="54" height="46" />
+<rect x="188" y="90" width="54" height="46" />
+<rect class="match" x="134" y="90" width="54" height="46" />
+<text x="107" y="119">00–2f</text>
+<text x="161" y="119">30–5f</text>
+<text x="215" y="119">60–8f</text>
+</g>
+<g class="run">
+<rect x="270" y="90" width="54" height="46" />
+<rect x="378" y="90" width="54" height="46" />
+<rect class="match" x="324" y="90" width="54" height="46" />
+<text x="297" y="119">10–2f</text>
+<text x="351" y="119">30–4f</text>
+<text x="405" y="119">50–9f</text>
+</g>
+  <line class="compact" x1="256" y1="146" x2="256" y2="176" marker-end="url(#lsm-arrowhead)" />
+  <text class="small-label" x="275" y="166">compact</text>
+<text class="level-label" x="24" y="214">L1</text>
+<g class="run">
+<rect x="80" y="185" width="58" height="46" />
+<rect x="138" y="185" width="58" height="46" />
+<rect x="312" y="185" width="58" height="46" />
+<rect x="370" y="185" width="58" height="46" />
+<rect class="match" x="196" y="185" width="58" height="46" />
+<rect class="match" x="254" y="185" width="58" height="46" />
+<text x="109" y="214">00–1f</text>
+<text x="167" y="214">20–3f</text>
+<text x="225" y="214">40–42</text>
+<text x="283" y="214">42–5f</text>
+<text x="341" y="214">60–8f</text>
+<text x="399" y="214">90–bf</text>
+</g>
+  <line class="compact" x1="256" y1="241" x2="256" y2="271" marker-end="url(#lsm-arrowhead)" />
+  <text class="small-label" x="275" y="261">compact</text>
+<text class="level-label" x="24" y="309">L2</text>
+<g class="run">
+<rect x="80" y="280" width="116" height="46" />
+<rect x="312" y="280" width="116" height="46" />
+<rect class="match" x="196" y="280" width="116" height="46" />
+<text x="138" y="309">00–2f</text>
+<text x="254" y="309">30–5f</text>
+<text x="370" y="309">60–bf</text>
+</g>
+  <g class="merge-links">
+    <path d="M 442 113 H 490 V 303 M 438 208 H 490 M 438 303 H 490" />
+    <line x1="490" y1="208" x2="520" y2="208" marker-end="url(#lsm-arrowhead)" />
+  </g>
+  <g class="result">
+    <rect x="525" y="173" width="170" height="70" />
+    <text x="610" y="202">return all matching</text>
+    <text x="610" y="226">backlinks</text>
+  </g>
+  <g class="legend">
+    <rect class="match" x="80" y="350" width="30" height="20" />
+    <text x="122" y="365">block range may contain target</text>
+  </g>
+</svg>
+</figure>
 
 ## storage layout
 
