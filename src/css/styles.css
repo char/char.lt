@@ -24,7 +24,7 @@ html {
 
   font-family: "Inter", sans-serif;
   font-size: 1rem;
-  line-height: 1.58;
+  line-height: 1.5;
   text-rendering: optimizeLegibility;
 
   background: var(--bg-col);
@@ -120,10 +120,6 @@ blockquote {
 ul,
 ol {
   padding-left: 1.25rem;
-}
-
-li + li {
-  margin-top: 0.25rem;
 }
 
 code,
@@ -342,4 +338,8 @@ picture {
   header {
     padding-top: 0;
   }
+}
+
+.katex {
+  display: inline-block;
 }
