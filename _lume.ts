@@ -107,8 +107,12 @@ const customizeMarkdown = (md: any) => {
   const renderFence = md.renderer.rules.fence;
   md.renderer.rules.fence = (tokens: any, idx: number, options: any, env: any, self: any) => {
     const token = tokens[idx];
-    if (token.info.trim().split(/\s+/)[0] === "ansi") {
+    const language = token.info.trim().split(/\s+/)[0];
+    if (language === "ansi") {
       return `<pre class="terminal"><code>${ansiToHtml(token.content)}</code></pre>\n`;
+    }
+    if (language === "text") {
+      return `<pre><code>${md.utils.escapeHtml(token.content)}</code></pre>\n`;
     }
     return renderFence(tokens, idx, options, env, self);
   };
