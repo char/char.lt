@@ -89,7 +89,11 @@ but you may notice that none of these components are fixed-length at all. that m
 
 ### fixed-width DIDs
 
-an interesting (and perhaps temporary[^2]) property of the `did:plc` did method having a single canonical directory is that it gives us a total ordering for all plc operations. we can assign a numeric ID to a PLC DID by just using the `seq` number of its genesis operation! this gets us a `u64` for any `did:plc`, and for `did:web` (the other atproto-blessed DID method) we can maintain our own intern table local to the application; we'll call this technique of maintaining our own list **"outlining"**. we'll need to outline both `did:web` as well as invalid `did:plc` DIDs. we can use the most significant bit to distinguish between inline did:plc and outline DIDs. i have also reserved an additional top bit to provide two extra reserved tags, in case of future need (e.g. to mark any future enumerable DID methods as atproto evolves - we won't have to pay the cost of storing these outlined)
+an interesting (and perhaps temporary[^2]) property of the `did:plc` did method having a single canonical directory is that it gives us a total ordering for all plc operations. we can assign a numeric ID to a PLC DID by just using the `seq` number of its genesis operation! this gets us a `u64` for any `did:plc`, and for `did:web` (the other atproto-blessed DID method) we can maintain our own intern table local to the application; we'll call this technique of maintaining our own list **"outlining"**.
+
+we'll get this canonical ordering directly from a [plox](https://tangled.org/cerulea.blue/plox) database. since i already run this service, i'm already paying the cost of a full plc.directory replica - were this not the case, we could easily design a thin `did:plc`<->`seq` service that throws out most of the plc operation log.
+
+we'll need to outline both `did:web` as well as invalid `did:plc` DIDs. we can use the most significant bit to distinguish between inline did:plc and outline DIDs. i have also reserved an additional top bit to provide two extra reserved tags, in case of future need (e.g. to mark any future enumerable DID methods as atproto evolves - we won't have to pay the cost of storing these outlined)
 
 | u64 header  | type     |
 | ----------- | -------- |
@@ -424,6 +428,30 @@ data SourceHeadBlockMetadata = SourceHeadBlockMetadata {
 and just like backlinks, when we're compacting `SourceHead` runs we can discard anything with a non-latest `rev` for this `source` :)
 
 for a concrete example, let's suppose a record `A` is created at repo revision `10` with a link to `X`. we'll append `Backlink { target = X, source = A, sourceRev = 10 }` and record `SourceHead { source = A, rev = 10 }`. at revision `20`, `A` is updated to link to `Y` instead. its source head tells us to append `Revocation { source = A, rev = 10 }`; then we append the new backlink to `Y` with `sourceRev = 20` and advance `A`'s source head to `20`. a query for `X` will still encounter the old backlink, but discard it after finding the revocation, while a query for `Y` will return the new one.
+
+## filesystem layout
+
+this is the part where we have all the information we need to concretize the in-filesystem layout of all our data: let's give each of our LSM trees a local & remote subdirectory, and each run within them a TID as its name. we'll also need a central manifest which references all the active runs: any run obsoleted by compaction can be thrown out of the manifest and asynchronously garbage-collected.
+
+```text
+[local data]
+├── manifest
+├── outlines.db
+├── plox.db -- or plox lookups happen via api service elsewhere
+└── {links,revoc,heads}/<tid>/
+    ├── metadata
+    ├── [<index>.CACHED] -- marker tag: present if table is present in s3 but locally-cached
+    └── [<index>.sst] -- optional: present if table is cached OR pending upload
+
+s3://…/
+└── {links,revoc,heads}/<tid>/
+    ├── metadata
+    └── <table-index>.sst
+```
+
+since runs are immutable, we'll never need to overwrite anything in here: after compaction, we can just reference the newly-created run in the manifest, and schedule the now-obsolete constituent runs to be garbage collected.
+
+we also support locally-caching hot SSTables. we'll store a `CACHED` marker adjacent to each cached table so that we can keep a bounded size target of local tables, without ever accidentally clobbering a table which is still pending upload.
 
 ## conclusion
 
