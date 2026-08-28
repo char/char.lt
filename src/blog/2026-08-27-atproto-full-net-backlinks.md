@@ -69,7 +69,7 @@ the drawbacks of remote storage are that query latencies go way up (especially f
 
 telically, storing sorted fixed-width data will allow you to efficiently query it via binary search. in the ideal case, you have _every_ backlink in a single, local sorted run (let's say 100 billion) ordered by target, and when you want to scan for all the backlinks to some target you get to binsearch & you will only need to perform <span class="language-math">\left\lceil \log_2(100\ 000\ 000\ 000) \right\rceil = 37</span> lookups, then you just perform a linear sweep. swag, right? unfortunately, we won't be able to keep all the data in a single packed local sorted run, because we're constantly appending new data and we have so much of it. but i'm getting ahead of myself
 
-so we agree that having fixed length data is good: how do we turn backlinks into fixed length data? a backlink looks like this, a (target, source, location) triple:[^1]
+so we agree that having fixed length data is good: how do we turn backlinks into fixed length data? a backlink looks like this, a (target, source, location) triple:
 
 ```haskell
 newtype AtUri = AtUri Text deriving (Eq, Ord)
@@ -85,7 +85,7 @@ data Backlink = Backlink {
 
 [^1]: let's assume we're using `{-# LANGUAGE DuplicateRecordFields #-}` so that we don't have to write ugly type defs
 
-but you may notice that none of these components are fixed-length at all. that might be a problem for us. whaddamagonnadoo??
+[^1] but you may notice that none of these components are fixed-length at all. that might be a problem for us. whaddamagonnadoo??
 
 ### fixed-width DIDs
 
@@ -455,7 +455,7 @@ we also support locally-caching hot SSTables. we'll store a `CACHED` marker adja
 
 ## conclusion
 
-so, our read path looks like two round-trips to object storage:
+so, our read path looks like at-most two round-trips to object storage:
 
 - round 1: concurrently prefix-scan the `Backlink` remote LSMT for a given `target`
   - skip any tables that don't match min/max/filter: no need to fetch
