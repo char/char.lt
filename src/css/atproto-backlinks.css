@@ -1,0 +1,226 @@
+:is(figure.lsm-diagram, figure.lookup-diagram, figure.storage-diagram) svg {
+  user-select: none;
+}
+
+figure.lsm-diagram {
+  margin: 1.5rem 0;
+
+  & svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  & text {
+    fill: var(--fg-col);
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    text-anchor: middle;
+  }
+
+  & .run rect {
+    fill: var(--bg-col-2);
+    stroke: var(--accent-col-mute-2);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & .run text {
+    font-family: "Ioskeley", ui-monospace, monospace;
+    font-size: 14px;
+  }
+
+  & :is(.run, .legend) rect.match {
+    fill: var(--accent-col-mute-2);
+    stroke: var(--accent-col-mute-1);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & :is(.query, .result) rect {
+    fill: var(--bg-col-3);
+    stroke: var(--accent-col-mute-1);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & .level-label {
+    fill: var(--fg-col-mute);
+    font-weight: 650;
+    text-anchor: start;
+  }
+
+  & .small-label {
+    fill: var(--fg-col-mute);
+    font-size: 12px;
+    text-anchor: start;
+  }
+
+  & :is(.compact, .merge-links line, .merge-links path) {
+    fill: none;
+    stroke: var(--fg-col-mute);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & marker path {
+    fill: none;
+    stroke: var(--fg-col-mute);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  & .legend text {
+    fill: var(--fg-col-mute);
+    font-size: 13px;
+    text-anchor: start;
+  }
+}
+
+figure.lookup-diagram {
+  margin: 1.5rem 0;
+
+  & svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  & text {
+    fill: var(--fg-col);
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    text-anchor: middle;
+  }
+
+  & .panel {
+    fill: none;
+    stroke: var(--fg-col-mute);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & :is(.query, .get, .result) rect {
+    fill: var(--bg-col-3);
+    stroke: var(--accent-col-mute-1);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & :is(.table, .blocks) rect {
+    fill: var(--bg-col-2);
+    stroke: var(--accent-col-mute-2);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & :is(.table.match rect, .blocks rect.match, .legend rect.match) {
+    fill: var(--accent-col-mute-2);
+    stroke: var(--accent-col-mute-1);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & :is(.table.filter-miss rect, .legend rect.filter-miss) {
+    fill: var(--bg-col-2);
+    stroke: var(--fg-col-mute);
+    stroke-width: 2;
+    stroke-dasharray: 4 3;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & .stage-label {
+    fill: var(--fg-col-mute);
+    font-weight: 650;
+    text-anchor: start;
+  }
+
+  & :is(.run-label, .row-label) {
+    fill: var(--fg-col-mute);
+    font-weight: 650;
+    text-anchor: start;
+  }
+
+  & .run-label {
+    font-family: "Ioskeley", ui-monospace, monospace;
+    font-size: 10px;
+  }
+
+  & .table text {
+    font-family: "Ioskeley", ui-monospace, monospace;
+  }
+
+  & .blocks text {
+    font-family: "Ioskeley", ui-monospace, monospace;
+    font-size: 13px;
+  }
+
+  & .legend text {
+    fill: var(--fg-col-mute);
+    font-size: 12px;
+    text-anchor: start;
+  }
+
+  & .flow {
+    fill: none;
+    stroke: var(--fg-col-mute);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & marker path {
+    fill: none;
+    stroke: var(--fg-col-mute);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+figure.storage-diagram {
+  margin: 1.5rem 0;
+
+  & svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  & :is(rect, path, ellipse) {
+    fill: var(--bg-col-2);
+    stroke: var(--accent-col-mute-1);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & .storage-top {
+    fill: var(--bg-col-3);
+  }
+
+  & .storage-link {
+    stroke: var(--fg-col-mute);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & marker path {
+    fill: none;
+    stroke: var(--fg-col-mute);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  & text {
+    fill: var(--fg-col);
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    text-anchor: middle;
+  }
+
+  & text.capacity {
+    fill: var(--fg-col-mute);
+    font-size: 15px;
+  }
+}
