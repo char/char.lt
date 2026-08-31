@@ -139,9 +139,9 @@ this leaves us with:
 
 ```haskell
 data RecordId = RecordId {
-  did :: U64,
+  rkey :: U64,
   collection :: U64,
-  rkey :: U64
+  did :: U64
 } deriving (Eq, Ord)
 
 data Backlink = Backlink {
@@ -152,10 +152,12 @@ data Backlink = Backlink {
 } deriving (Eq, Ord)
 ```
 
+since most incoming firehose traffic consists of fresh records that link to other fresh records, we'll store the `rkey` first because they are likely to be (recent) timestamps: having largely-sequential ordering of incoming data allows us to curtail write amplification because our write key ranges will lie in one portion of the tree, instead of being uniformly distributed - this saves us having to dirty & re-compact a lot of deep levels of the tree all the time. once we get to a steady-state of relay tailing after our full repo ingests are done, we'll have a very light write workload.
+
 we can also represent a bare DID target via `RecordId` in the same variant (i.e. without compromising fixed-length storage): let's reserve a special `<self>` collection & use the zero TID (`2222222222222`) as the rkey. these special links are only ever useful as the `target` of a `Backlink`, never the `source`. that is to say:
 
 ```
-"at://did:example:bob" -> RecordId { did = …, collection = 0, rkey = 0 }
+"at://did:example:bob" -> RecordId { rkey = 0, collection = 0, did = … }
 ```
 
 ## planning our query
@@ -406,7 +408,9 @@ when we receive a delete or update, though, we don't know the source record's cu
 
 ```haskell
 data SourceHead = SourceHead {
-  source :: RecordId,
+  did :: U64,
+  collection :: U64,
+  rkey :: U64,
   rev :: U64
 } deriving (Eq, Ord)
 
@@ -425,9 +429,11 @@ data SourceHeadBlockMetadata = SourceHeadBlockMetadata {
 }
 ```
 
-and just like backlinks, when we're compacting `SourceHead` runs we can discard anything with a non-latest `rev` for this `source` :)
+we redefine `did`, `collection`, `rkey` in this order instead of reusing `RecordId` because it would otherwise mean that `rkey` is ordered first, but we want to be able to prefix-scan for all `SourceHead` of a given repo for snapshot ingest.
 
-for a concrete example, let's suppose a record `A` is created at repo revision `10` with a link to `X`. we'll append `Backlink { target = X, source = A, sourceRev = 10 }` and record `SourceHead { source = A, rev = 10 }`. at revision `20`, `A` is updated to link to `Y` instead. its source head tells us to append `Revocation { source = A, rev = 10 }`; then we append the new backlink to `Y` with `sourceRev = 20` and advance `A`'s source head to `20`. a query for `X` will still encounter the old backlink, but discard it after finding the revocation, while a query for `Y` will return the new one.
+and just like backlinks, when we're compacting `SourceHead` runs we can discard anything with a non-latest `rev` for the same source record :)
+
+for a concrete example, let's suppose a record `A` is created at repo revision `10` with a link to `X`. we'll append `Backlink { target = X, source = A, sourceRev = 10 }` and record `SourceHead { …, rev = 10 }`. at revision `20`, `A` is updated to link to `Y` instead. its source head tells us to append `Revocation { source = A, rev = 10 }`; then we append the new backlink to `Y` with `sourceRev = 20` and advance `A`'s source head to `20`. a query for `X` will still encounter the old backlink, but discard it after finding the revocation, while a query for `Y` will return the new one.
 
 ## filesystem layout
 
