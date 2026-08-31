@@ -8,12 +8,12 @@ stylesheets:
   - /css/atproto-backlinks.css
 ---
 
-lately i have been working on indexing backlinks on the AT Protocol network. this duplicates work by [microcosm.blue constellation](https://microcosm.blue) with two differences:
+lately i have been working on indexing backlinks on the AT Protocol network. on atproto, every reply links to its parent (and thread root), every like/repost points links to its subject, and every follow/block points at the target identity. to do useful work, you often need to reverse these links (e.g. find everyone who follows a given account, or find all replies to a given thread). so i'm working on backlink indexing; this duplicates the prior art of fig's [microcosm.blue constellation](https://microcosm.blue) with two differences:
 
 - constellation, as a live-tailing system, only contains data after a certain epoch (its setup time) - but i want to index _all_ data on the network
 - i am really aggressively interested in cheap & available hosting
   - constellation _is_ cheap! it runs on an rpi at home with a connected HDD. but it seems annoying to have to bring down for hardware upgrades or residential net/power outages. we're looking to build low-cost yet reliable infrastructure
-  - i want to be much more storage-efficient by rolling my own fixed-size key-only store, as opposed to a variable-length key-value store like fjall
+  - i want to be much more storage-efficient by rolling my own fixed-size key-only store, as opposed to a variable-length key-value store like fjall or rocks
 
 at a high level, we want to ingest all the data on the network, and provide a query which lets you provide a "target" uri and get all record URIs on the network that link there.
 
