@@ -54,7 +54,7 @@ the drawbacks of remote storage are that query latencies go way up (especially f
     <text x="115" y="122">my-server</text>
     <text class="capacity" x="115" y="145">≈20 GiB</text>
   </g>
-  <line class="storage-link" x1="230" y1="125" x2="385" y2="125" marker-start="url(#storage-arrowhead)" marker-end="url(#storage-arrowhead)" />
+  <line class="storage-link" x1="196" y1="125" x2="419" y2="125" marker-start="url(#storage-arrowhead)" marker-end="url(#storage-arrowhead)" />
   <text x="305" y="105">WAN (slow!)</text>
   <g class="storage-node">
     <path d="M 420 65 V 155 C 420 167 471 175 535 175 C 599 175 650 167 650 155 V 65" />
@@ -197,7 +197,7 @@ it's very fortunate that we only have one type of query to answer (`list_backlin
 <text x="351" y="119">30-4f</text>
 <text x="405" y="119">50-9f</text>
 </g>
-  <line class="compact" x1="256" y1="146" x2="256" y2="176" marker-end="url(#lsm-arrowhead)" />
+  <line class="compact" x1="256" y1="146" x2="256" y2="184" marker-end="url(#lsm-arrowhead)" />
   <text class="small-label" x="275" y="166">(will compact into)</text>
 <text class="level-label" x="24" y="214">L1</text>
 <g class="run">
@@ -214,7 +214,7 @@ it's very fortunate that we only have one type of query to answer (`list_backlin
 <text x="341" y="214">60-8f</text>
 <text x="399" y="214">90-bf</text>
 </g>
-  <line class="compact" x1="256" y1="241" x2="256" y2="271" marker-end="url(#lsm-arrowhead)" />
+  <line class="compact" x1="256" y1="241" x2="256" y2="279" marker-end="url(#lsm-arrowhead)" />
   <text class="small-label" x="275" y="261">(will compact into)</text>
 <text class="level-label" x="24" y="309">L2</text>
 <g class="run">
@@ -226,8 +226,8 @@ it's very fortunate that we only have one type of query to answer (`list_backlin
 <text x="370" y="309">60-bf</text>
 </g>
   <g class="merge-links">
-    <path d="M 442 113 H 490 V 303 M 438 208 H 490 M 438 303 H 490" />
-    <line x1="490" y1="208" x2="520" y2="208" marker-end="url(#lsm-arrowhead)" />
+    <path d="M 433 113 H 490 V 303 M 429 208 H 490 M 429 303 H 490" />
+    <line x1="490" y1="208" x2="524" y2="208" marker-end="url(#lsm-arrowhead)" />
   </g>
   <g class="result">
     <rect x="525" y="173" width="170" height="70" />
@@ -272,7 +272,7 @@ we have to take into account our write path, as well: recent writes will stay lo
 additionally, when we're compacting backlinks into deeper level runs, we can deduplicate identical backlinks with differing `sourceRev` values, keeping the fresher ones.
 
 <figure class="lookup-diagram">
-<svg viewBox="0 0 720 696" role="img" aria-labelledby="lookup-title">
+<svg viewBox="0 0 720 708" role="img" aria-labelledby="lookup-title">
   <title id="lookup-title">run, table, and block lookup for a backlink query</title>
   <defs>
     <marker id="lookup-arrowhead" markerWidth="10" markerHeight="12" refX="9" refY="6" orient="auto" markerUnits="userSpaceOnUse">
@@ -283,7 +283,7 @@ additionally, when we're compacting backlinks into deeper level runs, we can ded
     <rect x="265" y="12" width="190" height="44" />
     <text x="360" y="40">target = 0x42…</text>
   </g>
-  <line class="flow" x1="360" y1="58" x2="360" y2="82" marker-end="url(#lookup-arrowhead)" />
+  <line class="flow" x1="360" y1="57" x2="360" y2="87" marker-end="url(#lookup-arrowhead)" />
   <g class="metadata">
     <rect class="panel" x="25" y="88" width="670" height="226" rx="4" />
     <text class="stage-label" x="45" y="116">1. for each run: find candidate tables via min/max + filter</text>
@@ -333,7 +333,7 @@ additionally, when we're compacting backlinks into deeper level runs, we can ded
       <text x="358" y="303">range match, filter miss</text>
     </g>
   </g>
-  <line class="flow" x1="360" y1="316" x2="360" y2="340" marker-end="url(#lookup-arrowhead)" />
+  <line class="flow" x1="360" y1="315" x2="360" y2="345" marker-end="url(#lookup-arrowhead)" />
   <rect class="panel" x="25" y="346" width="670" height="146" rx="4" />
   <text class="stage-label" x="45" y="370">2. select blocks based on block metadata min/max</text>
   <text class="row-label" x="45" y="410">table B</text>
@@ -360,8 +360,8 @@ additionally, when we're compacting backlinks into deeper level runs, we can ded
     <text x="420" y="468">2 (40-42)</text>
     <text x="540" y="468">3 (43-5f)</text>
   </g>
-  <line class="flow" x1="360" y1="494" x2="360" y2="526" marker-end="url(#lookup-arrowhead)" />
-  <rect class="panel" x="25" y="532" width="670" height="152" rx="4" />
+  <line class="flow" x1="360" y1="493" x2="360" y2="531" marker-end="url(#lookup-arrowhead)" />
+  <rect class="panel" x="25" y="532" width="670" height="164" rx="4" />
   <text class="stage-label" x="45" y="556">3. fetch blocks concurrently via ranged GET (remote)</text>
   <g class="get">
     <rect x="205" y="570" width="150" height="42" />
@@ -370,10 +370,10 @@ additionally, when we're compacting backlinks into deeper level runs, we can ded
     <text x="440" y="596">fetch block: H2</text>
   </g>
   <g class="result">
-    <rect x="245" y="632" width="230" height="44" />
-    <text x="360" y="660">return matching backlinks</text>
+    <rect x="245" y="644" width="230" height="44" />
+    <text x="360" y="672">return matching backlinks</text>
   </g>
-  <path class="flow" d="M 280 614 V 622 H 360 M 440 614 V 622 H 360 V 630" />
+  <path class="flow" d="M 280 613 V 626 H 360 M 440 613 V 626 H 360 V 643" marker-end="url(#lookup-arrowhead)" />
 </svg>
 </figure>
 
