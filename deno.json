@@ -1,6 +1,6 @@
 {
   "imports": {
-    "@arborium/arborium": "npm:@arborium/arborium@^2.18.1",
+    "@arborium/arborium": "npm:@arborium/arborium@^2.18.2",
     "@lume": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.3.1/mod.ts",
     "@lume/cli": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.3.1/cli.ts",
     "@lume/types": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.3.1/types.ts",

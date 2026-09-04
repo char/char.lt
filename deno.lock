@@ -77,7 +77,7 @@
     "jsr:@std/yaml@1.2.0": "1.2.0",
     "jsr:@std/yaml@^1.0.4": "1.0.4",
     "jsr:@std/yaml@^1.0.5": "1.2.0",
-    "npm:@arborium/arborium@^2.18.1": "2.18.1",
+    "npm:@arborium/arborium@^2.18.2": "2.18.2",
     "npm:@js-temporal/polyfill@0.4.4": "0.4.4",
     "npm:@types/estree@1.0.5": "1.0.5",
     "npm:@types/pug@2.0.10": "2.0.10",
@@ -364,8 +364,8 @@
     }
   },
   "npm": {
-    "@arborium/arborium@2.18.1": {
-      "integrity": "sha512-v6WuWy2yd/+R5OFT7g+asDXKImOrUdnTmEvGZwaBgOE2DSFKcksa2Us4QxxIr3C2ohVguRJf/rtbnZska6/UKg=="
+    "@arborium/arborium@2.18.2": {
+      "integrity": "sha512-Kgbbb28jfcucpTLaWOYrz4miVNYgE1HL7w3Bpvc/ylk05wduzXwMoPDwfUZqX+PHNhcWPL9KYkK69MIr2a1CvQ=="
     },
     "@babel/helper-string-parser@7.24.8": {
       "integrity": "sha512-pO9KhhRcuUyGnJWwyEgnRJTSIZHiT+vMD0kPeD+so0l7mxkMT19g3pjY9GTnHySck/hDzq+dtW/4VgnMkippsQ=="
@@ -1455,30 +1455,43 @@
     "https://cdn.jsdelivr.net/gh/ventojs/vento@2.4.0/plugins/unescape.ts": "1c56f0310c7757880df7684fc6b7bf9efd27fdb6b929b89626802f5a99cb93ee",
     "https://cdn.jsdelivr.net/npm/@arborium/arborium@2.16.0/dist/arborium_host.js": "0b3901142211cb327b70b3e0d35b69671ee8f10a346f2ccc8488f6f9e2b45e8c",
     "https://cdn.jsdelivr.net/npm/@arborium/arborium@2.18.1/dist/arborium_host.js": "85754bcdbdfe27caeb1ef537405f492b9546b068e11041a94ce16069ecd3d65d",
+    "https://cdn.jsdelivr.net/npm/@arborium/arborium@2.18.2/dist/arborium_host.js": "d857dc1953dee623f6cd9a426481b69a6fff5d56e1d7cad02fed3e652eaba426",
     "https://cdn.jsdelivr.net/npm/@arborium/bash@2.16.0/grammar.js": "e3fe1c21596b0756e88478a0d4cbb801c03826bff93816f075717b9390211d69",
     "https://cdn.jsdelivr.net/npm/@arborium/bash@2.18.1/grammar.js": "e2ff73ec025144b7bab12dc640304f73380a9e96d329505fbc93b8062332bed7",
+    "https://cdn.jsdelivr.net/npm/@arborium/bash@2.18.2/grammar.js": "e2ff73ec025144b7bab12dc640304f73380a9e96d329505fbc93b8062332bed7",
     "https://cdn.jsdelivr.net/npm/@arborium/c@2.16.0/grammar.js": "9f6c24f7af514b054121199f84ec8cf8835ed6a8d9d8477a848148c05ece29f6",
     "https://cdn.jsdelivr.net/npm/@arborium/c@2.18.1/grammar.js": "e6fa1024df25ec282444f7967c11d11daae0adea0fadd3fa5f3120c8a06012fa",
+    "https://cdn.jsdelivr.net/npm/@arborium/c@2.18.2/grammar.js": "e6fa1024df25ec282444f7967c11d11daae0adea0fadd3fa5f3120c8a06012fa",
     "https://cdn.jsdelivr.net/npm/@arborium/cpp@2.16.0/grammar.js": "07a296437d09cf459589a2b73d0a830fa466a6d4629cb47c77ab8134a3353265",
     "https://cdn.jsdelivr.net/npm/@arborium/cpp@2.18.1/grammar.js": "08cd35f805759c288495e2634e9efb1b127aecbe91fba052d5c93e716e5c639f",
+    "https://cdn.jsdelivr.net/npm/@arborium/cpp@2.18.2/grammar.js": "08cd35f805759c288495e2634e9efb1b127aecbe91fba052d5c93e716e5c639f",
     "https://cdn.jsdelivr.net/npm/@arborium/diff@2.16.0/grammar.js": "5d5bf7ce21209144c72fca47555f7c741d31b84366ed61bd4b3aa264611bd115",
     "https://cdn.jsdelivr.net/npm/@arborium/diff@2.18.1/grammar.js": "012229e6ea2eba9acbca34849fcc8f9daabc9d922a6c1a4040e47f7dc359f2ed",
+    "https://cdn.jsdelivr.net/npm/@arborium/diff@2.18.2/grammar.js": "012229e6ea2eba9acbca34849fcc8f9daabc9d922a6c1a4040e47f7dc359f2ed",
     "https://cdn.jsdelivr.net/npm/@arborium/haskell@2.13.0/grammar.js": "1dd08f92ef1df6fc9774073670e9c1399d3bf0542f5aaf52c5f5a18b7f32943a",
     "https://cdn.jsdelivr.net/npm/@arborium/haskell@2.18.1/grammar.js": "a16672abb194b65a62f2ff99d9490c92b00ebcc34a7739efb58ea15fd3e9829e",
+    "https://cdn.jsdelivr.net/npm/@arborium/haskell@2.18.2/grammar.js": "a16672abb194b65a62f2ff99d9490c92b00ebcc34a7739efb58ea15fd3e9829e",
     "https://cdn.jsdelivr.net/npm/@arborium/java@2.16.0/grammar.js": "6a9db1924d41173817a7a51bfcc63da4b6b93f702e43c480f6cd12efcdb10fd9",
     "https://cdn.jsdelivr.net/npm/@arborium/java@2.18.1/grammar.js": "9e75a5b256977e7ba5d18bec070c7668bf584142177b2f30bb2e8d0ab3d1c1d7",
+    "https://cdn.jsdelivr.net/npm/@arborium/java@2.18.2/grammar.js": "9e75a5b256977e7ba5d18bec070c7668bf584142177b2f30bb2e8d0ab3d1c1d7",
     "https://cdn.jsdelivr.net/npm/@arborium/javascript@2.16.0/grammar.js": "06f5b93b7f45d8457780a302dfa15bee12cda3d167b7d2256d89b90b89ca9fea",
     "https://cdn.jsdelivr.net/npm/@arborium/javascript@2.18.1/grammar.js": "125cfd146bcaf9028dcb7e1ebdac85f52211177b295969131aa03d7eeb56bd86",
+    "https://cdn.jsdelivr.net/npm/@arborium/javascript@2.18.2/grammar.js": "125cfd146bcaf9028dcb7e1ebdac85f52211177b295969131aa03d7eeb56bd86",
     "https://cdn.jsdelivr.net/npm/@arborium/jsdoc@2.18.1/grammar.js": "36f190e887f11c1ec58e1c13796fea2ec9a02eab041a9f78a68305f9bc3d12c3",
+    "https://cdn.jsdelivr.net/npm/@arborium/jsdoc@2.18.2/grammar.js": "36f190e887f11c1ec58e1c13796fea2ec9a02eab041a9f78a68305f9bc3d12c3",
     "https://cdn.jsdelivr.net/npm/@arborium/kotlin@2.16.0/grammar.js": "a9f2b995b443a13a0a512e7b0eb368b75e295e8e7005c7ea4ab1b0c4873f01d8",
     "https://cdn.jsdelivr.net/npm/@arborium/kotlin@2.18.1/grammar.js": "b587fddc5bb78a77e1e65af85d0617688d9c4b81b5b8c52c3e0ae0345d6f2e7f",
+    "https://cdn.jsdelivr.net/npm/@arborium/kotlin@2.18.2/grammar.js": "b587fddc5bb78a77e1e65af85d0617688d9c4b81b5b8c52c3e0ae0345d6f2e7f",
     "https://cdn.jsdelivr.net/npm/@arborium/nginx@2.16.0/grammar.js": "8fe88aa882f2fb68a1d4da53ecf7fa3c663d796ae81e4c3f3b02f5a83cb42e51",
     "https://cdn.jsdelivr.net/npm/@arborium/nginx@2.18.1/grammar.js": "597589dfd967f9e79053938f26c2d878f7589a29867e019ab367d53a19cb8f56",
+    "https://cdn.jsdelivr.net/npm/@arborium/nginx@2.18.2/grammar.js": "597589dfd967f9e79053938f26c2d878f7589a29867e019ab367d53a19cb8f56",
     "https://cdn.jsdelivr.net/npm/@arborium/rust@2.18.1/grammar.js": "bd0b5995462fe2ab7731e9e81ea696f747a38ed93fdffb75c45b00598e328ccf",
     "https://cdn.jsdelivr.net/npm/@arborium/toml@2.16.0/grammar.js": "b903f24d22331ac64f85bcf162f004ed47b20358b47d8511a0daeb7218dcf288",
     "https://cdn.jsdelivr.net/npm/@arborium/toml@2.18.1/grammar.js": "ac69ec8018fe10e4542f3ae7fcf3884c75dead3a9504f93e26b0e3c812883771",
+    "https://cdn.jsdelivr.net/npm/@arborium/toml@2.18.2/grammar.js": "ac69ec8018fe10e4542f3ae7fcf3884c75dead3a9504f93e26b0e3c812883771",
     "https://cdn.jsdelivr.net/npm/@arborium/typescript@2.16.0/grammar.js": "be5ee4cb454f68129b5396fcbce8acef70153364e7fed21ef606e24e3a5257c5",
     "https://cdn.jsdelivr.net/npm/@arborium/typescript@2.18.1/grammar.js": "7c5171ca2e40e6c918305425a91a4b1aaf2086e4176d599e31c740b02947bdbb",
+    "https://cdn.jsdelivr.net/npm/@arborium/typescript@2.18.2/grammar.js": "7c5171ca2e40e6c918305425a91a4b1aaf2086e4176d599e31c740b02947bdbb",
     "https://deno.land/std@0.170.0/_util/asserts.ts": "d0844e9b62510f89ce1f9878b046f6a57bf88f208a10304aab50efcb48365272",
     "https://deno.land/std@0.170.0/_util/os.ts": "8a33345f74990e627b9dfe2de9b040004b08ea5146c7c9e8fe9a29070d193934",
     "https://deno.land/std@0.170.0/encoding/base64.ts": "8605e018e49211efc767686f6f687827d7f5fd5217163e981d8d693105640d7a",
@@ -1833,7 +1846,7 @@
   },
   "workspace": {
     "dependencies": [
-      "npm:@arborium/arborium@^2.18.1"
+      "npm:@arborium/arborium@^2.18.2"
     ]
   }
 }
