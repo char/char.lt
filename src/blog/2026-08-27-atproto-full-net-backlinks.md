@@ -15,7 +15,11 @@ lately i have been working on indexing backlinks on the AT Protocol network. on 
   - constellation _is_ cheap! it runs on an rpi at home with a connected HDD. but it seems annoying to have to bring down for hardware upgrades or residential net/power outages. we're looking to build low-cost yet reliable infrastructure
   - i want to be much more storage-efficient by rolling my own fixed-size key-only store, as opposed to a variable-length key-value store like fjall or rocks
 
+## the goal
+
 at a high level, we want to ingest all the data on the network, and provide a query which lets you provide a "target" uri and get all record URIs on the network that link there.
+
+it's evident that a backlink store is _basically_ the same style of inverted index as a full-text search system: instead of tracking "&lt;token&gt; occurs in &lt;document&gt;", we track "&lt;target&gt; is linked to by &lt;source&gt;". a caveat is that we have many "documents" and far fewer "token" occurrences, which means we ought to throw out things like integer interning for documents and instead devise something that requires as few dictionary lookups as possible.
 
 ```ansi
 $ [32mcurl[0m [36m--get[0m [33m'https://[2m[…][22m/xrpc/blue.cerulea.backlinks.listBacklinks'[0m \
@@ -52,7 +56,7 @@ the drawbacks of remote storage are that query latencies go way up (especially f
   <g class="storage-node">
     <rect x="35" y="85" width="160" height="80" rx="4" />
     <text x="115" y="122">my-server</text>
-    <text class="capacity" x="115" y="145">≈20 GiB</text>
+    <text class="capacity" x="115" y="145">≈50 GiB</text>
   </g>
   <line class="storage-link" x1="196" y1="125" x2="419" y2="125" marker-start="url(#storage-arrowhead)" marker-end="url(#storage-arrowhead)" />
   <text x="305" y="105">WAN (slow!)</text>
@@ -164,116 +168,94 @@ we can also represent a bare DID target via `RecordId` in the same variant (i.e.
 
 in the ideal case, we would have a single sorted local run of every record-to-record link on the network: at query-time, this would mean that we would just need to binary search some sorted index of target `RecordId` -> byte offset into the big list of all backlink sources, and scan forward, returning `Backlink`s until we run into one that doesn't match our target. at ingestion-time, though, this would mean that we have to insert a record in the _middle_ of our index, and shift all the following ones forward - this leads to several hundred gigabytes of write just to add a new 64 byte entry!
 
-this is a well-explored space, however, and the [LSM tree](https://github.com/tigerbeetle/tigerbeetle/blob/878411f/docs/internals/lsm.md) is a perfectly-shaped solution for us: we are essentially doing a prefix scan of a key-value store (with fixed-size keys and zero-sized values!). TigerBeetle's LSM implementation (linked above) is also excellent thanks to its incrementally-stepped compaction routines, instead of one-shot unamortized spikes. all we need to do is store sstables that contain our lexicographically sorted backlink data, with maybe some additional bloom filters or something per-block so that we can easily skip anything that we know for sure doesn't contain any data that we care about at query-time.
+this is a well-explored space, however, and the [LSM tree](https://github.com/tigerbeetle/tigerbeetle/blob/878411f/docs/internals/lsm.md) is a perfectly-shaped solution for us: we are essentially doing a prefix scan of a key-value store (with fixed-size keys and zero-sized values!). TigerBeetle's LSM implementation (linked above) is also excellent thanks to its incrementally-stepped compaction routines, instead of one-shot unamortized spikes. all we need to do is store sstables that contain our lexicographically sorted backlink data, with maybe some additional bloom(-esque?) filters per-table so that we can easily skip anything that we know for sure doesn't contain any data that we care about at query-time.
 
-it's very fortunate that we only have one type of query to answer (`list_backlinks :: AtUri -> [Backlink]`) so we don't have to store any other type of index - but we could support e.g. some `listLinksByCollection` XRPC query with an index that uses a simple reordering of our `Backlink` struct (so that `target.collection` and `source.collection` are prefix-scannable !)
+it's very fortunate that we only have one type of query to answer (`list_backlinks :: AtUri -> [Backlink]`) so we don't have to store any other type of index - but we could support e.g. some `listLinksByCollection` XRPC query with an index that uses a simple reordering of our `Backlink` struct (so that `source.collection` is prefix-scannable !)
+
+we can do size-tiered compaction: group fully-published runs by compressed size, and merge eight similarly-sized runs into a super-run. for comparison parallelism, we can radix-split the runs by target hash and then sort these shards independently. then, we can just create a compacted run with one table per shard. we can use the same sharding at query-time to skip over tables we don't care about (we're only ever looking for one target!) and we don't need to sort the data across compacted tables either.
+
+when we flush in-memory writes (to keep memory usage appropriately bounded!), we'll sort them and write a **"delta run"** which is characterized by having a single table: unlike a _compacted_ run, a delta run can contain frames from all shards - queries will need to check deltas at the same time as all the compacted runs, so we should eventually compact them into larger runs too.
 
 <figure class="lsm-diagram">
-<svg viewBox="0 0 720 390" role="img" aria-labelledby="lsm-title">
-  <title id="lsm-title">a backlink query touching many sorted LSM runs</title>
+<svg viewBox="0 0 720 370" role="img" aria-labelledby="lsm-title">
+  <title id="lsm-title">compaction: eight runs merge by shard</title>
   <defs>
     <marker id="lsm-arrowhead" markerWidth="10" markerHeight="12" refX="9" refY="6" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M 1 1 L 9 6 L 1 11" />
     </marker>
   </defs>
-  <g class="query">
-    <rect x="180" y="12" width="170" height="44" />
-    <text x="265" y="40">prefix lookup: 0x42…</text>
+  <text x="360" y="28">8 similarly sized published runs</text>
+  <g class="run">
+    <rect x="40" y="46" width="80" height="42" />
+    <rect x="120" y="46" width="80" height="42" />
+    <rect x="200" y="46" width="80" height="42" />
+    <rect x="280" y="46" width="80" height="42" />
+    <rect x="360" y="46" width="80" height="42" />
+    <rect x="440" y="46" width="80" height="42" />
+    <rect x="520" y="46" width="80" height="42" />
+    <rect x="600" y="46" width="80" height="42" />
+    <text x="80" y="73">A</text>
+    <text x="160" y="73">B</text>
+    <text x="240" y="73">C</text>
+    <text x="320" y="73">D</text>
+    <text x="400" y="73">E</text>
+    <text x="480" y="73">F</text>
+    <text x="560" y="73">G</text>
+    <text x="640" y="73">H</text>
   </g>
-<text class="level-label" x="24" y="119">L0</text>
-<g class="run">
-<rect x="80" y="90" width="54" height="46" />
-<rect x="188" y="90" width="54" height="46" />
-<rect class="match" x="134" y="90" width="54" height="46" />
-<text x="107" y="119">00-2f</text>
-<text x="161" y="119">30-5f</text>
-<text x="215" y="119">60-8f</text>
-</g>
-<g class="run">
-<rect x="270" y="90" width="54" height="46" />
-<rect x="378" y="90" width="54" height="46" />
-<rect class="match" x="324" y="90" width="54" height="46" />
-<text x="297" y="119">10-2f</text>
-<text x="351" y="119">30-4f</text>
-<text x="405" y="119">50-9f</text>
-</g>
-  <line class="compact" x1="256" y1="146" x2="256" y2="184" marker-end="url(#lsm-arrowhead)" />
-  <text class="small-label" x="275" y="166">(will compact into)</text>
-<text class="level-label" x="24" y="214">L1</text>
-<g class="run">
-<rect x="80" y="185" width="58" height="46" />
-<rect x="138" y="185" width="58" height="46" />
-<rect x="312" y="185" width="58" height="46" />
-<rect x="370" y="185" width="58" height="46" />
-<rect class="match" x="196" y="185" width="58" height="46" />
-<rect class="match" x="254" y="185" width="58" height="46" />
-<text x="109" y="214">00-1f</text>
-<text x="167" y="214">20-3f</text>
-<text x="225" y="214">40-42</text>
-<text x="283" y="214">42-5f</text>
-<text x="341" y="214">60-8f</text>
-<text x="399" y="214">90-bf</text>
-</g>
-  <line class="compact" x1="256" y1="241" x2="256" y2="279" marker-end="url(#lsm-arrowhead)" />
-  <text class="small-label" x="275" y="261">(will compact into)</text>
-<text class="level-label" x="24" y="309">L2</text>
-<g class="run">
-<rect x="80" y="280" width="116" height="46" />
-<rect x="312" y="280" width="116" height="46" />
-<rect class="match" x="196" y="280" width="116" height="46" />
-<text x="138" y="309">00-2f</text>
-<text x="254" y="309">30-5f</text>
-<text x="370" y="309">60-bf</text>
-</g>
+  <line class="compact" x1="360" y1="89" x2="360" y2="130" marker-end="url(#lsm-arrowhead)" />
+  <text x="360" y="153">(each worker reads one shard from all 8 input runs)</text>
+  <g class="run">
+    <rect x="40" y="176" width="160" height="48" />
+    <rect x="240" y="176" width="160" height="48" />
+    <rect x="520" y="176" width="160" height="48" />
+    <text x="120" y="206">shard 1</text>
+    <text x="320" y="206">shard 2</text>
+    <text x="460" y="206">…</text>
+    <text x="600" y="206">shard 64</text>
+  </g>
   <g class="merge-links">
-    <path d="M 433 113 H 490 V 303 M 429 208 H 490 M 429 303 H 490" />
-    <line x1="490" y1="208" x2="524" y2="208" marker-end="url(#lsm-arrowhead)" />
+    <path d="M 120 225 V 252 H 600 V 225 M 320 225 V 252" />
+    <line x1="360" y1="252" x2="360" y2="282" marker-end="url(#lsm-arrowhead)" />
   </g>
   <g class="result">
-    <rect x="525" y="173" width="170" height="70" />
-    <text x="610" y="202">return all matching</text>
-    <text x="610" y="226">backlinks</text>
-  </g>
-  <g class="legend">
-    <rect class="match" x="80" y="350" width="30" height="20" />
-    <text x="122" y="365">range contains target key</text>
+    <rect x="160" y="284" width="400" height="64" />
+    <text x="360" y="310">all 64 shards become tables</text>
+    <text x="360" y="334">and placed into 1 run</text>
   </g>
 </svg>
 </figure>
 
-## storage layout
+## metadata and bulk data
 
-things get a little more complex, however, when we don't want to have all the data resident on disk at once: our target case for operations is a cheap, small VPS (with little storage) backed by a large pool of object storage, without blowing up query latency. so we need to somehow keep latency-critical state local, but still offload the bulk of the data to object storage.
+things get a little more complex, however, when we don't want to have the _entirety_ of the data resident on disk at once: our target case for operations is a cheap, small VPS (with little storage) backed by a large pool of object storage, without blowing up query latency. so we need to somehow keep latency-critical state local, but still offload the bulk of the data to object storage.
 
-let's store our LSM tree's runs' sstables (≈512MiB) remotely as an object each and logically split them into independently-readable blocks (≈1MiB, compressed). for each table, we'll keep an index locally which contains its target key range, a bloom-esque[^3] filter over targets (so that we can skip irrelevant tables!), and range fences for each of its blocks:
+let's store our LSM tree's runs' sstables remotely as an object each and logically split it into independently-readable frames (≈64 KiB, then compressed with zstd). for each table, we'll keep an index locally which contains a bloom-esque[^3] filter over targets (so that we can skip irrelevant tables!), and metadata for each of its frames.
 
 ```haskell
 data TableMetadata = TableMetadata {
-  minTarget :: RecordId,
-  maxTarget :: RecordId,
   filter :: KeyFilter RecordId,
-  blocks :: [BlockMetadata]
+  frames :: [FrameMetadata]
 }
 
-data BlockMetadata = BlockMetadata {
-  minTarget :: RecordId,
-  maxTarget :: RecordId,
-  offset :: U64, -- byte offset in table for this block
-  len :: U64     -- compressed length
+data FrameMetadata = FrameMetadata {
+  firstTarget :: RecordId,
+  firstSource :: RecordId,
+  targetContinues :: Bool, -- first target appears in previous frame
+  offset :: U64,
+  len :: U64
 }
 ```
 
-[^3]: we don't actually use a bloom filter exactly. sstables are definitionally immutable, so we can get better storage efficiency for the same probabilities by using a [xor](https://lemire.me/blog/2019/12/19/xor-filters-faster-and-smaller-than-bloom-filters/) or [binary fuse filter](https://lemire.github.io/talks/2023/fastfilters/fastfilter.html).
+[^3]: we probably won't use a bloom filter exactly. sstables are definitionally immutable, so we can get better storage efficiency for the same probabilities by using a [xor](https://lemire.me/blog/2019/12/19/xor-filters-faster-and-smaller-than-bloom-filters/) or [binary fuse filter](https://lemire.github.io/talks/2023/fastfilters/fastfilter.html).
 
-this means that to serve a query, we look at all table metadata, throw away any table whose target range / filter does not match our query target, and then binary search for matching blocks. a subtlety here is that since we have a block size limit we can't assume that there's only one matching block for a target: we need to allow exceptionally popular targets to span multiple blocks (or even tables!), but since blocks are sorted we can fetch many constituent blocks at once by folding their ranges and using one contiguous object GET.
+this means that to serve a query, we look at the full deltas + our target's shard in each compacted run, throw away any table whose filter doesn't match the query target, and then binary search for matching frames. a subtlety here is that since we have a frame size limit we can't assume that there's only one matching frame for a target: we need to allow exceptionally popular targets to span multiple frames (or even tables!), but since tables are sorted that means frames _within_ a table are sorted, and we can fetch many constituent frames at once by folding their ranges and using one contiguous object GET.
 
-we have to take into account our write path, as well: recent writes will stay local in the upper levels of our LSM tree and only after a few rounds of compaction into larger levels will we upload runs to object storage, so that we minimize object store write amplification & keep sparse data on a quickly-seekable medium. conversely, larger, deeper levels of the LSM tree should have fewer overlapping runs & more disjoint key ranges, so we will need to scan fewer (remote) sstables.
-
-additionally, when we're compacting backlinks into deeper level runs, we can deduplicate identical backlinks with differing `sourceRev` values, keeping the fresher ones.
+additionally, when we're compacting backlink runs, we can deduplicate identical backlinks with differing `sourceRev` values, keeping the fresher ones.
 
 <figure class="lookup-diagram">
-<svg viewBox="0 0 720 708" role="img" aria-labelledby="lookup-title">
-  <title id="lookup-title">run, table, and block lookup for a backlink query</title>
+<svg viewBox="0 0 720 490" role="img" aria-labelledby="lookup-title">
+  <title id="lookup-title">local filters and frame fences plan remote reads for a backlink query</title>
   <defs>
     <marker id="lookup-arrowhead" markerWidth="10" markerHeight="12" refX="9" refY="6" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M 1 1 L 9 6 L 1 11" />
@@ -284,199 +266,118 @@ additionally, when we're compacting backlinks into deeper level runs, we can ded
     <text x="360" y="40">target = 0x42…</text>
   </g>
   <line class="flow" x1="360" y1="57" x2="360" y2="87" marker-end="url(#lookup-arrowhead)" />
-  <g class="metadata">
-    <rect class="panel" x="25" y="88" width="670" height="226" rx="4" />
-    <text class="stage-label" x="45" y="116">1. for each run: find candidate tables via min/max + filter</text>
-    <text class="run-label" x="35" y="157">3muk2lq7n5s2a</text>
-    <g class="table">
-      <rect x="120" y="130" width="160" height="42" />
-      <text x="200" y="156">A (00-2f)</text>
-    </g>
-    <g class="table">
-      <rect x="440" y="130" width="160" height="42" />
-      <text x="520" y="156">C (60-9f)</text>
-    </g>
-    <g class="table match">
-      <rect x="280" y="130" width="160" height="42" />
-      <text x="360" y="156">B (30-5f)</text>
-    </g>
-    <text class="run-label" x="35" y="211">3muk2m4x6p72b</text>
-    <g class="table">
-      <rect x="120" y="184" width="160" height="42" />
-      <text x="200" y="210">D (00-3f)</text>
-    </g>
-    <g class="table">
-      <rect x="440" y="184" width="160" height="42" />
-      <text x="520" y="210">F (80-bf)</text>
-    </g>
-    <g class="table filter-miss">
-      <rect x="280" y="184" width="160" height="42" />
-      <text x="360" y="210">E (40-7f)</text>
-    </g>
-    <text class="run-label" x="35" y="265">3muk2nq7v4k2c</text>
-    <g class="table">
-      <rect x="120" y="238" width="160" height="42" />
-      <text x="200" y="264">G (00-2f)</text>
-    </g>
-    <g class="table">
-      <rect x="440" y="238" width="160" height="42" />
-      <text x="520" y="264">I (60-bf)</text>
-    </g>
-    <g class="table match">
-      <rect x="280" y="238" width="160" height="42" />
-      <text x="360" y="264">H (30-5f)</text>
-    </g>
-    <g class="legend">
-      <rect class="match" x="120" y="292" width="20" height="12" />
-      <text x="148" y="303">range + filter match</text>
-      <rect class="filter-miss" x="330" y="292" width="20" height="12" />
-      <text x="358" y="303">range match, filter miss</text>
-    </g>
+  <rect class="panel" x="25" y="88" width="670" height="110" rx="4" />
+  <text class="stage-label" x="45" y="116">1. probe candidate tables' filters (local)</text>
+  <g class="table match">
+    <rect x="100" y="138" width="160" height="42" />
+    <text x="180" y="164">A: possible match</text>
   </g>
-  <line class="flow" x1="360" y1="315" x2="360" y2="345" marker-end="url(#lookup-arrowhead)" />
-  <rect class="panel" x="25" y="346" width="670" height="146" rx="4" />
-  <text class="stage-label" x="45" y="370">2. select blocks based on block metadata min/max</text>
-  <text class="row-label" x="45" y="410">table B</text>
+  <g class="table filter-miss">
+    <rect x="280" y="138" width="160" height="42" />
+    <text x="360" y="164">B: absent</text>
+  </g>
+  <g class="table match">
+    <rect x="460" y="138" width="160" height="42" />
+    <text x="540" y="164">C: possible match</text>
+  </g>
+  <line class="flow" x1="360" y1="199" x2="360" y2="229" marker-end="url(#lookup-arrowhead)" />
+  <rect class="panel" x="25" y="230" width="670" height="110" rx="4" />
+  <text class="stage-label" x="45" y="258">2. binary-search frame fences (local)</text>
   <g class="blocks">
-    <rect x="120" y="386" width="96" height="42" />
-    <rect x="216" y="386" width="96" height="42" />
-    <rect x="504" y="386" width="96" height="42" />
-    <rect class="match" x="312" y="386" width="96" height="42" />
-    <rect class="match" x="408" y="386" width="96" height="42" />
-    <text x="168" y="412">0 (30-37)</text>
-    <text x="264" y="412">1 (38-3f)</text>
-    <text x="360" y="412">2 (40-42)</text>
-    <text x="456" y="412">3 (42-42)</text>
-    <text x="552" y="412">4 (43-5f)</text>
+    <rect x="100" y="280" width="80" height="42" />
+    <rect class="match" x="180" y="280" width="80" height="42" />
+    <rect class="match" x="260" y="280" width="80" height="42" />
+    <rect x="380" y="280" width="80" height="42" />
+    <rect class="match" x="460" y="280" width="80" height="42" />
+    <rect x="540" y="280" width="80" height="42" />
+    <text x="140" y="306">A0</text>
+    <text x="220" y="306">A1</text>
+    <text x="300" y="306">A2</text>
+    <text x="420" y="306">C0</text>
+    <text x="500" y="306">C1</text>
+    <text x="580" y="306">C2</text>
   </g>
-  <text class="row-label" x="45" y="466">table H</text>
-  <g class="blocks">
-    <rect x="120" y="442" width="120" height="42" />
-    <rect x="240" y="442" width="120" height="42" />
-    <rect x="480" y="442" width="120" height="42" />
-    <rect class="match" x="360" y="442" width="120" height="42" />
-    <text x="180" y="468">0 (30-37)</text>
-    <text x="300" y="468">1 (38-3f)</text>
-    <text x="420" y="468">2 (40-42)</text>
-    <text x="540" y="468">3 (43-5f)</text>
-  </g>
-  <line class="flow" x1="360" y1="493" x2="360" y2="531" marker-end="url(#lookup-arrowhead)" />
-  <rect class="panel" x="25" y="532" width="670" height="164" rx="4" />
-  <text class="stage-label" x="45" y="556">3. fetch blocks concurrently via ranged GET (remote)</text>
+  <line class="flow" x1="360" y1="341" x2="360" y2="371" marker-end="url(#lookup-arrowhead)" />
+  <rect class="panel" x="25" y="372" width="670" height="106" rx="4" />
+  <text class="stage-label" x="45" y="400">3. fetch candidate frames concurrently (disk or S3)</text>
   <g class="get">
-    <rect x="205" y="570" width="150" height="42" />
-    <text x="280" y="596">fetch blocks: B2-B3</text>
-    <rect x="365" y="570" width="150" height="42" />
-    <text x="440" y="596">fetch block: H2</text>
+    <rect x="160" y="420" width="180" height="42" />
+    <text x="250" y="446">A.data: frames 1–2</text>
+    <rect x="380" y="420" width="180" height="42" />
+    <text x="470" y="446">C.data: frame 1</text>
   </g>
-  <g class="result">
-    <rect x="245" y="644" width="230" height="44" />
-    <text x="360" y="672">return matching backlinks</text>
-  </g>
-  <path class="flow" d="M 280 613 V 626 H 360 M 440 613 V 626 H 360 V 643" marker-end="url(#lookup-arrowhead)" />
 </svg>
 </figure>
 
 ## updates & deletes
 
-this is the last big challenge: cleanup of deleted links is (or at least used to be) the [most resource-intensive part of microcosm](https://bsky.app/profile/bad-example.com/post/3llz5ypn3jc2t) so i want to solve this in an efficient way really badly: did you notice our `sourceRev` field on our `Backlink` struct? here's where we make use of it!! the high-level idea is that we store a revocation set of `(source, sourceRev)` pairs, and can tell if a backlink is irrelevant (and should be omitted from a query response) if its source and rev appear in the revocation set. we don't want to store the entire revoked set locally, however, so we'll need to employ the same strategies for offloading this data to object storage without blowing up query latency.
+this is the last big challenge: cleanup of deleted links is (or at least used to be) the [most resource-intensive part of microcosm](https://bsky.app/profile/bad-example.com/post/3llz5ypn3jc2t) so i want to solve this in an efficient way really badly: did you notice our `sourceRev` field on our `Backlink` struct? here's where we make use of it!! the high-level idea is that we store a revocation threshold for each source `RecordId`: we can tell if a backlink is irrelevant (and should be omitted from a query response) if its `sourceRev` is below the threshold. we don't want to store all the thresholds locally, however, so we'll need to employ the same strategies for offloading this data to object storage without blowing up query latency.
 
-let's put all revocations in a similar LSMT and again store local metadata for each sstable of each run & each block within these tables:
+here, `sourceRev` is the value of an ingestion lamport clock, not the repo revision: this lets us process arbitrarily many deletes and recreates in the same atproto commit (i.e. they would all have the same rev!), in the case of a weird `applyWrites` or something. let's put all thresholds in a similar LSMT and again store local metadata for each table & each frame within these tables:
 
 ```haskell
 data Revocation = Revocation {
   source :: RecordId,
   rev :: U64
 } deriving (Eq, Ord)
-
-data RevocationTableMetadata = RevocationTableMetadata {
-  min :: Revocation,
-  max :: Revocation,
-  filter :: KeyFilter Revocation,
-  blocks :: [RevocationBlockMetadata]
-}
-
-data RevocationBlockMetadata = RevocationBlockMetadata {
-  min :: Revocation,
-  max :: Revocation,
-  offset :: U64,
-  len :: U64
-}
+-- & revocation block, revocation frame
 ```
 
-when we receive a delete or update, though, we don't know the source record's current rev in order to revoke it! so we also need to store a forward index of the most recent `rev` observed for a given `source`:
+when we receive a delete or update, we append a revocation with the current ingestion clock as the rev, invalidating all older links from that source. updates are handled the exact same way, except we _also_ scan the new version of the record for links :)
 
-```haskell
-data SourceHead = SourceHead {
-  did :: U64,
-  collection :: U64,
-  rkey :: U64,
-  rev :: U64
-} deriving (Eq, Ord)
+just like backlinks, when we're compacting revocation runs we can discard anything with a non-latest `rev` for the same source record :)
 
-data SourceHeadTableMetadata = SourceHeadTableMetadata {
-  min :: RecordId,
-  max :: RecordId,
-  filter :: KeyFilter RecordId,
-  blocks :: [SourceHeadBlockMetadata]
-}
+for a concrete example, let's suppose a record `A` is created at rev `10` with a link to `X`. we'll append `Backlink { target = X, source = A, sourceRev = 10 }`. at rev `20`, `A` is updated to link to `Y` instead. we append `Revocation { source = A, rev = 20 }`; then we append the new backlink to `Y` with `sourceRev = 20`. a query for `X` will still encounter the old backlink, but discard it after finding the revocation, while a query for `Y` will return the new one.
 
-data SourceHeadBlockMetadata = SourceHeadBlockMetadata {
-  min :: RecordId,
-  max :: RecordId,
-  offset :: U64,
-  len :: U64
-}
-```
-
-we redefine `did`, `collection`, `rkey` in this order instead of reusing `RecordId` because it would otherwise mean that `rkey` is ordered first, but we want to be able to prefix-scan for all `SourceHead` of a given repo for snapshot ingest.
-
-and just like backlinks, when we're compacting `SourceHead` runs we can discard anything with a non-latest `rev` for the same source record :)
-
-for a concrete example, let's suppose a record `A` is created at repo revision `10` with a link to `X`. we'll append `Backlink { target = X, source = A, sourceRev = 10 }` and record `SourceHead { …, rev = 10 }`. at revision `20`, `A` is updated to link to `Y` instead. its source head tells us to append `Revocation { source = A, rev = 10 }`; then we append the new backlink to `Y` with `sourceRev = 20` and advance `A`'s source head to `20`. a query for `X` will still encounter the old backlink, but discard it after finding the revocation, while a query for `Y` will return the new one.
+as a special case, we'll also support using the same "whole DID" `RecordId` zero-coll/-rkey encoding in a Revocation - this will apply to _all records in the repo_ (i.e. a backlink must be unrevoked at both its source record + rev as well as its source _repo_ + rev) so that we can "reset" a repository whenever we need to resync - we can just write a single revocation and then add all the links we find.
 
 ## filesystem layout
 
-this is the part where we have all the information we need to concretize the in-filesystem layout of all our data: let's give each of our LSM trees a local & remote subdirectory, and each run within them a TID as its name. we'll also need a central manifest which references all the active runs: any run obsoleted by compaction can be thrown out of the manifest and asynchronously garbage-collected.
+this is the part where we have all the information we need to concretize the in-filesystem layout of all our data: let's give each of our LSM trees a local & remote subdirectory, and each table within them a random ID as its name. we'll also need a local SQLite catalog which references all the active tables, and remote manifests for published views:
 
 ```text
 [local data]
-├── manifest
 ├── outlines.db
-├── plox.db -- or plox lookups happen via api service elsewhere
-└── {links,revoc,heads}/<tid>/
-    ├── metadata
-    ├── [<index>.CACHED] -- marker tag: present if table is present in s3 but locally-cached
-    └── [<index>.sst] -- optional: present if table is cached OR pending upload
+├── repos.db
+└── state/
+    ├── state.db
+    └── tables/
+        ├── links/<id>.{meta,data}
+        └── thresholds/<id>.{meta,data}
 
 s3://…/
-└── {links,revoc,heads}/<tid>/
-    ├── metadata
-    └── <table-index>.sst
+├── CURRENT
+├── manifests/<generation>-<digest>
+├── tables/
+│   ├── links/<id>.{meta,data}
+│   └── thresholds/<id>.{meta,data}
+├── outlines/<kind>/<after>-<through>
+└── checkpoints/<generation>/<id>/repos.db.zst
 ```
 
 since runs are immutable, we'll never need to overwrite anything in here: after compaction, we can just reference the newly-created run in the manifest, and schedule the now-obsolete constituent runs to be garbage collected.
 
-we also support locally-caching hot SSTables. we'll store a `CACHED` marker adjacent to each cached table so that we can keep a bounded size target of local tables, without ever accidentally clobbering a table which is still pending upload.
+we'll also support locally-caching hot tables. we'll store upload status in the local catalog so that we can keep a bounded size target of local data, without ever accidentally clobbering a table which is still pending upload.
 
-## conclusion
+## recap
 
-so, our read path looks like at-most two round-trips to object storage:
+so, our read path looks like at most two serially dependent round-trips to object storage:
 
-- round 1: concurrently prefix-scan the `Backlink` remote LSMT for a given `target`
-  - skip any tables that don't match min/max/filter: no need to fetch
-  - fetch all blocks that match min/max for any matching tables concurrently
-- round 2: for each of the results, discard any which have a corresponding entry in the `Revocation` LSMT
-  - again, skip object fetches using min/max/filter
-  - again, fetch all blocks concurrently
-- return matching `Backlink`s as an API response
+- round 1: concurrently prefix-scan the `Backlink` LSMT for a given `target`, including recent in-memory writes
+  - skip any tables that don't match the filter: no need to fetch
+  - fetch matching frames concurrently, using the local fences
+  - deduplicate identical backlinks, folding differing `sourceRev` by greatest-wins
+- round 2: for each of the results (concurrently), read the `Revocation` LSMT to:
+  1. find their record-level & repo-level thresholds
+  2. discard any with a threshold greater than their source revision stamp
+- return all matching `Backlink`s as an API response
 
-and our write path is a little more complex:
+our write path is simpler:
 
-- to write a whole repo, we fill the `Backlink` LSMT and write to `SourceHead` for each record we find in there
-- for firehose ingest, we have to inspect a commit's ops and write to `SourceHead` for each touched record, and additionally:
+- to write a whole repo, we write a repo threshold and fill the `Backlink` LSMT at the same ingestion stamp
+- for firehose ingest, we have to inspect a commit's ops:
   - for `action: "create"`, we can populate the `Backlink` LSMT as usual
-  - for `action: "delete"`, we have to read from the `SourceHead` LSMT to find the correct rev and then append to the `Revocation` LSMT
-  - for `action: "update"`, we have to treat it like a delete && create, so we read from `SourceHead`s and then write to `Revocation`s and then write to `Backlink`s.
+  - for `action: "delete"`, we append a record threshold to the `Revocation` LSMT
+  - for `action: "update"`, we have to treat it like a "delete; create", so we write to `Revocation`s and then write to `Backlink`s at the same stamp.
 
 i have a few prototypes that aided in arriving at a design for this thing, and will be implementing this one shortly. wish me luck chat
