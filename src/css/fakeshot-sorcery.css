@@ -1,0 +1,215 @@
+.sorcery-fakeshot {
+  margin: 1.5rem 0;
+  container-type: inline-size;
+
+  & .screen {
+    overflow-x: auto;
+    border: 1px solid var(--accent-col-mute-2);
+    background: var(--bg-col);
+    box-shadow: 0 0.35rem 1.25rem #0005;
+  }
+
+  & .screen:focus-visible {
+    outline: 2px solid var(--accent-col);
+    outline-offset: 3px;
+  }
+
+  & .commit-page {
+    --added: #95ffc3;
+    --removed: #ff94d1;
+    padding: 1.5em;
+    color: var(--fg-col);
+    font-family: "InterVariable", "Inter", sans-serif;
+    font-size: clamp(0.75rem, 1.7cqw, 0.875rem);
+    line-height: 1.5;
+  }
+
+  & code {
+    margin: 0;
+    padding: 0;
+    background: none;
+    color: inherit;
+    font-family: "Ioskeley", ui-monospace, monospace;
+    font-size: 0.875em;
+    font-weight: 500;
+  }
+
+  & .muted {
+    color: var(--fg-col-mute);
+  }
+  & .link {
+    color: var(--accent-col);
+  }
+  & .added {
+    color: var(--added);
+  }
+  & .removed {
+    color: var(--removed);
+  }
+
+  & .repo-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 1.5em;
+  }
+
+  & .repo-name {
+    font-size: 1.75em;
+    font-weight: 520;
+    line-height: 1.2;
+    margin-bottom: 0.25em;
+  }
+
+  & .clone {
+    padding: 0.7em 1em;
+    border: 1px solid var(--accent-col-mute-2);
+    border-right: 2px solid var(--accent-col-mute-1);
+    background: var(--bg-col-2);
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  & .crumbs {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75em;
+    margin: 1em 0 2em;
+    padding-bottom: 0.9em;
+    border-bottom: 1px solid var(--accent-col-mute-2);
+    font-size: 0.875em;
+  }
+
+  & .push-right {
+    margin-left: auto;
+  }
+
+  & .subject {
+    font-size: 1.5em;
+    font-weight: 650;
+    line-height: 1.2;
+    margin-bottom: 0.5em;
+  }
+
+  & .metadata {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: 1.5em;
+    margin: 1.5em 0;
+    font-size: 0.875em;
+
+    & dt {
+      color: var(--fg-col-mute);
+    }
+    & dd {
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+    & code {
+      font-size: 1em;
+    }
+  }
+
+  & .stats {
+    display: flex;
+    gap: 0.75em;
+    color: var(--fg-col-mute);
+    font-size: 0.875em;
+  }
+
+  & .file-diff {
+    margin-top: 0.75em;
+    border: 1px solid var(--accent-col-mute-2);
+  }
+
+  & .file-diff + .file-diff {
+    margin-top: 1.5em;
+  }
+
+  & .file-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6em;
+    padding: 0.35em 0.75em;
+    background: var(--bg-col-2);
+    border-bottom: 1px solid var(--accent-col-mute-2);
+    font-size: 0.875em;
+
+    & code {
+      font-size: 1em;
+    }
+
+    &::before {
+      content: "";
+      align-self: center;
+      width: 0.45em;
+      height: 0.45em;
+      margin-right: 0.25em;
+      border-right: 1px solid var(--fg-col-mute);
+      border-bottom: 1px solid var(--fg-col-mute);
+      transform: translateY(-0.15em) rotate(45deg);
+    }
+  }
+
+  & .diff-line {
+    display: grid;
+    grid-template-columns: 2.85em 2.85em 1.5ch minmax(0, 1fr);
+    padding-right: 0.75em;
+    font-family: "Ioskeley", ui-monospace, monospace;
+    font-size: 0.875em;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+
+    & > :nth-child(-n + 2) {
+      padding-right: 0.6em;
+      color: var(--fg-col-mute);
+      text-align: right;
+      user-select: none;
+    }
+
+    & code {
+      font-size: 1em;
+    }
+    & .keyword {
+      color: #9bedff;
+      font-weight: 600;
+    }
+    & .string {
+      color: var(--added);
+    }
+  }
+
+  & .hunk {
+    padding-block: 0.15em;
+    color: var(--fg-col-mute);
+    background: var(--bg-col-2);
+
+    & > :first-child {
+      grid-column: 3 / -1;
+      text-align: left;
+    }
+  }
+
+  & .add {
+    background: color-mix(in srgb, var(--added) 9%, transparent);
+  }
+  & .del {
+    background: color-mix(in srgb, var(--removed) 9%, transparent);
+  }
+
+  & figcaption {
+    margin-top: 0.75rem;
+    color: var(--fg-col-mute);
+    font-size: 0.875rem;
+    text-align: center;
+  }
+}
+
+@media (min-width: 1050px) {
+  .sorcery-fakeshot {
+    width: calc(100% + 6rem);
+    margin-inline: -3rem;
+  }
+}

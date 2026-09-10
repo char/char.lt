@@ -1,0 +1,79 @@
+figure.sorcery-diagram {
+  margin: 1.5rem 0;
+
+  & svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    user-select: none;
+  }
+
+  & text {
+    fill: var(--fg-col);
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    text-anchor: middle;
+  }
+
+  & rect {
+    fill: var(--bg-col-2);
+    stroke: var(--accent-col-mute-2);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  & .result rect {
+    fill: var(--bg-col-3);
+    stroke: var(--accent-col-mute-1);
+  }
+
+  & .code {
+    font-family: "Ioskeley", ui-monospace, monospace;
+  }
+
+  & .label {
+    fill: var(--fg-col-mute);
+    font-size: 14px;
+  }
+
+  & .heading {
+    font-weight: 650;
+  }
+
+  & :is(.flow, .lifeline, marker path) {
+    fill: none;
+    stroke: var(--fg-col-mute);
+    stroke-width: 2;
+  }
+
+  & :is(.flow, .lifeline) {
+    vector-effect: non-scaling-stroke;
+  }
+
+  & marker path {
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  & .lifeline {
+    stroke-width: 1;
+    stroke-dasharray: 4 5;
+  }
+
+  & figcaption {
+    margin-top: 0.75rem;
+    color: var(--fg-col-mute);
+    font-size: 0.875rem;
+    text-align: center;
+  }
+
+  & .sequence-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+
+    @media (max-width: 520px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
