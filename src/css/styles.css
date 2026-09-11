@@ -239,6 +239,7 @@ pre {
   margin: 1.5rem 0;
   background: var(--bg-col-2);
   overflow-x: auto;
+  text-size-adjust: 100%;
 
   & > code {
     display: block;
