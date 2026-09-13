@@ -54,7 +54,7 @@ and along the way i've fallen into a bunch of different niche specializations:
   - systemd's [fdstore](https://systemd.io/FILE_DESCRIPTOR_STORE/) is very cool! careful architecture lets you upgrade running software without dropping its important state
 - **STM32 embedded development** (keyboards!)
   - i've gone lower-level before, but nowadays i mostly just use [QMK](https://github.com/qmk/qmk_firmware)
-  - one day i'd love to build keyboard firmware on [Hubris](https://github.com/oxidecomputer/hubris) as an ≈RTOS
+  - ~~one day i'd love to build keyboard firmware on [Hubris](https://github.com/oxidecomputer/hubris) as an ≈RTOS~~ [i did this!](https://github.com/char/q65-max-hubris)
 
 </section>
 <section id="game-hacking">
