@@ -1,27 +1,26 @@
 ---
 title: what if my git host was a static site generator?
 description: "introducing: sorcery, the source-ery.."
-unlisted: true
 stylesheets:
   - /css/sorcery.css
   - /css/fakeshot-sorcery.css
 ---
 
-i have been running several personal git forges for almost half my life, at this point. i like running my own dev infrastructure, especially because i'm almost always 120ms+ away from `us-east-1` :3 in 2015 i had a Gogs instance which became a Gitea instance which became a Forgejo instance, and I've also deployed GitLab/Forgejo several other times for various groups I've been a part of. i like the communal git forge, and Forgejo is great at this!
+i have been running several personal git forges for, at this point, almost half my life :o i like running my own dev infrastructure, not only because i'm almost always 120ms+ away from `us-east-1`, but because sysadmin is just plain fun :3 in 2015 i had a Gogs instance which became a Gitea instance which became a Forgejo instance, and i've also deployed GitLab/Forgejo several other times for various groups i've been a member of. i like the communal collaborative git forge, and Forgejo is great at this!
 
-but.
-
-my Forgejo server keeps running out of disk space (from crashing while repacking git repos that haven't updated) and falling over / OOMing under ambient scraper load. it's clear that, for my needs, this is straight up just the wrong size of thing. it can't stand up to the internet's cosmic microwave background radiation. i also kinda want to simplify my experience by only exposing features i will *actually use* - Forgejo and its ilk do way more than i need them to: issues, PRs, releases, wikis -- a bunch of GitHub feature-compatibility that i don't care about, and pay some sort of cost for anyway :(
+but my Forgejo server keeps running out of disk space (from crashing while repacking git repos that haven't updated) and falling over / OOMing under ambient scraper load. it's clear that, for my needs, this is just the wrong size of thing: on the tiny machines i use for personal infrastructure, the software can't stand up to the internet's cosmic microwave background radiation. i also kinda wanna simplify my experience by only exposing features i'll _actually use_: Forgejo and its ilk do way more than i need them to: issues, PRs, releases, wikis - a bunch of GitHub feature-compatibility that i don't care about, and pay some sort of cost for anyway :(
 
 ## publishing to the open web
 
-the usual antidote prescribed for Forgejo resource exhaustion is to block scrapers via a web application firewall like [Anubis](https://anubis.techaro.lol/), which aims to gate access to the web application behind a JavaScript proof of work challenge. but this is counter to, like, the philosophy of the open web, right? the ostensible "user agent" is coerced into choosing between either executing near-useless code that taxes the user's device (the point of the challenge is to spin!), or to refuse & not show any user-relevant information at all. plus, alternative browsers that _don't_ support JavaScript (or just don't support JITted JavaScript) are either completely blocked off or locked behind a truly intrusive wait time. this is the opposite of open access.
+the usual antidote prescribed for Forgejo resource exhaustion is to block scrapers via a web application firewall like [Anubis](https://anubis.techaro.lol/), which aims to gate access to the webapp behind a JavaScript proof of work challenge.
+
+but this is counter to, like, the philosophy of the open web, right? the browser, ostensibly the "user agent", is coerced into user-unfriendly behavior, executing near-useless code that taxes the user's device (the point of the challenge is to spin!) - were it to refuse, no user-relevant information could be displayed at all. alternative browsers that _don't_ support JavaScript (or just don't support JITted JavaScript) are either completely blocked off or locked behind a truly intrusive wait time. this deepens the oligoculture of the modern web, which i think is a bad thing.
 
 additionally, deployment of such a thing is an admission of defeat that the fronted application *does not work correctly* when met with real-world internet traffic: when we have a workload where reads so heavily outnumber writes, this notion is kind of ridiculous - serving write-sparse data ought to be super cheap in practice: all of github pages ran on one machine for years!! why not have a git host where everything is static files?
 
 ## git repo views with minimal server compute
 
-[sorcery](https://git.t4t.associates) at its core is shaped like a static site generator: when it receives an update to a git repo, it will rebuild a bunch of on-disk HTML for that repo - an overview page, the directory tree the tip commit of each branch, and syntax-highlighted source code renderings for each file in the tips. this allows us to pay a fixed upfront cost for serving many future requests, which means we are resilient against scraper load (because a sendfile-and-forget has basically negligible cost). however, since it would be expensive to render out HTML ahead of time for every revision of every file, we choose not to serve static historical views of the repo.
+at its core, [sorcery](https://git.t4t.associates/char/sorcery) is shaped like a static site generator: when it receives an update to a git repo, it will rebuild a bunch of on-disk HTML for that repo - an overview page, the directory tree the tip commit of each branch, and syntax-highlighted source code renderings for each file in the tips. this allows us to pay a fixed upfront cost for serving many future requests, which means we are resilient against scraper load (because a sendfile-and-forget has basically negligible cost). however, since it would be expensive to render out HTML ahead of time for every revision of every file, we choose not to serve static historical views of the repo.
 
 repo history viewing is an integral feature of a git web interface, though, so we serve the `.git` directory directly, implement a basic read-only git client in JavaScript, and then client-side render all the "rich views" of the repository - the repo site generator does also need to emit some supplementary JSON data to aid the git client, since we can't reliably list directories in the git repo, but that's still static!
 
@@ -101,7 +100,7 @@ historical views _do_ require JavaScript, but I'm not super into blanket js alle
 i still like the communal git forge!! for my personal projects, i mostly just want somewhere to push code that i can browse from my phone / link to people: i don't need collaborative features, and it's much more lightweight this way. reading my code should _never_ involve a ceremony of proof to the server that you're worthy of receiving hypertext.
 
 <figure class="sorcery-fakeshot">
-<div class="screen" role="img" aria-label="Sorcery's commit diff view: remove --allow-all from ngx script. Two files each have one removed and one added line, dropping -A from the Deno command in README.md and sorcery.ngx.ts." tabindex="0">
+<div class="screen" role="img" aria-label="a screenshot of sorcery's commit diff view" tabindex="0">
 <div class="commit-page" aria-hidden="true">
   <div class="repo-heading">
     <div><div class="repo-name">char/sorcery</div><div class="muted">static-files based git repo viewer</div></div>
