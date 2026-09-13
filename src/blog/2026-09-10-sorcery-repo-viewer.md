@@ -8,7 +8,9 @@ stylesheets:
 
 i have been running several personal git forges for, at this point, almost half my life :o i like running my own dev infrastructure, not only because i'm almost always 120ms+ away from `us-east-1`, but because sysadmin is just plain fun :3 in 2015 i had a Gogs instance which became a Gitea instance which became a Forgejo instance, and i've also deployed GitLab/Forgejo several other times for various groups i've been a member of. i like the communal collaborative git forge, and Forgejo is great at this!
 
-but my Forgejo server keeps running out of disk space (from crashing while repacking git repos that haven't updated) and falling over / OOMing under ambient scraper load. it's clear that, for my needs, this is just the wrong size of thing: on the tiny machines i use for personal infrastructure, the software can't stand up to the internet's cosmic microwave background radiation. i also kinda wanna simplify my experience by only exposing features i'll _actually use_: Forgejo and its ilk do way more than i need them to: issues, PRs, releases, wikis - a bunch of GitHub feature-compatibility that i don't care about, and pay some sort of cost for anyway :(
+but my Forgejo server keeps running out of disk space (from crashing while repacking git repos that haven't updated) and falling over / OOMing under ambient scraper load. for my needs it's clear that this is just the wrong size of thing: on the tiny machines i use for personal infrastructure, the software can't stand up to the internet's cosmic microwave background radiation.
+
+i also kinda wanna simplify my experience by only exposing features i'll _actually use_: Forgejo and its ilk do way more than i need them to: issues, PRs, releases, wikis - a bunch of GitHub feature-compatibility that i don't care about, and pay some sort of cost for anyway :(
 
 ## publishing to the open web
 
@@ -16,7 +18,7 @@ the usual antidote prescribed for Forgejo resource exhaustion is to block scrape
 
 but this is counter to, like, the philosophy of the open web, right? the browser, ostensibly the "user agent", is coerced into user-unfriendly behavior, executing near-useless code that taxes the user's device (the point of the challenge is to spin!) - were it to refuse, no user-relevant information could be displayed at all. alternative browsers that _don't_ support JavaScript (or just don't support JITted JavaScript) are either completely blocked off or locked behind a truly intrusive wait time. this deepens the oligoculture of the modern web, which i think is a bad thing.
 
-additionally, deployment of such a thing is an admission of defeat that the fronted application *does not work correctly* when met with real-world internet traffic: when we have a workload where reads so heavily outnumber writes, this notion is kind of ridiculous - serving write-sparse data ought to be super cheap in practice: all of github pages ran on one machine for years!! why not have a git host where everything is static files?
+additionally, deployment of such a thing is an admission of defeat - we surrender to the assumption that the fronted application *does not work correctly* when met with real-world internet traffic: isn't this kind of ridiculous when we have a workload where reads so heavily outnumber writes? serving write-sparse data ought to be super cheap in practice: all of github pages ran on one machine for years!! why not have a git host where everything is static files?
 
 ## git repo views with minimal server compute
 
