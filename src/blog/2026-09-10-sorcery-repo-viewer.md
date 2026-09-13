@@ -1,5 +1,5 @@
 ---
-title: what if my git host was a static site generator?
+title: what if my git host were a static site generator?
 description: "introducing: sorcery, the source-ery.."
 stylesheets:
   - /css/sorcery.css
