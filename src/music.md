@@ -36,6 +36,12 @@ piano remix of a pop/electronic song
 
 <iframe class="soundcloud-iframe" src="https://w.soundcloud.com/player/?url=https://soundcloud.com/char-lt/quickscope?x=1&amp;auto_play=false&amp;visual=false&amp;hide_related=true" allowfullscreen frameborder="0" seamless></iframe>
 
+## outside remix (orig. calvin harris / ellie goulding)
+
+color bass remix of a pop edm song
+
+<iframe class="soundcloud-iframe" src="https://w.soundcloud.com/player/?url=https://soundcloud.com/char-lt/outside?x=1&amp;auto_play=false&amp;visual=false&amp;hide_related=true" allowfullscreen frameborder="0" seamless></iframe>
+
 ## magnetic edit (orig. ILLIT)
 
 color bass / future jersey remix of a korean pop song
