@@ -63,7 +63,7 @@ and along the way i've fallen into a bunch of different niche specializations:
 
 i used to make money selling a custom Minecraft client and a subscription trainer menu for GTA Online. i also love decompiling and modifying Unity3D games because there's something about MSIL that activates the Java bytecode part of my brain, but a lot of them are il2cpp now :(
 
-games are a really fun playground because there's a bunch of emergent behavior to be found in the interaction between systems. like, here's a demonstration of a fast infinite obsidian glitch in Minecraft, it chains a limit instant block-brekaing exploit into some specific world interaction that repopulates obsidian blocks:
+games are a really fun playground because there's a bunch of emergent behavior to be found in the interaction between systems. like, here's a demonstration of a fast infinite obsidian glitch in Minecraft, it chains a limit instant block-breaking exploit into some specific world interaction that repopulates obsidian blocks:
 
 <video alt="A screen recording of Minecraft" controls poster="/assets/misc/infinite-obsidian.webp">
   <source type="video/mp4" src="/assets/misc/infinite-obsidian.mp4">
