@@ -1,12 +1,13 @@
 ---
-title: "(draft) a storage engine for generic network-scale AT Protocol data"
-description: "here's the plan."
-unlisted: true
+title: "designing a storage engine for AT Protocol backlinks"
+description: "economical full-network-scale application-agnostic data storage"
 stylesheets:
   - /css/vendor/katex.min.css
   - /css/terminal.css
   - /css/atproto-backlinks.css
 ---
+
+a prototype of the following design is available at [backlinks.cerulea.blue](https://backlinks.cerulea.blue).
 
 lately i have been working on indexing backlinks on the AT Protocol network. on atproto, every reply links to its parent (and thread root), every like/repost points links to its subject, and every follow/block points at the target identity. to do useful work, you often need to reverse these links (e.g. find everyone who follows a given account, or find all replies to a given thread). so i'm working on backlink indexing; this duplicates the prior art of fig's [microcosm.blue constellation](https://microcosm.blue) with two differences:
 
@@ -39,11 +40,11 @@ $ [32mcurl[0m [36m--get[0m [33m'https://[2m[…][22m/xrpc/blue.cerulea.ba
 
 ## object storage
 
-the first decision i made in this project was to decouple storage and compute. as a write-heavy, read-sparse system, our storage requirements are super idiosyncratic vs what is available packaged _with_ compute, so being able to scale these axes independently is great for us. hosted object storage can be reasonably priced (around 8 dollars per TB for flat-rate options without transfer surcharges), so a couple terabytes plus a VPS can come out to around $40/mo to serve a full-network index!
+for economic reasons it's good for us to decouple/disaggregate storage and compute. as a write-heavy, read-sparse system, our storage requirements are super idiosyncratic vs what is available packaged _with_ the level of compute we need, so being able to scale these axes independently is great: hosted object storage can be reasonably priced (around 8 dollars per TB for flat-rate options without transfer surcharges), so a couple terabytes plus a VPS can come out to around $25/mo to serve an application-agnostic full-network index!
 
 high-touch local options are still open: running `garage` or similar in-homelab lets you disaggregate serving from storage (e.g. a NAS with a slow CPU + a faster server or laptop) & easily spread storage across multiple disks. so it's win-win :D
 
-the drawbacks of remote storage are that query latencies go way up (especially for data dependency waterfalls!) because you're literally over WAN to get any data. but i think it's worth it & the pathological cases are avoidable via a much smaller set of local indices
+the drawbacks of remote storage are that query latencies go way up (especially for data dependency waterfalls!) because you're literally over WAN to get any data. but i think it's worth it & via some slightly more involved engineering we can avoid the pathological cases (e.g. via small local indices)
 
 <figure class="storage-diagram">
 <svg viewBox="0 0 720 240" role="img" aria-labelledby="storage-title">
@@ -71,7 +72,7 @@ the drawbacks of remote storage are that query latencies go way up (especially f
 
 ## fixed-width data
 
-telically, storing sorted fixed-width data will allow you to efficiently query it via binary search. in the ideal case, you have _every_ backlink in a single, local sorted run (let's say 100 billion) ordered by target, and when you want to scan for all the backlinks to some target you get to binsearch & you will only need to perform <span class="language-math">\left\lceil \log_2(100\ 000\ 000\ 000) \right\rceil = 37</span> lookups, then you just perform a linear sweep. swag, right? unfortunately, we won't be able to keep all the data in a single packed local sorted run, because we're constantly appending new data and we have so much of it. but i'm getting ahead of myself
+telically, storing sorted fixed-width data will allow you to efficiently query it via binary search. in the ideal case, you have _every_ backlink in a single, local sorted run (let's say 100 billion) ordered by target, and when you want to scan for all the backlinks to some target you get to binsearch & you will only need to perform <span class="language-math">\left\lceil \log_2(100\ 000\ 000\ 000) \right\rceil = 37</span> on-disk lookups, then you just perform a linear sweep. swag, right? unfortunately, we won't be able to keep all the data in a single packed local sorted run, because we're constantly appending new data and we have so much of it. but i'm getting ahead of myself
 
 so we agree that having fixed length data is good: how do we turn backlinks into fixed length data? a backlink looks like this, a (target, source, location) triple:
 
@@ -311,7 +312,7 @@ additionally, when we're compacting backlink runs, we can deduplicate identical 
 
 ## updates & deletes
 
-this is the last big challenge: cleanup of deleted links is (or at least used to be) the [most resource-intensive part of microcosm](https://bsky.app/profile/bad-example.com/post/3llz5ypn3jc2t) so i want to solve this in an efficient way really badly: did you notice our `sourceRev` field on our `Backlink` struct? here's where we make use of it!! the high-level idea is that we store a revocation threshold for each source `RecordId`: we can tell if a backlink is irrelevant (and should be omitted from a query response) if its `sourceRev` is below the threshold. we don't want to store all the thresholds locally, however, so we'll need to employ the same strategies for offloading this data to object storage without blowing up query latency.
+this is the last big challenge: cleanup of deleted links is (or at least used to be) the [most resource-intensive part of microcosm](https://bsky.app/profile/bad-example.com/post/3llz5ypn3jc2t), so i really wanna solve this in an efficient way: did you notice our `sourceRev` field on our `Backlink` struct? here's where we make use of it!! the high-level idea is that we store a revocation threshold for each source `RecordId`: we can tell if a backlink is irrelevant (and should be omitted from a query response) if its `sourceRev` is below the threshold. we don't want to store all the thresholds locally, however, so we'll need to employ the same strategies for offloading this data to object storage without blowing up query latency.
 
 here, `sourceRev` is the value of an ingestion lamport clock, not the repo revision: this lets us process arbitrarily many deletes and recreates in the same atproto commit (i.e. they would all have the same rev!), in the case of a weird `applyWrites` or something. let's put all thresholds in a similar LSMT and again store local metadata for each table & each frame within these tables:
 
@@ -325,11 +326,11 @@ data Revocation = Revocation {
 
 when we receive a delete or update, we append a revocation with the current ingestion clock as the rev, invalidating all older links from that source. updates are handled the exact same way, except we _also_ scan the new version of the record for links :)
 
-just like backlinks, when we're compacting revocation runs we can discard anything with a non-latest `rev` for the same source record :)
-
 for a concrete example, let's suppose a record `A` is created at rev `10` with a link to `X`. we'll append `Backlink { target = X, source = A, sourceRev = 10 }`. at rev `20`, `A` is updated to link to `Y` instead. we append `Revocation { source = A, rev = 20 }`; then we append the new backlink to `Y` with `sourceRev = 20`. a query for `X` will still encounter the old backlink, but discard it after finding the revocation, while a query for `Y` will return the new one.
 
 as a special case, we'll also support using the same "whole DID" `RecordId` zero-coll/-rkey encoding in a Revocation - this will apply to _all records in the repo_ (i.e. a backlink must be unrevoked at both its source record + rev as well as its source _repo_ + rev) so that we can "reset" a repository whenever we need to resync - we can just write a single revocation and then add all the links we find.
+
+& just like backlinks, we can discard anything with a non-latest `rev` for the same source record when we're compacting revocation runs ^-^
 
 ## filesystem layout
 
@@ -380,4 +381,4 @@ our write path is simpler:
   - for `action: "delete"`, we append a record threshold to the `Revocation` LSMT
   - for `action: "update"`, we have to treat it like a "delete; create", so we write to `Revocation`s and then write to `Backlink`s at the same stamp.
 
-i have a few prototypes that aided in arriving at a design for this thing, and will be implementing this one shortly. wish me luck chat
+hooray!!
