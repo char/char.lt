@@ -53,14 +53,9 @@ turns out, yes: [isync/mbsync](https://github.com/gburd/isync) is software writt
 so, let's set up dovecot (again, [see flake](https://git.t4t.associates/char/topaz-flake/#commit/6cf7d6da3f7fbdfd621e36d5e8f8cce32624cd8b)):
 
 ```nix
-{ config, lib, pkgs, ... }: 
+{ config, pkgs, ... }:
 let
   domain = "my-domain.com";
-  accounts = {
-    a = "a@my-email-a.example";
-    b = "b@my-email-b.example";
-  };
-  passwordFile = name: "/var/secrets/mail/${name}.password";
 in
 {
   # enable acme with http challenge via nginx to get a tls cert
@@ -83,43 +78,11 @@ in
       ssl = "required";
       ssl_server_cert_file = "${config.security.acme.certs.${domain}.directory}/fullchain.pem";
       ssl_server_key_file = "${config.security.acme.certs.${domain}.directory}/key.pem";
-      "service imap-login" = {
-        "inet_listener imap" = {
-          listen = "127.0.0.1";
-          port = 143;
-        };
-        "inet_listener imaps" = {
-          port = 993;
-          ssl = true;
-        };
-      };
     };
   };
 
   # set up passwd file
-  systemd.services.dovecot = {
-    wants = [ "acme-finished-${domain}.target" ];
-    after = [ "acme-finished-${domain}.target" ];
-    serviceConfig.LoadCredential = lib.mapAttrsToList (
-      name: _: "${name}:${passwordFile name}"
-    ) accounts;
-    preStart = lib.mkAfter ''
-      umask 077
-      : > /run/dovecot2/passwd.new
-      ${lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (name: username: ''
-          test -n "$(cat "$CREDENTIALS_DIRECTORY/${name}")"
-          hash=$(${pkgs.openssl}/bin/openssl passwd -6 -stdin < "$CREDENTIALS_DIRECTORY/${name}")
-          [[ "$hash" != *$'\n'* ]]
-          printf '${username}:{CRYPT}%s:%s:%s::/var/lib/mail/${username}\n' \
-            "$hash" "$(id -u dovemail)" "$(id -g dovemail)" >> /run/dovecot2/passwd.new
-        '') accounts
-      )}
-      chown root:dovecot2 /run/dovecot2/passwd.new
-      chmod 640 /run/dovecot2/passwd.new
-      mv /run/dovecot2/passwd.new /run/dovecot2/passwd
-    '';
-  };
+  # ...
 }
 ```
 
@@ -134,11 +97,7 @@ let
   passwordFile = ...;
 in
 {
-  users.users.mail-sync = {
-    isSystemUser = true;
-    group = "mail-sync";
-  };
-  users.groups.mail-sync = { };
+  # ...
 
   systemd.services = lib.mapAttrs' (
     name: username:
@@ -159,26 +118,14 @@ in
       '';
     in
     lib.nameValuePair "mail-sync-${name}" {
-      description = "Synchronise ${username} with Migadu";
-      wants = [ "network-online.target" ];
-      requires = [ "dovecot.service" ];
-      after = [
-        "network-online.target"
-        "dovecot.service"
-      ];
+      # ...
       serviceConfig = {
         Type = "oneshot";
         User = "mail-sync";
-        Group = "mail-sync";
         StateDirectory = "mail-sync/${name}";
-        StateDirectoryMode = "0700";
-        UMask = "0077";
         LoadCredential = [ "password:${passwordFile name}" ];
         ExecStart = "${pkgs.isync}/bin/mbsync --config ${mbsyncConfig} --all";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectHome = true;
-        ProtectSystem = "strict";
+        # ...
       };
     }
   ) accounts;
