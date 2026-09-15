@@ -15,6 +15,8 @@ so, i wanted to set up my own rules to sort things into separate folders/mailbox
 
 so, let's get old-school: [imapfilter](https://github.com/lefcha/imapfilter) is a piece of software initially released when i was ten years old, and seems to be exactly what i need: you write Lua and it does things to your inbox. so let's set it up on my NixOS configuration:
 
+(abridged here, but the full setup is in [my flake](https://git.t4t.associates/char/flake/#commit/41147b9a8787622a98fd5b3090424cde5edd6aa4))
+
 ```nix
 { pkgs, ... }: {
   systemd.services.imapfilter = {
@@ -48,7 +50,7 @@ so here's the plan: i stay with my mail provider, but i have an _additional_ mai
 
 turns out, yes: [isync/mbsync](https://github.com/gburd/isync) is software written (as far as i can tell) in or before 2000, which makes it older than _me_! but it's perfect for this use case: i'll just spin up a mail server, mbsync it between my mail provider, and then point imapfilter at the new server.
 
-so, let's set up dovecot:
+so, let's set up dovecot (again, [see flake](https://git.t4t.associates/char/topaz-flake/#commit/6cf7d6da3f7fbdfd621e36d5e8f8cce32624cd8b)):
 
 ```nix
 { config, lib, pkgs, ... }: 
