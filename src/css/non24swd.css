@@ -28,14 +28,12 @@
   & input[type="file"] {
     display: block;
     box-sizing: border-box;
-    width: min(100%, 30rem);
-    margin-top: 0.35rem;
-    padding: 0.75rem;
-    border: 1px solid var(--accent-col);
-    border-radius: 0.25rem;
+    margin-top: 0.35em;
+    padding: 0.75em;
     color: var(--fg-col);
     background: var(--bg-col-3);
     font: inherit;
+    font-size: 0.8em;
     cursor: pointer;
 
     &:disabled {
