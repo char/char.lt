@@ -19,9 +19,35 @@
     }
   }
 
+  & > label {
+    display: block;
+    margin-top: 0.75rem;
+    color: var(--fg-col-mute);
+  }
+
+  & input[type="file"] {
+    display: block;
+    box-sizing: border-box;
+    width: min(100%, 30rem);
+    margin-top: 0.35rem;
+    padding: 0.75rem;
+    border: 1px solid var(--accent-col);
+    border-radius: 0.25rem;
+    color: var(--fg-col);
+    background: var(--bg-col-3);
+    font: inherit;
+    cursor: pointer;
+
+    &:disabled {
+      color: var(--fg-col-mute);
+      cursor: wait;
+    }
+  }
+
   &[data-error]::after {
     content: attr(data-error);
-    margin-left: 0.75rem;
+    display: block;
+    margin-top: 0.5rem;
     color: var(--fg-col-mute);
   }
 }

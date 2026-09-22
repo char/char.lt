@@ -5,7 +5,7 @@ const minute = 60_000;
 const hour = 60 * minute;
 const day = 24 * hour;
 
-const start = Date.parse("2021-01-01T00:00:00Z");
+let start = Date.parse("2021-01-01T00:00:00Z");
 const initialScrollDate = Date.parse("2024-01-01T00:00:00Z");
 const binSize = 5 * minute;
 // we run each row to 30時 so that activity over midnight isn't split
@@ -47,7 +47,12 @@ async function loadTimestamps() {
     }
   }
   if (factor !== 1) throw new Error("truncated minute delta");
-  return timestamps;
+  return timestamps.filter((timestamp) => timestamp >= start);
+}
+
+async function loadUploadedTimestamps(file) {
+  const timestamps = JSON.parse(await file.text());
+  return timestamps.sort((a, b) => a - b);
 }
 
 const bar = (x, y, width) => `M${x} ${y}h${width}v${barHeight}h-${width}z`;
@@ -156,8 +161,8 @@ function hourLabels(plotWidth) {
 
 function render(timestamps) {
   const latest = timestamps.at(-1);
-  if (latest === undefined || latest < start)
-    throw new Error("no activity in the selected date range");
+  if (latest === undefined) throw new Error("no activity to graph");
+  start = Date.UTC(new Date(timestamps[0]).getUTCFullYear(), 0, 1);
   const days = Math.floor((latest - start) / day) + 1;
   const plotHeight = days * rowHeight;
 
@@ -205,19 +210,35 @@ function render(timestamps) {
 
 const graphContainer = document.querySelector("#non24swd-graph");
 const loadButton = graphContainer.querySelector("button");
-loadButton.addEventListener("click", async () => {
+const fileInput = graphContainer.querySelector('input[type="file"]');
+
+async function showGraph(load, scrollDate) {
   loadButton.disabled = true;
+  fileInput.disabled = true;
   loadButton.textContent = "loading…";
   delete graphContainer.dataset.error;
   try {
-    const figure = render(await loadTimestamps());
-    loadButton.replaceWith(figure);
-    figure.querySelector(".actogram-scroller").scrollTop =
-      ((initialScrollDate - start) / day) * rowHeight;
+    const timestamps = await load();
+    const figure = render(timestamps);
+    graphContainer.replaceChildren(figure);
+    if (scrollDate !== undefined)
+      figure.querySelector(".actogram-scroller").scrollTop =
+        ((scrollDate - start) / day) * rowHeight;
   } catch (error) {
     console.error(error);
     loadButton.disabled = false;
+    fileInput.disabled = false;
     loadButton.textContent = "try again";
+    fileInput.value = "";
     graphContainer.dataset.error = "sorry, the graph failed to load";
   }
+}
+
+loadButton.addEventListener("click", () => {
+  showGraph(loadTimestamps, initialScrollDate);
+});
+
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (file) showGraph(() => loadUploadedTimestamps(file));
 });
