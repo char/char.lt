@@ -1,0 +1,125 @@
+#non24swd-graph {
+  --actogram-activity: var(--hl-string);
+  --actogram-sleep: color-mix(in srgb, var(--hl-ident) 40%, var(--bg-col));
+
+  margin-block: 1.5rem;
+
+  & > button {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--accent-col);
+    border-radius: 0.25rem;
+    color: var(--fg-col);
+    background: var(--bg-col-3);
+    font: inherit;
+    cursor: pointer;
+
+    &:disabled {
+      color: var(--fg-col-mute);
+      cursor: wait;
+    }
+  }
+
+  &[data-error]::after {
+    content: attr(data-error);
+    margin-left: 0.75rem;
+    color: var(--fg-col-mute);
+  }
+}
+
+.actogram {
+  margin: 0;
+
+  & svg {
+    display: block;
+    max-width: none;
+    font-family: inherit;
+    font-size: 11px;
+  }
+
+  & figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1.25rem;
+    padding-top: 0.5rem;
+    color: var(--fg-col-mute);
+    font-size: 0.875rem;
+
+    & span {
+      display: inline-flex;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    & i {
+      width: 0.9rem;
+      height: 0.65rem;
+    }
+  }
+}
+
+.actogram-scroller {
+  display: grid;
+  grid-template-columns: var(--actogram-axis-width) var(--actogram-width);
+  grid-template-rows: var(--actogram-axis-height) var(--actogram-height);
+  width: 100%;
+  height: min(80vh, 48rem);
+  overflow: auto;
+  /* always reserve the vertical scrollbar so the measured width is stable */
+  overflow-y: scroll;
+  scrollbar-color: var(--fg-col-mute) var(--bg-col);
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-col);
+    outline-offset: 2px;
+  }
+}
+
+.actogram-corner,
+.actogram-x-axis,
+.actogram-y-axis {
+  color: var(--fg-col-mute);
+  background: var(--bg-col);
+}
+
+.actogram-corner {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  grid-area: 1 / 1;
+}
+
+.actogram-x-axis {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  grid-area: 1 / 2;
+  fill: currentcolor;
+}
+
+.actogram-y-axis {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  grid-area: 2 / 1;
+  fill: currentcolor;
+}
+
+.actogram-plot {
+  grid-area: 2 / 2;
+}
+
+.actogram-activity {
+  background: var(--actogram-activity);
+}
+
+.actogram-sleep {
+  background: var(--actogram-sleep);
+}
+
+@media (min-width: 1050px) {
+  #non24swd-graph:not(:has(button)) {
+    width: calc(100% + 64px);
+    margin-inline: -64px;
+  }
+}
