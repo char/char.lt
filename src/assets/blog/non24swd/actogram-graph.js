@@ -1,3 +1,6 @@
+if (!ReadableStream.prototype[Symbol.asyncIterator])
+  await import("./ihatesafari.js");
+
 const minute = 60_000;
 const hour = 60 * minute;
 const day = 24 * hour;
