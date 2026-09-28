@@ -24,11 +24,39 @@ you might have noticed that all my posts have been written in a super informal s
 <figcaption>so for this site i kinda killed my worksona. the repercussions are yet to be seen but it's very comfy to not be performing a façade of professionalism in my own spot</figcaption>
 </figure>
 
-in a world where it seems like quadrillions of dollars are going to get funneled into building better probability distributions of median speech, i'm finding myself *really* drawn to getting _weirder_ with it. idiosyncrasy is basically the best way to cope when drowning in a flood of impersonal simulacra of works: it's a slop hardcounter to be eccentric in the face of the sanitized, inoffensive, and run-of-the-mill.
+there's a quirk of history at play, too: informal written language is undergoing a very modern surge (& experiencing very fast evolution!) because before we had the internet the formal/informal+spoken/written split kinda looked like this:
+
+<table class="matrix">
+  <thead>
+    <tr>
+      <th></th>
+      <th scope="col">spoken</th>
+      <th scope="col">written</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">formal</th>
+      <td>speech / lecture / presentation</td>
+      <td>essay / treatise / paper</td>
+    </tr>
+    <tr>
+      <th scope="row">informal</th>
+      <td>familial/friendly conversation</td>
+      <td>(some) letters, notes</td>
+    </tr>
+  </tbody>
+</table>
+
+it's not like informal writing was *absent* beforehand, but now we do sooo much casual socializing over text, & (at least in my experience in online English) we're developing so many ways of conveying tone and gesture that speech has had for free for centuries :D
+
+there's also something else happening to written language right now: da computer. they're making computer programs that can parse and use natural language now. that's crazy.
 
 as someone who's been into computers and linguistics for basically her whole life, i do, of course, find language models extremely interesting[^llms] - even devoid of all other capabilities, a computer program that can understand and emit natural language is like a snipe for specifically me! but i really, absolutely _abhor_ LLM prose. i can't really think of a better description for the root of my distaste for it other than that it's _calorically sparse_: you're kind of "inflating" little information into reams of excruciatingly median text, without adding any extra entropy in the process, really. more than anything, this is a question of etiquette: it's _rude_ to subject an unwitting person to something that will take more effort to digest than it took to produce - you're expecting a reader to do the work of locating the small point inside a bunch of padding, which is definitely tiring and also, like, almost nauseating sometimes.
 
 [^llms]: the most fun i had recently with language models was porting a [base model with a weird MoE architecture](https://huggingface.co/yandex/AliceAI-T5-35B-A0.6B/) to run inside my local fork of llama.cpp so i could hook it up to LM Studio on my workstation ^-^
+
+in a world where it seems like quadrillions of dollars are going to get funneled into building better probability distributions of median speech, i'm finding myself *really* drawn to getting _weirder_ with it. idiosyncrasy is basically the best way to cope when drowning in a flood of impersonal simulacra of works: it's a slop hardcounter to be eccentric in the face of the sanitized, inoffensive, and run-of-the-mill.
 
 language, in my opinion, is a way to pull apart, like, a high-dimensional cognitive hyperobject (what you 'mean'), serialize it into a sequence of words (what you 'say'), and give it to a recipient who can turn it back into a meaning in their own cognitive hyperspace (what they 'interpret'): in this communicative dance you are _compressing_ a big ball of sememes into a shorter string of morphemes, relying on preconceived context upon decompression.[^contextassemblage] i think LLMs approximate this compression _pretty badly_, and you end up with longer strings for few semantic bits of information. but as people we _can_ do it really well, especially when we lean on subcultural dialects!!
 

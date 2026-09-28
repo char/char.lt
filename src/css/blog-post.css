@@ -32,6 +32,18 @@ article {
     border-left: 2px solid var(--accent-col-mute-1);
     background: var(--bg-col-2);
     font-variant-numeric: tabular-nums;
+
+    &.matrix {
+      border-left: none;
+
+      & :is(th + th, td + td) {
+        border-left: 1px solid var(--accent-col-mute-2);
+      }
+
+      & thead th:first-child {
+        border-right: 1px solid var(--accent-col-mute-1);
+      }
+    }
   }
 
   & :is(th, td) {
@@ -40,10 +52,17 @@ article {
   }
 
   & th {
-    border-bottom: 1px solid var(--accent-col-mute-1);
     background: var(--bg-col-3);
     color: var(--fg-col);
     font-weight: 650;
+  }
+
+  & thead th {
+    border-bottom: 1px solid var(--accent-col-mute-1);
+  }
+
+  & th[scope="row"] {
+    border-right: 1px solid var(--accent-col-mute-1);
   }
 
   & tbody tr + tr {
