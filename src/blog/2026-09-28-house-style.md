@@ -21,7 +21,7 @@ you might have noticed that all my posts have been written in a super informal s
 </div>
 </div>
 </a>
-<figcaption>so for this site i took my worksona out back and put her down. i shouldn't need to perform a façade in my own house, right?</figcaption>
+<figcaption>so for this site i kinda killed my worksona. the repercussions are yet to be seen but it's very comfy to not be performing a façade of professionalism in my own spot</figcaption>
 </figure>
 
 in a world where it seems like quadrillions of dollars are going to get funneled into building better probability distributions of median speech, i'm finding myself *really* drawn to getting _weirder_ with it. idiosyncrasy is basically the best way to cope when drowning in a flood of impersonal simulacra of works: it's a slop hardcounter to be eccentric in the face of the sanitized, inoffensive, and run-of-the-mill.
