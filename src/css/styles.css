@@ -124,7 +124,9 @@ ol {
 
 code,
 kbd {
-  font-family: "Ioskeley", ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", monospace;
+  font-family:
+    "iocgnMonoVariable", "iocgnMono", ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono",
+    monospace;
   font-size: 0.875em;
   font-weight: 500;
 
@@ -252,7 +254,7 @@ pre {
     width: fit-content;
 
     line-height: 1.45;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 500;
 
     background: transparent;
