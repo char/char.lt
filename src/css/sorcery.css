@@ -28,7 +28,7 @@ figure.sorcery-diagram {
   }
 
   & .code {
-    font-family: "Ioskeley", ui-monospace, monospace;
+    font-family: "iocgnMonoVariable", "iocgnMono", ui-monospace, monospace;
   }
 
   & .label {

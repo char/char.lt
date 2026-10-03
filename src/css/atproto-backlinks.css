@@ -26,7 +26,7 @@ figure.lsm-diagram {
   }
 
   & .run text {
-    font-family: "Ioskeley", ui-monospace, monospace;
+    font-family: "iocgnMonoVariable", "iocgnMono", ui-monospace, monospace;
     font-size: 14px;
   }
 
@@ -138,21 +138,21 @@ figure.lookup-diagram {
 
   & :is(.run-label, .row-label) {
     fill: var(--fg-col-mute);
-    font-weight: 650;
+    font-weight: 600;
     text-anchor: start;
   }
 
   & .run-label {
-    font-family: "Ioskeley", ui-monospace, monospace;
+    font-family: "iocgnMonoVariable", "iocgnMono", ui-monospace, monospace;
     font-size: 10px;
   }
 
   & .table text {
-    font-family: "Ioskeley", ui-monospace, monospace;
+    font-family: "iocgnMonoVariable", "iocgnMono", ui-monospace, monospace;
   }
 
   & .blocks text {
-    font-family: "Ioskeley", ui-monospace, monospace;
+    font-family: "iocgnMonoVariable", "iocgnMono", ui-monospace, monospace;
     font-size: 13px;
   }
 

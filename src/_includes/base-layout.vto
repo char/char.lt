@@ -10,7 +10,8 @@
     {{ /if }}
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    {{ await stylesheet("/css/ioskeley.css") }}
+    <link rel="preload" href="/assets/fonts/iocgnMono/iocgnMono-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    {{ await stylesheet("/css/iocgn-mono.css") }}
     {{ await stylesheet("/css/styles.css") }}
     {{ for href of content.stylesheets || [] }}
       {{ await stylesheet(href) }}
