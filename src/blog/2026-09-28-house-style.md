@@ -7,7 +7,7 @@ stylesheets:
 
 you might have noticed that all my posts have been written in a super informal style lately. so here's a "why do you type like that now?" blog post. and sure, there's an easy answer that lowercase aesthetics[^bcinter] are part and parcel of queer+online+girlypop+zoomer sociolect (and at a certain level there's kind of a foot-in-the-door phenomenon where "visibly transgender" is already a baseline level of professionally-offputting to begin with, so you're already chained to conspicuity), but there's more to it, i think.
 
-[^bcinter]: [why typing like this is sometimes okay. - Tom Scott](https://youtu.be/sVT2btZjYlM)
+[^bcinter]: [why typing like this is sometimes okay. - Tom Scott](https://youtu.be/fS4X1JfX6_Q)
 
 <figure class="github-fakeshot">
 <a class="commit-link" href="https://github.com/char/char.lt/commit/a2ef9d55689d43941b340ee29718c9ae2a261409">
