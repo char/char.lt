@@ -133,6 +133,10 @@
   grid-area: 2 / 2;
 }
 
+.actogram-month {
+  content-visibility: auto;
+}
+
 .actogram-activity {
   background: var(--actogram-activity);
 }

@@ -57,41 +57,43 @@ async function loadUploadedTimestamps(file) {
 
 const bar = (x, y, width) => `M${x} ${y}h${width}v${barHeight}h-${width}z`;
 
-function activityLayer(timestamps, days) {
+function activityLayers(timestamps, days, months) {
   const counts = new Uint32Array(days * binsPerDay);
   for (const timestamp of timestamps) {
     if (timestamp >= start) counts[Math.floor((timestamp - start) / binSize)]++;
   }
   const maxCount = counts.reduce((a, b) => Math.max(a, b));
 
-  const runsByCount = new Map();
-  for (let row = 0; row < days; row++) {
-    const bins = counts.subarray(
-      row * binsPerDay,
-      row * binsPerDay + binsPerRow,
-    );
-    for (let bin = 0; bin < bins.length; ) {
-      const count = bins[bin];
-      const first = bin++;
-      while (bin < bins.length && bins[bin] === count) bin++;
-      if (!count) continue;
-      const runs = runsByCount.get(count) ?? [];
-      runs.push(bar(first, row * rowHeight, bin - first));
-      runsByCount.set(count, runs);
+  return months.map((month) => {
+    const runsByCount = new Map();
+    for (let row = month.row; row < month.row + month.days; row++) {
+      const bins = counts.subarray(
+        row * binsPerDay,
+        row * binsPerDay + binsPerRow,
+      );
+      for (let bin = 0; bin < bins.length; ) {
+        const count = bins[bin];
+        const first = bin++;
+        while (bin < bins.length && bins[bin] === count) bin++;
+        if (!count) continue;
+        const runs = runsByCount.get(count) ?? [];
+        runs.push(bar(first, row * rowHeight, bin - first));
+        runsByCount.set(count, runs);
+      }
     }
-  }
 
-  let layer = "";
-  for (const [count, runs] of runsByCount) {
-    const intensity = Math.log(count) / Math.log(Math.max(2, maxCount));
-    layer += `<path d="${runs.join("")}" fill="var(--actogram-activity)" fill-opacity="${0.1 + intensity * 0.9}"/>`;
-  }
-  return layer;
+    let layer = "";
+    for (const [count, runs] of runsByCount) {
+      const intensity = Math.log(count) / Math.log(Math.max(2, maxCount));
+      layer += `<path d="${runs.join("")}" fill="var(--actogram-activity)" fill-opacity="${0.1 + intensity * 0.9}"/>`;
+    }
+    return layer;
+  });
 }
 
-function sleepLayer(timestamps, days) {
+function sleepLayers(timestamps, days, months) {
   const [minSleep, maxSleep] = sleepRange;
-  const bars = [];
+  const bars = Array.from({ length: days }, () => []);
   for (let i = 1; i < timestamps.length; i++) {
     const [asleep, awake] = [timestamps[i - 1], timestamps[i]];
     const duration = awake - asleep;
@@ -104,7 +106,7 @@ function sleepLayer(timestamps, days) {
       const from = Math.max(asleep, rowStart);
       const to = Math.min(awake, rowStart + rowSpan);
       if (to > from) {
-        bars.push(
+        bars[row].push(
           bar(
             (from - rowStart) / binSize,
             row * rowHeight,
@@ -114,7 +116,13 @@ function sleepLayer(timestamps, days) {
       }
     }
   }
-  return `<path d="${bars.join("")}" fill="var(--actogram-sleep)"/>`;
+  return months.map(
+    ({ row, days }) =>
+      `<path d="${bars
+        .slice(row, row + days)
+        .flat()
+        .join("")}" fill="var(--actogram-sleep)"/>`,
+  );
 }
 
 function firstsOfMonths(days) {
@@ -126,17 +134,18 @@ function firstsOfMonths(days) {
   return rows;
 }
 
-function gridLayer(days) {
-  const plotHeight = days * rowHeight;
-  let lines = "";
+function gridLayer(month, days) {
+  const top = month.row * rowHeight;
+  const height = month.days * rowHeight;
+  let lines = `M0 ${top}h${binsPerRow}`;
+  if (month.row + month.days < days)
+    lines += `M0 ${top + height}h${binsPerRow}`;
   for (let h = 0; h <= rowSpan / hour; h += 6)
-    lines += `M${h * (hour / binSize)} 0v${plotHeight}`;
-  for (const { row } of firstsOfMonths(days))
-    lines += `M0 ${row * rowHeight}h${binsPerRow}`;
+    lines += `M${h * (hour / binSize)} ${top}v${height}`;
 
   return `<path d="${lines}" stroke="var(--fg-col-mute)" stroke-opacity="0.3" vector-effect="non-scaling-stroke"/>
-    <path d="M${binsPerDay} 0v${plotHeight}" stroke="var(--fg-col-mute)" vector-effect="non-scaling-stroke"/>
-    <rect x="${binsPerDay}" y="${plotHeight - rowHeight}" width="${binsPerRow - binsPerDay}" height="${rowHeight}" fill="var(--fg-col-mute)" fill-opacity="0.3"/>`;
+    <path d="M${binsPerDay} ${top}v${height}" stroke="var(--fg-col-mute)" vector-effect="non-scaling-stroke"/>
+    ${month.row + month.days === days ? `<rect x="${binsPerDay}" y="${days * rowHeight - rowHeight}" width="${binsPerRow - binsPerDay}" height="${rowHeight}" fill="var(--fg-col-mute)" fill-opacity="0.3"/>` : ""}`;
 }
 
 function monthLabels(days) {
@@ -165,6 +174,12 @@ function render(timestamps) {
   start = Date.UTC(new Date(timestamps[0]).getUTCFullYear(), 0, 1);
   const days = Math.floor((latest - start) / day) + 1;
   const plotHeight = days * rowHeight;
+  const months = firstsOfMonths(days).map((month, index, months) => ({
+    ...month,
+    days: (months[index + 1]?.row ?? days) - month.row,
+  }));
+  const activity = activityLayers(timestamps, days, months);
+  const sleep = sleepLayers(timestamps, days, months);
 
   const figure = document.createElement("figure");
   figure.className = "actogram";
@@ -174,12 +189,21 @@ function render(timestamps) {
       <div class="actogram-corner"></div>
       <svg class="actogram-x-axis" aria-hidden="true" height="${axisHeight}"></svg>
       <svg class="actogram-y-axis" aria-hidden="true" width="${axisWidth}" height="${plotHeight}">${monthLabels(days)}</svg>
-      <svg class="actogram-plot" role="img" height="${plotHeight}" viewBox="0 0 ${binsPerRow} ${plotHeight}"
-          preserveAspectRatio="none" style="margin-inline: ${plotOverhang}px">
-        ${sleepLayer(timestamps, days)}
-        ${gridLayer(days)}
-        ${activityLayer(timestamps, days)}
-      </svg>
+      <div class="actogram-plot" role="img" aria-label="Activity and possible sleep by date and time of day" style="margin-inline: ${plotOverhang}px">
+        ${months
+          .map(
+            (month, index) => `
+          <div class="actogram-month" style="height: ${month.days * rowHeight}px">
+            <svg aria-hidden="true" width="100%" height="${month.days * rowHeight}"
+                viewBox="0 ${month.row * rowHeight} ${binsPerRow} ${month.days * rowHeight}" preserveAspectRatio="none">
+              ${sleep[index]}
+              ${gridLayer(month, days)}
+              ${activity[index]}
+            </svg>
+          </div>`,
+          )
+          .join("")}
+      </div>
     </div>
     <figcaption>
       <span><i class="actogram-activity"></i>online activity</span>
@@ -187,7 +211,6 @@ function render(timestamps) {
     </figcaption>`;
 
   const scroller = figure.querySelector(".actogram-scroller");
-  const plot = figure.querySelector(".actogram-plot");
   const xAxis = figure.querySelector(".actogram-x-axis");
   new ResizeObserver(() => {
     const available = scroller.clientWidth - axisWidth - plotOverhang * 2;
@@ -196,7 +219,6 @@ function render(timestamps) {
       "--actogram-width",
       `${plotWidth + plotOverhang * 2}px`,
     );
-    plot.setAttribute("width", plotWidth);
     xAxis.setAttribute("width", plotWidth + plotOverhang * 2);
     xAxis.setAttribute(
       "viewBox",
