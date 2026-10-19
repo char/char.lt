@@ -5,8 +5,9 @@ const minute = 60_000;
 const hour = 60 * minute;
 const day = 24 * hour;
 
-let start = Date.parse("2021-01-01T00:00:00Z");
+const cutoffDate = Date.parse("2021-01-01T00:00:00Z");
 const initialScrollDate = Date.parse("2024-01-01T00:00:00Z");
+let start = cutoffDate;
 const binSize = 5 * minute;
 // we run each row to 30時 so that activity over midnight isn't split
 const rowSpan = 30 * hour;
@@ -47,7 +48,7 @@ async function loadTimestamps() {
     }
   }
   if (factor !== 1) throw new Error("truncated minute delta");
-  return timestamps.filter((timestamp) => timestamp >= start);
+  return timestamps.filter((timestamp) => timestamp >= cutoffDate);
 }
 
 async function loadUploadedTimestamps(file) {
@@ -212,7 +213,7 @@ function render(timestamps) {
 
   const scroller = figure.querySelector(".actogram-scroller");
   const xAxis = figure.querySelector(".actogram-x-axis");
-  new ResizeObserver(() => {
+  const resizeObserver = new ResizeObserver(() => {
     const available = scroller.clientWidth - axisWidth - plotOverhang * 2;
     const plotWidth = Math.max(binsPerRow * minBinWidth, available);
     scroller.style.setProperty(
@@ -225,34 +226,43 @@ function render(timestamps) {
       `${-plotOverhang} 0 ${plotWidth + plotOverhang * 2} ${axisHeight}`,
     );
     xAxis.innerHTML = hourLabels(plotWidth);
-  }).observe(scroller);
+  });
+  resizeObserver.observe(scroller);
 
-  return figure;
+  return { figure, resizeObserver };
 }
 
 const graphContainer = document.querySelector("#non24swd-graph");
 const loadButton = graphContainer.querySelector("button");
 const fileInput = graphContainer.querySelector('input[type="file"]');
+let graph;
 
 async function showGraph(load, scrollDate) {
+  loadButton.hidden = false;
   loadButton.disabled = true;
   fileInput.disabled = true;
   loadButton.textContent = "loading…";
   delete graphContainer.dataset.error;
   try {
     const timestamps = await load();
-    const figure = render(timestamps);
-    graphContainer.replaceChildren(figure);
+    const nextGraph = render(timestamps);
+    graph?.resizeObserver.disconnect();
+    graph?.figure.remove();
+    graph = nextGraph;
+    const { figure } = graph;
+    loadButton.before(figure);
+    loadButton.hidden = true;
     if (scrollDate !== undefined)
       figure.querySelector(".actogram-scroller").scrollTop =
         ((scrollDate - start) / day) * rowHeight;
   } catch (error) {
     console.error(error);
+    loadButton.textContent = "try again";
+    graphContainer.dataset.error = "sorry, the graph failed to load";
+  } finally {
     loadButton.disabled = false;
     fileInput.disabled = false;
-    loadButton.textContent = "try again";
     fileInput.value = "";
-    graphContainer.dataset.error = "sorry, the graph failed to load";
   }
 }
 
@@ -264,3 +274,5 @@ fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (file) showGraph(() => loadUploadedTimestamps(file));
 });
+
+showGraph(loadTimestamps, initialScrollDate);

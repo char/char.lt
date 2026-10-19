@@ -146,7 +146,7 @@
 }
 
 @media (min-width: 1050px) {
-  #non24swd-graph:not(:has(button)) {
+  #non24swd-graph:has(.actogram) {
     width: calc(100% + 64px);
     margin-inline: -64px;
   }
