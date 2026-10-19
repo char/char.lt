@@ -373,7 +373,7 @@ And with a small `main` method to test, we successfully read some data about the
     <div class="idea-editor-line active"><span class="line-number">83</span><span class="gutter"><span class="breakpoint">●</span></span><span class="source">&nbsp;&nbsp;<span class="function">println</span>(structs) <span class="editor-hint">structs: size = 190</span></span></div>
     <div class="idea-editor-line"><span class="line-number">84</span><span class="gutter">⌄</span><span class="source">}</span></div>
   </div>
-  <div class="idea-expression">
+  <div class="idea-expression" aria-hidden="true">
     <div class="idea-expression-head"><span>Expression:</span><span class="language">Kotlin<span class="language-toggle" aria-hidden="true"></span></span></div>
     <div class="idea-input"><code>structs[<span class="string">"Flag"</span>]</code><span class="input-tool">↗</span><span class="input-tool">▾</span></div>
     <div class="idea-expression-hint">Use Ctrl+Shift+Enter to add to Watches</div>
@@ -456,7 +456,7 @@ And we can inspect our flag _type_ now:
     <div class="idea-editor-line"><span class="line-number">119</span><span class="gutter">💡</span><span class="source">&nbsp;&nbsp;<span class="keyword">val</span> types <span class="muted">: Map&lt;String, JVMType&gt;</span> = <span class="function">getTypes</span>(<span class="function">getStructs</span>()) <span class="editor-hint">types: size = 677</span></span></div>
     <div class="idea-editor-line active"><span class="line-number">120</span><span class="gutter"><span class="breakpoint">●</span></span><span class="source">&nbsp;&nbsp;<span class="function">println</span>(types)</span></div>
   </div>
-  <div class="idea-expression">
+  <div class="idea-expression" aria-hidden="true">
     <div class="idea-expression-head"><span>Expression:</span><span class="language">Kotlin<span class="language-toggle" aria-hidden="true"></span></span></div>
     <div class="idea-input"><code>types[<span class="string">"Flag"</span>]</code><span class="input-tool">↗</span><span class="input-tool">▾</span></div>
     <div class="idea-expression-hint">Use Ctrl+Shift+Enter to add to Watches</div>
